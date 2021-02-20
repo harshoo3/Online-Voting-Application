@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1014566080197",
+    "project_id": "online-voting-b6b5d",
+    "storage_bucket": "online-voting-b6b5d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1014566080197:android:82f58e21260dda45caaaac",
+        "android_client_info": {
+          "package_name": "com.tylerdurden.online_voting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1014566080197-fk6fvcqal1rqb46j309dfc81n82dfit0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsVCw-nQpJ6HLig6pB2xWBrhbqZ6utvzY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1014566080197-fk6fvcqal1rqb46j309dfc81n82dfit0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
