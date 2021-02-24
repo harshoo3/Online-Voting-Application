@@ -9,6 +9,7 @@ import 'package:online_voting/services/auth.dart';
 import 'package:online_voting/wrapper.dart';
 import 'package:online_voting/screens/accountDetailsList.dart';
 import 'package:provider/provider.dart';
+import 'package:online_voting/models/accountDetails.dart';
 //
 // void main() {
 //   runApp(MaterialApp(
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget{
           '/signup': (context) => SignUp(),
           '/wrapper': (context) => Wrapper(),
           '/loading': (context) => Loading(),
-          '/accountDetailsList': (context) => AccountDetailsList(),
+          '/accountDetails': (context) => AccountDetails(),
         },
       ),
     );

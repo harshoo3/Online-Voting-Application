@@ -17,19 +17,13 @@ class DatabaseService{
     });
   }
 
-  List<AccountDetails> _accountDetailsListFromSnapshot(QuerySnapshot snapshot){
-    return snapshot.documents.map((doc){
-      return AccountDetails(
-        name: doc.data['name']?? '',
-        email: doc.data['email']?? '',
-        dateOfBirth: doc.data['dateOfBirth']??'',
-      );
-    }).toList();
-  }
-
-  Stream<List<AccountDetails>> get data{
-    return userdata.snapshots().map(_accountDetailsListFromSnapshot);
-  }
+  // AccountDetails _accountDetailsListFromSnapshot(DocumentSnapshot snapshot){
+  //   return snapshot.data
+  // }
+  //
+  // Stream<AccountDetails> get data{
+  //   return userdata.document(uid).map(_accountDetailsListFromSnapshot);
+  // }
 
 
 }

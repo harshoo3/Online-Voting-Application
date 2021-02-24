@@ -12,9 +12,10 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<AccountDetails>>.value(
-      value: DatabaseService().data,
-      child: Scaffold(
+    // StreamProvider<List<AccountDetails>>.value(
+    // value: DatabaseService().data,
+    // child:
+    return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.black,
           title: Text('Online Voting'),
@@ -32,22 +33,33 @@ class Home extends StatelessWidget {
         body: SafeArea(
           child: Column(
             children: <Widget>[
-              Text('home'),
-              // SizedBox(height: 30,),
-              // SizedBox(
-              //   width: 300,
-              //   child: FlatButton(
-              //     child:Text('Account details'),
-              //     onPressed: (){
-              //       Navigator.pushNamed(context,'/accountDetailsList');
-              //     },
-              //   ),
-              // ),
-              AccountDetailsList(),
+              Text(
+                'Home page',
+                style: TextStyle(
+                  fontSize: 30,
+                ),
+              ),
+              SizedBox(height: 30,),
+              SizedBox(
+                width: 300,
+                child: FlatButton(
+                  color: Colors.black,
+                  child:Text(
+                    'Account details',
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
+                  ),
+                  onPressed: (){
+                    Navigator.pushNamed(context,'/accountDetails');
+                  },
+                ),
+              ),
+              // AccountDetailsList(),
             ],
           )
         ),
-      ),
+      // ),
     );
   }
 }

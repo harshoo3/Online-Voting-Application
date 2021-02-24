@@ -59,6 +59,18 @@ class AuthService{
       return null;
     }
   }
+
+  Future getCurrentUser()async{
+    try{
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      return _userFromFirebaseUser(user);
+
+    }catch(e){
+      print(e.toString());
+      return null;
+    }
+  }
+
   // Future sendEmailVerification()async{
   //   try{
   //     AuthResult result = await _auth.
