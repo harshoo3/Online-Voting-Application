@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/services/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService{
 
@@ -58,6 +59,18 @@ class AuthService{
       print(e.toString());
       return null;
     }
+  }
+
+  Future updateData({ String email = '',String name = ''}) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    Firestore.instance
+        .collection('userdata')
+        .document(user.uid)
+        .updateData({
+      'email':email,
+      'name':name,
+    });
   }
 
   Future getCurrentUser()async{
