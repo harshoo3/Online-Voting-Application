@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:online_voting/services/auth.dart';
+import 'package:smart_select/smart_select.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -19,6 +20,8 @@ class _SignInState extends State<SignIn> {
   String password = '';
   String text1 = '';
   bool loading = false;
+  String value = null;
+  bool isValueEmpty = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +35,52 @@ class _SignInState extends State<SignIn> {
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(top: 20,bottom: 30),
+                  padding: const EdgeInsets.only(top: 20),
                   child: Center(
-                    child: Image.asset(
-                      'images/id-card2.jpg',
-                      height: 300,
+                    child: SizedBox(
+                      width: 300,
+                      child: SmartSelect<String>.single(
+                        title:'User type',
+                        modalValidation: (val) => isValueEmpty? 'Invalid. Please enter your User type':null,
+                        modalType: S2ModalType.popupDialog,
+                        // modalConfig: S2ModalConfig(
+                        //   confirmColor: Colors.green,
+                        //   barrierColor: Colors.pink,
+                        // ),
+                        modalHeaderStyle: S2ModalHeaderStyle(
+                            backgroundColor: Colors.black,
+                            centerTitle: true,
+                            iconTheme: IconThemeData(
+                              color: Colors.white, //change your color here
+                            ),
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                            )
+                        ),
+                        // The text displayed when the value is null
+                        placeholder :'Select one',
+                        choiceStyle: S2ChoiceStyle(
+                          activeColor: Colors.black,
+                        ),
+                        // The current value of the single choice widget.
+                        value:value,
+                        // Called when single choice value changed
+                        onChange: (state) => setState((){
+                          value = state.value;
+                          isValueEmpty = false;
+                        }),
+
+                        // choice item list
+                        choiceItems: [
+                          S2Choice<String>(value: 'vot', title: 'Voter'),
+                          S2Choice<String>(value: 'can', title: 'Candidate'),
+                          S2Choice<String>(value: 'org', title: 'Organisation'),
+                        ],
+                      ),
                     ),
                   ),
                 ),
+                SizedBox(height: 25.0),
                 SizedBox(
                   width: 300,
                   child: TextFormField(
@@ -105,6 +146,11 @@ class _SignInState extends State<SignIn> {
                       //   print(password);
                       // },
                       onPressed: () async{
+                        if(value == null){
+                          setState(() {
+                            isValueEmpty = true;
+                          });
+                        }
                         email = email.trimRight();
                         password = password.trimRight();
                         if(_formkey.currentState.validate()){

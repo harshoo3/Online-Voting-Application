@@ -44,14 +44,45 @@ class AuthService{
     }
   }
 
+  // Future verifyMobileNo(String mobileNo)async{
+  //   try{
+  //     await _auth.verifyPhoneNumber(
+  //       phoneNumber: '+91'+mobileNo,
+  //       timeout: Duration(minutes: 5),
+  //       verificationCompleted: null,
+  //       verificationFailed: (AuthException e) {
+  //         if (e.code == 'invalid-phone-number') {
+  //           print('The provided phone number is not valid.');
+  //         }
+  //
+  //         // Handle other errors
+  //       },
+  //       codeSent:(String verificationId, int resendToken) async {
+  //         // Update the UI - wait for the user to enter the SMS code
+  //         String smsCode = 'xxxx';
+  //
+  //         // Create a PhoneAuthCredential with the code
+  //         PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider
+  //             .credential(verificationId: verificationId, smsCode: smsCode);
+  //         await auth.signInWithCredential(phoneAuthCredential);
+  //       },
+  //     );
+  //   }catch(e){
+  //     print(e.toString());
+  //     return null;
+  //   }
+  // }
+
+
   // register with email pwd
-  Future registerWithEmailAndPassword(String email, String password,String name,DateTime dateTime) async{
+  Future registerWithEmailAndPassword(String email, String password,String name,DateTime dateTime,String mobileNo) async{
     try{
-      // AuthResult result = await _auth.
+      // AuthResult result = await _auth.signInWithCustomToken(token: nul)
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
 
-      await DatabaseService(uid : user.uid).updateUserData(name, email,dateTime);
+
+      await DatabaseService(uid : user.uid).updateUserData(name, email,dateTime,mobileNo);
 
       return _userFromFirebaseUser(user);
 
@@ -61,16 +92,20 @@ class AuthService{
     }
   }
 
-  Future updateData({ String email = '',String name = ''}) async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  Future updateData({ String email = '',String name = '',DateTime dateOfBirth,String mobileNo=''}) async {
+    try{
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      if(email.isNotEmpty){
+        user.updateEmail(email);
+      }
 
-    Firestore.instance
-        .collection('userdata')
-        .document(user.uid)
-        .updateData({
-      'email':email,
-      'name':name,
-    });
+      await DatabaseService(uid : user.uid).updateUserData(name, email,dateOfBirth,mobileNo);
+      return _userFromFirebaseUser(user);
+
+    } catch(e){
+      print(e.toString());
+      return null;
+    }
   }
 
   Future getCurrentUser()async{
@@ -83,13 +118,6 @@ class AuthService{
       return null;
     }
   }
-
-  // Future sendEmailVerification()async{
-  //   try{
-  //     AuthResult result = await _auth.
-  //   }
-  // }
-  //sign out
 
   Future signOut() async{
     try{

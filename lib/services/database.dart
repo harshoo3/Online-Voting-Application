@@ -9,11 +9,12 @@ class DatabaseService{
 
   final CollectionReference userdata = Firestore.instance.collection('userdata');
 
-  Future updateUserData(String name,String email,DateTime dateTime)async{
+  Future updateUserData(String name,String email,DateTime dateTime,String mobileNo)async{
     return await userdata.document(uid).setData({
       'name': name,
       'email': email,
       'dateOfBirth': DateFormat('yyyy-MM-dd').format(dateTime),
+      'mobileNo': mobileNo,
     });
   }
 

@@ -5,6 +5,7 @@ import 'package:online_voting/services/auth.dart';
 import 'package:date_field/date_field.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:smart_select/smart_select.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -23,10 +24,13 @@ class _SignUpState extends State<SignUp> {
   String email = '';
   String password = '';
   String confirmPassword = '';
+  String mobileNo = '';
   String error = '';
   String name = '';
   DateTime dateOfBirth ;
   bool isDateEmpty = false;
+  String value = null;
+  bool isValueEmpty = false;
   // bool phoneNumber =
   String initialCountry = 'IN';
   PhoneNumber number = PhoneNumber(isoCode: 'IN');
@@ -99,6 +103,68 @@ class _SignUpState extends State<SignUp> {
                 //     },
                 //   ),
                 // ),
+                SizedBox(height: 25,),
+                SizedBox(
+                  width: 300,
+                  child: SmartSelect<String>.single(
+                    title:'User type',
+                    modalValidation: (val) => isValueEmpty? 'Invalid. Please enter your User type':null,
+                    modalType: S2ModalType.popupDialog,
+                    // modalConfig: S2ModalConfig(
+                    //   confirmColor: Colors.green,
+                    //   barrierColor: Colors.pink,
+                    // ),
+                    modalHeaderStyle: S2ModalHeaderStyle(
+                      backgroundColor: Colors.black,
+                      centerTitle: true,
+                      iconTheme: IconThemeData(
+                        color: Colors.white, //change your color here
+                      ),
+                      textStyle: TextStyle(
+                        color: Colors.white,
+                      )
+                    ),
+                    // The text displayed when the value is null
+                    placeholder :'Select one',
+                    choiceStyle: S2ChoiceStyle(
+                      activeColor: Colors.black,
+                    ),
+                    // The current value of the single choice widget.
+                    value:value,
+                    // Called when single choice value changed
+                    onChange: (state) => setState((){
+                      value = state.value;
+                      isValueEmpty = false;
+                    }),
+
+                    // choice item list
+                    choiceItems: [
+                      S2Choice<String>(value: 'vot', title: 'Voter'),
+                      S2Choice<String>(value: 'can', title: 'Candidate'),
+                      S2Choice<String>(value: 'org', title: 'Organisation'),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 25,),
+                SizedBox(
+                  width: 300,
+                  child: TextFormField(
+                    validator: (val) => val.isEmpty? 'Invalid. Please enter your Mobile number':null,
+                    onChanged: (val){
+                      setState(() {
+                        mobileNo = val;
+                      });
+                    },
+                    obscureText: false,
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                        suffixIcon: Icon(Icons.phone),
+                        hintText: "Mobile number...",
+                        border:
+                        OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+                    ),
+                  ),
+                ),
                 SizedBox(height: 25,),
                 SizedBox(
                   width: 300,
@@ -223,8 +289,13 @@ class _SignUpState extends State<SignUp> {
                             isDateEmpty = true;
                           });
                         }
+                        if(value == null){
+                          setState(() {
+                            isValueEmpty = true;
+                          });
+                        }
                         if(_formkey.currentState.validate()){
-
+                          mobileNo = mobileNo.trim();
                           email = email.trimRight();
                           password = password.trimRight();
                           name = name.trimRight();
@@ -232,7 +303,7 @@ class _SignUpState extends State<SignUp> {
                           setState(() {
                             loading = true;
                           });
-                          dynamic result = await _auth.registerWithEmailAndPassword(email,password,name,dateOfBirth);
+                          dynamic result = await _auth.registerWithEmailAndPassword(email,password,name,dateOfBirth,mobileNo);
                           loading = false;
                           if(result == null){
                             setState(() {
