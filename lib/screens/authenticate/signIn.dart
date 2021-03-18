@@ -20,8 +20,8 @@ class _SignInState extends State<SignIn> {
   String password = '';
   String text1 = '';
   bool loading = false;
-  String value = null;
-  bool isValueEmpty = false;
+  String userType = null;
+  bool isUserTypeEmpty = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class _SignInState extends State<SignIn> {
                       width: 300,
                       child: SmartSelect<String>.single(
                         title:'User type',
-                        modalValidation: (val) => isValueEmpty? 'Invalid. Please enter your User type':null,
+                        modalValidation: (val) => isUserTypeEmpty? 'Invalid. Please enter your User type':null,
                         modalType: S2ModalType.popupDialog,
                         // modalConfig: S2ModalConfig(
                         //   confirmColor: Colors.green,
@@ -63,11 +63,11 @@ class _SignInState extends State<SignIn> {
                           activeColor: Colors.black,
                         ),
                         // The current value of the single choice widget.
-                        value:value,
+                        value:userType,
                         // Called when single choice value changed
                         onChange: (state) => setState((){
-                          value = state.value;
-                          isValueEmpty = false;
+                          userType = state.value;
+                          isUserTypeEmpty = false;
                         }),
 
                         // choice item list
@@ -146,9 +146,9 @@ class _SignInState extends State<SignIn> {
                       //   print(password);
                       // },
                       onPressed: () async{
-                        if(value == null){
+                        if(userType == null){
                           setState(() {
-                            isValueEmpty = true;
+                            isUserTypeEmpty = true;
                           });
                         }
                         email = email.trimRight();
@@ -157,10 +157,13 @@ class _SignInState extends State<SignIn> {
                           setState(() {
                             loading = true;
                           });
-                          dynamic result = await _auth.loginWithEmailAndPassword(email,password);
+
+                          dynamic result = await _auth.loginWithEmailAndPassword(email,password,userType);
+                          print(result);
                           if(result == null){
+                            print('3');
                             setState(() {
-                              text1 = 'Incorrect username or password';
+                              text1 = 'Incorrect username,user type or password';
                               loading = false;
                             });
                           }
@@ -190,33 +193,33 @@ class _SignInState extends State<SignIn> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(
-                        height: 45,
-                        width: 150,
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            // side: BorderSide(color: Colors.red)
-                          ),
-
-                          onPressed: () async {
-                            Navigator.pushNamed(context, '/loading');
-                            dynamic result = await _auth.signInAnon();
-                            Navigator.pop(context);
-                            if(result == null){
-                              print('error signing in');
-                            } else {
-                              print('signed in');
-                              print(result.uid);
-                            }
-
-                          },
-                          color: Colors.black,
-                          textColor: Colors.white,
-                          child: Text("guest".toUpperCase(),
-                              style: TextStyle(fontSize: 19)),
-                        ),
-                      ),
+                      // SizedBox(
+                      //   height: 45,
+                      //   width: 150,
+                      //   child: RaisedButton(
+                      //     shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(18.0),
+                      //       // side: BorderSide(color: Colors.red)
+                      //     ),
+                      //
+                      //     onPressed: () async {
+                      //       Navigator.pushNamed(context, '/loading');
+                      //       dynamic result = await _auth.signInAnon();
+                      //       Navigator.pop(context);
+                      //       if(result == null){
+                      //         print('error signing in');
+                      //       } else {
+                      //         print('signed in');
+                      //         print(result.uid);
+                      //       }
+                      //
+                      //     },
+                      //     color: Colors.black,
+                      //     textColor: Colors.white,
+                      //     child: Text("guest".toUpperCase(),
+                      //         style: TextStyle(fontSize: 19)),
+                      //   ),
+                      // ),
                       SizedBox(
                         height: 45,
                         width: 150,

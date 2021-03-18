@@ -7,14 +7,16 @@ class DatabaseService{
   final String uid;
   DatabaseService({this.uid});
 
-  final CollectionReference userdata = Firestore.instance.collection('userdata');
+  Future updateUserData({String name,String email,DateTime dateOfBirth,String mobileNo,String userType})async{
 
-  Future updateUserData(String name,String email,DateTime dateTime,String mobileNo)async{
-    return await userdata.document(uid).setData({
+    final CollectionReference userdata = Firestore.instance.collection('dataset');
+    return await userdata.document(email).setData({
+      'uid': uid,
       'name': name,
       'email': email,
-      'dateOfBirth': DateFormat('yyyy-MM-dd').format(dateTime),
+      'dateOfBirth': DateFormat('yyyy-MM-dd').format(dateOfBirth),
       'mobileNo': mobileNo,
+      'userType': userType,
     });
   }
 

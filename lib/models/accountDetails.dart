@@ -10,9 +10,9 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class AccountDetails extends StatefulWidget {
 
-  String name,email,mobileNo;
+  String name,email,mobileNo,userType;
   DateTime dateOfBirth;
-  AccountDetails({ this.name,this.email,this.dateOfBirth,this.mobileNo});
+  AccountDetails({ this.name,this.email,this.dateOfBirth,this.mobileNo,this.userType});
 
   @override
   _AccountDetailsState createState() => _AccountDetailsState(name: name,email: email,dateOfBirth: dateOfBirth,mobileNo: mobileNo);
@@ -91,6 +91,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                     OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
               ),
             ),
+            SizedBox(height: 25,),
             SizedBox(
               width: 300,
               child: TextFormField(
@@ -101,11 +102,11 @@ class _AccountDetailsState extends State<AccountDetails> {
                   });
                 },
                 readOnly: _changeDetails,
-                initialValue: "$name",
+                initialValue: "$mobileNo",
                 obscureText: false,
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                    suffixIcon: Icon(Icons.account_circle_outlined),
+                    suffixIcon: Icon(Icons.phone_android),
                     border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
               ),

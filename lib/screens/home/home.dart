@@ -20,22 +20,30 @@ class _HomeState extends State<Home> {
   String name = '';
   String email = '';
   DateTime dateOfBirth;
-
+  String userType;
+  String mobileNo;
+  // User user;
+  FirebaseUser user;
   @override
   void initState(){
     super.initState();
     _getUserDetails();
   }
   Future<void> _getUserDetails() async {
+    // user = await _auth.getCurrentUser();
+    user =  await FirebaseAuth.instance.currentUser();
+    // print(user.email);
     Firestore.instance
-        .collection('userdata')
-        .document((await FirebaseAuth.instance.currentUser()).uid)
+        .collection('dataset')
+        .document(user.email)
         .get()
         .then((value) {
       setState(() {
         name = value.data['name'].toString();
         email = value.data['email'].toString();
         dateOfBirth = DateTime.parse(value.data['dateOfBirth'].toString());
+        mobileNo = value.data['mobileNo'].toString();
+        userType = value.data['userType'].toString();
       });
     });
   }
@@ -94,7 +102,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AccountDetails(name: name,email:email,dateOfBirth:dateOfBirth)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AccountDetails(name: name,email:email,dateOfBirth:dateOfBirth,mobileNo: mobileNo,userType:userType)));
                   },
                 ),
               ),

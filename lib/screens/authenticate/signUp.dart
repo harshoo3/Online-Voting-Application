@@ -4,8 +4,10 @@ import 'package:online_voting/screens/loading.dart';
 import 'package:online_voting/services/auth.dart';
 import 'package:date_field/date_field.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:smart_select/smart_select.dart';
+import 'package:flutter/services.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -19,6 +21,8 @@ class _SignUpState extends State<SignUp> {
 
   final _formkey = GlobalKey<FormState>();
   final AuthService _auth = AuthService();
+
+  FirebaseAuth _auth1 = FirebaseAuth.instance;
   bool loading = false;
   //text field state
   String email = '';
@@ -27,14 +31,73 @@ class _SignUpState extends State<SignUp> {
   String mobileNo = '';
   String error = '';
   String name = '';
+  String smsOTP = '';
+  String verificationId;
   DateTime dateOfBirth ;
   bool isDateEmpty = false;
-  String value = null;
-  bool isValueEmpty = false;
+  String userType = null;
+  bool isUserTypeEmpty = false;
   // bool phoneNumber =
   String initialCountry = 'IN';
   PhoneNumber number = PhoneNumber(isoCode: 'IN');
 
+  Future<void> verifyPhone() async {
+    final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
+      this.verificationId = verId;
+    };
+    try {
+      await _auth1.verifyPhoneNumber(
+          phoneNumber: this.mobileNo, // PHONE NUMBER TO SEND OTP
+          codeAutoRetrievalTimeout: (String verId) {
+            //Starts the phone number verification process for the given phone number.
+            //Either sends an SMS with a 6 digit code to the phone number specified, or sign's the user in and [verificationCompleted] is called.
+            this.verificationId = verId;
+          },
+          codeSent:
+          smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
+          timeout: const Duration(seconds: 100),
+          verificationCompleted: (AuthCredential phoneAuthCredential) {
+            print(phoneAuthCredential);
+          },
+          verificationFailed: (AuthException exceptio) {
+            print('${exceptio.message}');
+          });
+    } catch (e) {
+      handleError(e);
+    }
+  }
+  handleError(PlatformException error) {
+    print(error);
+    // switch (error.code) {
+    //   case 'ERROR_INVALID_VERIFICATION_CODE':
+    //     FocusScope.of(context).requestFocus(new FocusNode());
+    //     setState(() {
+    //       errorMessage = 'Invalid Code';
+    //     });
+    //     Navigator.of(context).pop();
+    //     smsOTPDialog(context).then((value) {
+    //       print('sign in');
+    //     });
+    //     break;
+    //   default:
+    //     setState(() {
+    //       errorMessage = error.message;
+    //     });
+    //
+    //     break;
+    // }
+  }
+  verifyOTP() async {
+    try {
+      final AuthCredential credential = PhoneAuthProvider.getCredential(
+        verificationId: verificationId,
+        smsCode: smsOTP,
+      );
+      print('otp verified');
+    } catch (e) {
+      handleError(e);
+    }
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -108,7 +171,7 @@ class _SignUpState extends State<SignUp> {
                   width: 300,
                   child: SmartSelect<String>.single(
                     title:'User type',
-                    modalValidation: (val) => isValueEmpty? 'Invalid. Please enter your User type':null,
+                    modalValidation: (val) => isUserTypeEmpty? 'Invalid. Please enter your User type':null,
                     modalType: S2ModalType.popupDialog,
                     // modalConfig: S2ModalConfig(
                     //   confirmColor: Colors.green,
@@ -130,11 +193,11 @@ class _SignUpState extends State<SignUp> {
                       activeColor: Colors.black,
                     ),
                     // The current value of the single choice widget.
-                    value:value,
+                    value:userType,
                     // Called when single choice value changed
                     onChange: (state) => setState((){
-                      value = state.value;
-                      isValueEmpty = false;
+                      userType = state.value;
+                      isUserTypeEmpty = false;
                     }),
 
                     // choice item list
@@ -162,6 +225,70 @@ class _SignUpState extends State<SignUp> {
                         hintText: "Mobile number...",
                         border:
                         OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+                    ),
+                  ),
+                ),
+                SizedBox(height: 25,),
+                SizedBox(
+                  height: 45,
+                  width: 150,
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    onPressed: (){
+                      // setState(() {
+                      //   mobileNo = '+91'+mobileNo;
+                      //   print(mobileNo);
+                      // });
+                      verifyPhone();
+                    },
+                    color: Colors.black,
+                    textColor: Colors.white,
+                    child: Text("Send OTP".toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 19,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 25,),
+                SizedBox(
+                  width: 300,
+                  child: TextFormField(
+                    validator: (val) => val.isEmpty? 'Invalid. Please enter your Mobile number':null,
+                    onChanged: (val){
+                      setState(() {
+                        smsOTP = val;
+                      });
+                    },
+                    obscureText: false,
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                        suffixIcon: Icon(Icons.message_outlined),
+                        hintText: "OTP...",
+                        border:
+                        OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+                    ),
+                  ),
+                ),
+                SizedBox(height: 25,),
+                SizedBox(
+                  height: 45,
+                  width: 150,
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    onPressed: (){
+                      verifyOTP();
+                    },
+                    color: Colors.black,
+                    textColor: Colors.white,
+                    child: Text("Done".toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 19,
+                      ),
                     ),
                   ),
                 ),
@@ -289,9 +416,9 @@ class _SignUpState extends State<SignUp> {
                             isDateEmpty = true;
                           });
                         }
-                        if(value == null){
+                        if(userType == null){
                           setState(() {
-                            isValueEmpty = true;
+                            isUserTypeEmpty = true;
                           });
                         }
                         if(_formkey.currentState.validate()){
@@ -303,7 +430,7 @@ class _SignUpState extends State<SignUp> {
                           setState(() {
                             loading = true;
                           });
-                          dynamic result = await _auth.registerWithEmailAndPassword(email,password,name,dateOfBirth,mobileNo);
+                          dynamic result = await _auth.registerWithEmailAndPassword(email,password,name,dateOfBirth,mobileNo,userType);
                           loading = false;
                           if(result == null){
                             setState(() {

@@ -32,14 +32,21 @@ class AuthService{
   }
 
   // sign in w email pwd
-  Future loginWithEmailAndPassword(String email, String password) async{
+  Future loginWithEmailAndPassword(String email, String password,String userType) async{
     try{
-      AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
-      FirebaseUser user = result.user;
-      return _userFromFirebaseUser(user);
-
+      await Firestore.instance.collection('dataset').document(email).get()
+        .then((value)async {
+          if(userType == value.data['userType'].toString()){
+            dynamic result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+            FirebaseUser user = result.user;
+            return _userFromFirebaseUser(user);
+        }else{
+            return null;
+        }
+      });
     }catch(e){
-      print(e.toString());
+      // print(e.toString());
+      print('yolololo 2');
       return null;
     }
   }
@@ -75,14 +82,14 @@ class AuthService{
 
 
   // register with email pwd
-  Future registerWithEmailAndPassword(String email, String password,String name,DateTime dateTime,String mobileNo) async{
+  Future registerWithEmailAndPassword(String email, String password,String name,DateTime dateOfBirth,String mobileNo,String userType) async{
     try{
       // AuthResult result = await _auth.signInWithCustomToken(token: nul)
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
 
 
-      await DatabaseService(uid : user.uid).updateUserData(name, email,dateTime,mobileNo);
+      await DatabaseService(uid : user.uid).updateUserData(name:name, email:email,dateOfBirth:dateOfBirth,mobileNo:mobileNo,userType:userType);
 
       return _userFromFirebaseUser(user);
 
@@ -92,14 +99,14 @@ class AuthService{
     }
   }
 
-  Future updateData({ String email = '',String name = '',DateTime dateOfBirth,String mobileNo=''}) async {
+  Future updateData({ String email = '',String name = '',DateTime dateOfBirth,String mobileNo='',String userType}) async {
     try{
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       if(email.isNotEmpty){
         user.updateEmail(email);
       }
 
-      await DatabaseService(uid : user.uid).updateUserData(name, email,dateOfBirth,mobileNo);
+      await DatabaseService(uid : user.uid).updateUserData(name:name, email:email,dateOfBirth:dateOfBirth,mobileNo:mobileNo,userType:userType);
       return _userFromFirebaseUser(user);
 
     } catch(e){
@@ -108,7 +115,7 @@ class AuthService{
     }
   }
 
-  Future getCurrentUser()async{
+  Future getCurrentUser() async{
     try{
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       return _userFromFirebaseUser(user);
