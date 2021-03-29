@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_voting/models/changeDetailsVerification.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/screens/authenticate/authenticate.dart';
 import 'package:online_voting/screens/home/home.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget{
           '/wrapper': (context) => Wrapper(),
           '/loading': (context) => Loading(),
           '/accountDetails': (context) => AccountDetails(),
+          '/changeDetailsVerification': (context) => ChangeDetailsVerification(),
         },
       ),
     );

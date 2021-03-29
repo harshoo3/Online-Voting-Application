@@ -1,3 +1,5 @@
+// import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/screens/home/voting.dart';
@@ -8,6 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_voting/screens/accountDetailsList.dart';
 import 'package:online_voting/models/accountDetails.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:online_voting/screens/home/addManifesto.dart';
+import 'package:online_voting/screens/home/createElection.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -22,16 +26,18 @@ class _HomeState extends State<Home> {
   DateTime dateOfBirth;
   String userType;
   String mobileNo;
+
   // User user;
   FirebaseUser user;
   @override
   void initState(){
     super.initState();
-    _getUserDetails();
+    getUserDetails();
   }
-  Future<void> _getUserDetails() async {
-    // user = await _auth.getCurrentUser();
-    user =  await FirebaseAuth.instance.currentUser();
+
+  Future<void> getUserDetails() async {
+    // user = await _auth.getCurrentUser()
+   this.user =  await FirebaseAuth.instance.currentUser();
     // print(user.email);
     Firestore.instance
         .collection('dataset')
@@ -39,18 +45,19 @@ class _HomeState extends State<Home> {
         .get()
         .then((value) {
       setState(() {
-        name = value.data['name'].toString();
-        email = value.data['email'].toString();
-        dateOfBirth = DateTime.parse(value.data['dateOfBirth'].toString());
-        mobileNo = value.data['mobileNo'].toString();
-        userType = value.data['userType'].toString();
+        this.name = value.data['name'].toString();
+        this.email = value.data['email'].toString();
+        this.dateOfBirth = DateTime.parse(value.data['dateOfBirth'].toString());
+        this.mobileNo = value.data['mobileNo'].toString();
+        this.userType = value.data['userType'].toString();
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    _getUserDetails();
+    getUserDetails();
+
     // StreamProvider<List<AccountDetails>>.value(
     // value: DatabaseService().data,
     // child:
@@ -102,14 +109,33 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AccountDetails(name: name,email:email,dateOfBirth:dateOfBirth,mobileNo: mobileNo,userType:userType)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AccountDetails(name: name,email: email,dateOfBirth: dateOfBirth,mobileNo: mobileNo,userType: userType)));
                   },
                 ),
               ),
+              // userType == 'can'?SizedBox(
+              //   width: 200,
+              //   child: Voting(),
+              // ):null,
+              // userType == 'org'?SizedBox(
+              //   width: 200,
+              //   child: CreateElection(),
+              // ):null,
               SizedBox(
-                width: 200,
-                child: Voting(),
-              )
+                width: 300,
+                child: FlatButton(
+                  color: Colors.black,
+                  child:Text(
+                    'Add Manifesto',
+                    style: TextStyle(
+                        color: Colors.white
+                    ),
+                  ),
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddManifesto()));
+                  },
+                ),
+              ),
             ],
           ),
       ),

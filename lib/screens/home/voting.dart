@@ -16,40 +16,52 @@ class _VotingState extends State<Voting> {
 
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Party 1: $count1',
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     Text(
+        //       'Party 1: $count1',
+        //     ),
+        //     Text(
+        //       'Party 2: $count2',
+        //     ),
+        //   ],
+        // ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     RaisedButton.icon(
+        //       onPressed: (){
+        //       count1=count1+1;
+        //       },
+        //       icon: Icon(Icons.add),
+        //       label: Text(
+        //         '+1'
+        //       ),
+        //     ),
+        //     RaisedButton.icon(
+        //       onPressed: (){
+        //         count2=count2+1;
+        //       },
+        //       icon: Icon(Icons.add),
+        //       label: Text(
+        //           '+1'
+        //       ),
+        //     ),
+        //   ],
+        // )
+        RaisedButton(
+          color: Colors.black,
+          child: Text(
+            'Contest Election',
+            style: TextStyle(
+              color: Colors.white,
             ),
-            Text(
-              'Party 2: $count2',
-            ),
-          ],
+          ),
+          onPressed: (){
+
+          },
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            RaisedButton.icon(
-              onPressed: (){
-              count1=count1+1;
-              },
-              icon: Icon(Icons.add),
-              label: Text(
-                '+1'
-              ),
-            ),
-            RaisedButton.icon(
-              onPressed: (){
-                count2=count2+1;
-              },
-              icon: Icon(Icons.add),
-              label: Text(
-                  '+1'
-              ),
-            ),
-          ],
-        )
       ],
     );
   }

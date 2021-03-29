@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:smart_select/smart_select.dart';
 import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -34,12 +35,32 @@ class _SignUpState extends State<SignUp> {
   String smsOTP = '';
   String verificationId;
   DateTime dateOfBirth ;
+  String orgName = null;
   bool isDateEmpty = false;
   String userType = null;
   bool isUserTypeEmpty = false;
+  List<DocumentSnapshot> orgNamesDoc;
+  List<String> orgNames = [];
   // bool phoneNumber =
   String initialCountry = 'IN';
   PhoneNumber number = PhoneNumber(isoCode: 'IN');
+  Future<void> getMarker() async{
+    QuerySnapshot snapshot = await Firestore.instance.collection('orgNames').getDocuments();
+    orgNamesDoc = snapshot.documents;
+    for(var i = 0;i< orgNamesDoc.length;i++){
+      print(orgNamesDoc[i].data['name']);
+      setState(() {
+        orgNames.add(orgNamesDoc[i].data['name']);
+      });
+    }
+    // print(xyz.data);
+  }
+  Future addOrgName()async{
+    final CollectionReference userdata = Firestore.instance.collection('orgNames');
+    return await userdata.document(name).setData({
+      'name':name,
+    });
+  }
 
   Future<void> verifyPhone() async {
     final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
@@ -99,8 +120,13 @@ class _SignUpState extends State<SignUp> {
     }
   }
   @override
+  void initState() {
+    // TODO: implement initState
+    getMarker();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
-
     FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
     return loading? Loading():Scaffold(
       body: SafeArea(
@@ -209,6 +235,43 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
                 SizedBox(height: 25,),
+                userType!= 'org'?SizedBox(
+                  width: 200,
+                  child: DropdownButton<String>(
+                    hint: Text('Organisation name'),
+                    isExpanded: true,
+                    value: orgName,
+                    icon: Icon(
+                      Icons.arrow_downward,
+                    ),
+                    iconSize: 24,
+                    elevation: 16,
+
+                    style: TextStyle(
+                        color: Colors.black
+                    ),
+                    underline: Container(
+                      height: 2,
+                      color: Colors.black,
+                    ),
+                    onChanged: (String newValue) {
+                      setState(() {
+                        orgName = newValue;
+                      });
+                    },
+                    items: orgNames
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    })
+                        .toList(),
+                  ),
+                ):SizedBox(height: 0,),
+                SizedBox(
+                  height: userType!= 'org'? 25 : 0,
+                ),
                 SizedBox(
                   width: 300,
                   child: TextFormField(
@@ -437,6 +500,10 @@ class _SignUpState extends State<SignUp> {
                               error = 'Please enter a valid Email';
                             });
                           }else{
+                            if(userType=='org'){
+                              addOrgName();
+                            }
+                            print(getMarker());
                             Navigator.pop(context);
                           }
                           // }else{
