@@ -38,6 +38,7 @@ class _SignUpState extends State<SignUp> {
   String orgName = null;
   bool isDateEmpty = false;
   String userType = null;
+  int electionCount = 0;
   bool isUserTypeEmpty = false;
   List<DocumentSnapshot> orgNamesDoc;
   List<String> orgNames = [];
@@ -236,8 +237,8 @@ class _SignUpState extends State<SignUp> {
                 ),
                 SizedBox(height: 25,),
                 userType!= 'org'?SizedBox(
-                  width: 200,
-                  child: DropdownButton<String>(
+                  width: 260,
+                  child: DropdownButtonFormField<String>(
                     hint: Text('Organisation name'),
                     isExpanded: true,
                     value: orgName,
@@ -247,13 +248,15 @@ class _SignUpState extends State<SignUp> {
                     iconSize: 24,
                     elevation: 16,
 
+                    validator: (value) => value == null ? 'Organisation name required' : null,
                     style: TextStyle(
                         color: Colors.black
                     ),
-                    underline: Container(
-                      height: 2,
-                      color: Colors.black,
-                    ),
+                    // underline: Container(
+                    //   height: 2,
+                    //   color: Colors.black,
+                    // ),
+
                     onChanged: (String newValue) {
                       setState(() {
                         orgName = newValue;
@@ -493,7 +496,7 @@ class _SignUpState extends State<SignUp> {
                           setState(() {
                             loading = true;
                           });
-                          dynamic result = await _auth.registerWithEmailAndPassword(email,password,name,dateOfBirth,mobileNo,userType);
+                          dynamic result = await _auth.registerWithEmailAndPassword(email,password,name,dateOfBirth,mobileNo,userType,orgName,electionCount);
                           loading = false;
                           if(result == null){
                             setState(() {

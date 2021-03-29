@@ -26,7 +26,8 @@ class _HomeState extends State<Home> {
   DateTime dateOfBirth;
   String userType;
   String mobileNo;
-
+  String orgName;
+  int electionCount;
   // User user;
   FirebaseUser user;
   @override
@@ -50,6 +51,8 @@ class _HomeState extends State<Home> {
         this.dateOfBirth = DateTime.parse(value.data['dateOfBirth'].toString());
         this.mobileNo = value.data['mobileNo'].toString();
         this.userType = value.data['userType'].toString();
+        this.orgName = value.data['orgName'].toString();
+        this.electionCount = value.data['electionCount'];
       });
     });
   }
@@ -117,10 +120,21 @@ class _HomeState extends State<Home> {
               //   width: 200,
               //   child: Voting(),
               // ):null,
-              // userType == 'org'?SizedBox(
-              //   width: 200,
-              //   child: CreateElection(),
-              // ):null,
+              userType == 'org'?SizedBox(
+                width: 300,
+                child: RaisedButton(
+                  color:Colors.black,
+                  child: Text(
+                    'Create Election',
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
+                  ),
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CreateElection(name: name,electionCount:electionCount)));
+                  },
+                ),
+              ):SizedBox(height: 0,),
               SizedBox(
                 width: 300,
                 child: FlatButton(

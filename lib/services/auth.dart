@@ -82,14 +82,14 @@ class AuthService{
 
 
   // register with email pwd
-  Future registerWithEmailAndPassword(String email, String password,String name,DateTime dateOfBirth,String mobileNo,String userType) async{
+  Future registerWithEmailAndPassword(String email, String password,String name,DateTime dateOfBirth,String mobileNo,String userType,String orgName,int electionCount) async{
     try{
       // AuthResult result = await _auth.signInWithCustomToken(token: nul)
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
 
 
-      await DatabaseService(uid : user.uid).updateUserData(name:name, email:email,dateOfBirth:dateOfBirth,mobileNo:mobileNo,userType:userType);
+      await DatabaseService(uid : user.uid).updateUserData(name:name, email:email,dateOfBirth:dateOfBirth,mobileNo:mobileNo,userType:userType,orgName:orgName,electionCount:electionCount);
 
       return _userFromFirebaseUser(user);
 
