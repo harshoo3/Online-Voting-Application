@@ -38,7 +38,7 @@ class AuthService{
         .then((value)async {
           if(userType == value.data['userType'].toString()){
             dynamic result = await _auth.signInWithEmailAndPassword(email: email, password: password);
-            FirebaseUser user = result.user;
+            FirebaseUser user = result.currUser;
             return _userFromFirebaseUser(user);
         }else{
             return null;

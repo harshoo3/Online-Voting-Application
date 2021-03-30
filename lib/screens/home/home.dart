@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:online_voting/models/user.dart';
+import 'package:online_voting/screens/home/elections.dart';
 import 'package:online_voting/screens/home/voting.dart';
+import 'package:online_voting/screens/loading.dart';
 import 'package:online_voting/services/auth.dart';
 import 'package:online_voting/services/database.dart';
 import 'package:provider/provider.dart';
@@ -21,50 +23,46 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
 
-  String name = '';
-  String email = '';
-  DateTime dateOfBirth;
-  String userType;
-  String mobileNo;
-  String orgName;
-  int electionCount;
-  // User user;
-  FirebaseUser user;
+  User user;
+  FirebaseUser currUser;
+  bool loading =true;
   @override
   void initState(){
-    super.initState();
     getUserDetails();
+    super.initState();
   }
 
   Future<void> getUserDetails() async {
     // user = await _auth.getCurrentUser()
-   this.user =  await FirebaseAuth.instance.currentUser();
+   this.currUser =  await FirebaseAuth.instance.currentUser();
     // print(user.email);
     Firestore.instance
         .collection('dataset')
-        .document(user.email)
+        .document(currUser.email)
         .get()
         .then((value) {
       setState(() {
-        this.name = value.data['name'].toString();
-        this.email = value.data['email'].toString();
-        this.dateOfBirth = DateTime.parse(value.data['dateOfBirth'].toString());
-        this.mobileNo = value.data['mobileNo'].toString();
-        this.userType = value.data['userType'].toString();
-        this.orgName = value.data['orgName'].toString();
-        this.electionCount = value.data['electionCount'];
+        user= User(
+            userType:value.data['userType'].toString(),
+            name:value.data['name'].toString(),
+            email:value.data['email'].toString(),
+            dateOfBirth:DateTime.parse(value.data['dateOfBirth'].toString()),
+            mobileNo:value.data['mobileNo'].toString(),
+            orgName:value.data['orgName'].toString(),
+            electionCount:value.data['electionCount']
+        );
+        loading = false;
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    getUserDetails();
 
     // StreamProvider<List<AccountDetails>>.value(
     // value: DatabaseService().data,
     // child:
-    return Scaffold(
+    return loading? Loading():Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text('Online Voting'),
@@ -93,7 +91,7 @@ class _HomeState extends State<Home> {
               SizedBox(height: 30,),
               SizedBox(
                 child:Text(
-                  'Welcome $name',
+                  'Welcome ${user.name}',
                   // 'yolo',
                   style: TextStyle(
                       fontSize: 20
@@ -112,7 +110,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AccountDetails(name: name,email: email,dateOfBirth: dateOfBirth,mobileNo: mobileNo,userType: userType)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AccountDetails(user:user)));
                   },
                 ),
               ),
@@ -120,33 +118,18 @@ class _HomeState extends State<Home> {
               //   width: 200,
               //   child: Voting(),
               // ):null,
-              userType == 'org'?SizedBox(
-                width: 300,
-                child: RaisedButton(
-                  color:Colors.black,
-                  child: Text(
-                    'Create Election',
-                    style: TextStyle(
-                      color: Colors.white
-                    ),
-                  ),
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CreateElection(name: name,electionCount:electionCount)));
-                  },
-                ),
-              ):SizedBox(height: 0,),
               SizedBox(
                 width: 300,
                 child: FlatButton(
                   color: Colors.black,
                   child:Text(
-                    'Add Manifesto',
+                    'Elections',
                     style: TextStyle(
                         color: Colors.white
                     ),
                   ),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddManifesto()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Elections(user:user)));
                   },
                 ),
               ),

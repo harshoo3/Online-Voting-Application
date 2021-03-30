@@ -8,15 +8,17 @@ import 'package:intl/intl.dart';
 import 'package:online_voting/services/auth.dart';
 import 'package:online_voting/services/database.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:online_voting/models/user.dart';
 
 class AccountDetails extends StatefulWidget {
 
   String name,email,mobileNo,userType;
   DateTime dateOfBirth;
-  AccountDetails({ this.name,this.email,this.dateOfBirth,this.mobileNo,this.userType});
+  User user;
+  AccountDetails({ this.user});
 
   @override
-  _AccountDetailsState createState() => _AccountDetailsState(name: name,email: email,dateOfBirth: dateOfBirth,mobileNo: mobileNo);
+  _AccountDetailsState createState() => _AccountDetailsState(user:user);
 }
 
 class _AccountDetailsState extends State<AccountDetails> {
@@ -25,11 +27,12 @@ class _AccountDetailsState extends State<AccountDetails> {
   bool _changeDetails = true;
   bool isEmailChanged = false;
   bool error=false;
+  User user;
   // final _controller = TextEditingController().text = "$name" ;
-  String name,email,mobileNo;
-  DateTime dateOfBirth;
+  // String name,email,mobileNo;
+  // DateTime dateOfBirth;
 
-  _AccountDetailsState({ this.name,this.email,this.dateOfBirth,this.mobileNo});
+  _AccountDetailsState({ this.user});
 
   void initState() {
     super.initState();
@@ -57,11 +60,11 @@ class _AccountDetailsState extends State<AccountDetails> {
                   validator: (val) => val.isEmpty ? 'Invalid. Please enter your new email':null,
                   onChanged: (val){
                     setState(() {
-                      email = val;
+                      user.email = val;
                     });
                   },
                   readOnly: _changeDetails,
-                  initialValue: "$email",
+                  initialValue: "${user.email}",
                   obscureText: false,
                   decoration: InputDecoration(
                       contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -79,11 +82,11 @@ class _AccountDetailsState extends State<AccountDetails> {
                 validator: (val) => val.isEmpty ? 'Invalid. Please enter your new name':null,
                 onChanged: (val){
                   setState(() {
-                    name = val;
+                    user.name = val;
                   });
                 },
                 readOnly: _changeDetails,
-                initialValue: "$name",
+                initialValue: "${user.name}",
                 obscureText: false,
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -99,11 +102,11 @@ class _AccountDetailsState extends State<AccountDetails> {
                 validator: (val) => val.isEmpty ? 'Invalid. Please enter your new mobile number':null,
                 onChanged: (val){
                   setState(() {
-                    mobileNo = val;
+                    user.mobileNo = val;
                   });
                 },
                 readOnly: _changeDetails,
-                initialValue: "$mobileNo",
+                initialValue: "${user.mobileNo}",
                 obscureText: false,
                 decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -127,13 +130,13 @@ class _AccountDetailsState extends State<AccountDetails> {
                   hintText: 'Date of birth...',
                 ),
                 enabled: !_changeDetails,
-                initialValue: dateOfBirth,
+                initialValue: user.dateOfBirth,
                 mode: DateTimeFieldPickerMode.date,
                 autovalidateMode: AutovalidateMode.always,
                 validator: (val) => val == null ? 'Invalid. Enter Date of birth' : null,
                 onDateSelected: (DateTime val) {
                   setState(() {
-                    dateOfBirth = val;
+                    user.dateOfBirth = val;
                     // isDateEmpty = false;
                     print(DateFormat('yyyy-MM-dd').format(val));
                   });
@@ -174,7 +177,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                   setState(() {
                     _changeDetails=!_changeDetails;
                   });
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeDetailsVerification(changeDetails:_changeDetails,email: email)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeDetailsVerification(changeDetails:_changeDetails,email: user.email)));
                 },
               ),
             ),
@@ -190,7 +193,7 @@ class _AccountDetailsState extends State<AccountDetails> {
                   ),
                 ),
                 onPressed: () async {
-                  dynamic result = await _auth.updateData(name:name,email:email,dateOfBirth:dateOfBirth);
+                  dynamic result = await _auth.updateData(name:user.name,email:user.email,dateOfBirth:user.dateOfBirth);
                   if(result == null){
                     setState(() {
                       error=true;

@@ -1,18 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:date_field/date_field.dart';
 import 'package:intl/intl.dart';
 import 'package:online_voting/screens/loading.dart';
+import 'package:online_voting/models/user.dart';
+import 'package:flutter/services.dart';
 
 
 class CreateElection extends StatefulWidget {
-  String name;
-  int electionCount;
-  CreateElection({this.name,this.electionCount});
+  User user;
+  CreateElection({this.user});
 
   @override
-  _CreateElectionState createState() => _CreateElectionState(name:name,electionCount: electionCount);
+  _CreateElectionState createState() => _CreateElectionState(user:user);
 }
 
 class _CreateElectionState extends State<CreateElection> {
@@ -21,32 +23,37 @@ class _CreateElectionState extends State<CreateElection> {
   DateTime startDate,endDate;
   DateTime setDate = new DateTime.now();
   bool loading = false;
-  String name;
-  int electionCount;
+  User user;
   bool isPressed = false;
   bool isStartDateEmpty = false;
   bool isEndDateEmpty = false;
+  bool isPartyModeAllowed = false;
+  String post = '' ;
+  String electionDescription = '';
+  int maxCandidates;
   bool success = false;
   String errorText = '';
 
-  _CreateElectionState({this.name,this.electionCount});
-  FirebaseUser user;
+  _CreateElectionState({this.user});
   Future<void> createElectionDatabase(DateTime startDate,DateTime endDate) async {
 
     // = new DateTime(now.year, now.month, now.day);
-    user = await FirebaseAuth.instance.currentUser();
     final CollectionReference elec = Firestore.instance.collection('Elections');
-    await elec.document(name).updateData({
-      '$electionCount':{
+    await elec.document(user.name).updateData({
+      '${user.electionCount}':{
         'setDate': setDate,
         'startDate': startDate,
         'endDate': endDate,
+        'post': post,
+        'electionDescription': electionDescription,
+        'maxCandidates':maxCandidates,
+        'isPartyModeAllowed':isPartyModeAllowed,
       }
     });
-    electionCount=electionCount+1;
+    user.electionCount=user.electionCount+1;
     final CollectionReference userdata = Firestore.instance.collection('dataset');
     return await userdata.document(user.email).updateData({
-      'electionCount':electionCount,
+      'electionCount':user.electionCount,
     });
   }
 
@@ -55,7 +62,10 @@ class _CreateElectionState extends State<CreateElection> {
     setState(() {
       errorText = success?'Success':'Failure';
     });
-    return loading? Loading():Scaffold(
+    if (loading) {
+      return Loading();
+    } else {
+      return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text('Create Elections'),
@@ -76,7 +86,7 @@ class _CreateElectionState extends State<CreateElection> {
                       border:
                       OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
                       suffixIcon: Icon(Icons.event_note),
-                      hintText: 'Election Start Date...',
+                      labelText: 'Election Start Date...',
                     ),
                     mode: DateTimeFieldPickerMode.dateAndTime,
                     autovalidateMode: AutovalidateMode.always,
@@ -100,7 +110,7 @@ class _CreateElectionState extends State<CreateElection> {
                       border:
                       OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
                       suffixIcon: Icon(Icons.event_note),
-                      hintText: 'Election End Date...',
+                      labelText: 'Election End Date...',
                     ),
                     mode: DateTimeFieldPickerMode.dateAndTime,
                     autovalidateMode: AutovalidateMode.always,
@@ -114,6 +124,89 @@ class _CreateElectionState extends State<CreateElection> {
                     },
                   ),
                 ),
+                SizedBox(height: 25,),
+                SizedBox(
+                  width: 300,
+                  child: TextFormField(
+                    validator: (val) => val.isEmpty? 'Invalid. Please enter the post for election':null,
+                    onChanged: (val){
+                      setState(() {
+                        post = val;
+                      });
+                    },
+                    obscureText: false,
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                        suffixIcon: Icon(Icons.email_outlined),
+                        labelText: "The Post for election...",
+                        border:
+                        OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+                    ),
+                  ),
+                ),SizedBox(height: 25,),
+                SizedBox(
+                  width: 270,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Is Party system allowed?'),
+                      CupertinoSwitch(
+                        activeColor: Colors.blue,
+                        value: isPartyModeAllowed,
+                        onChanged: (value) {
+                          print("VALUE : $value");
+                          setState(() {
+                            isPartyModeAllowed = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 25,),
+                SizedBox(
+                  width: 300,
+                  child: TextFormField(
+                    validator: (val) => val.isEmpty? 'Invalid. Please enter the maximum number of Candidates':null,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    onChanged: (val){
+                      setState(() {
+                        maxCandidates = int.parse(val);
+                      });
+                    },
+                    obscureText: false,
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                        suffixIcon: Icon(Icons.person),
+                        labelText: "The Max number of Candidates...",
+                        border:
+                        OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+                    ),
+                  ),
+                ),
+                SizedBox(height: 25.0),
+                SizedBox(
+                  width: 300,
+                  height: 140,
+                  child: TextFormField(
+                    keyboardType: TextInputType.multiline,
+                    expands: true,
+                    maxLines: null,
+                    validator: (val) => val.isEmpty? 'Invalid. Please enter the post for election':null,
+                    onChanged: (val){
+                      setState(() {
+                        electionDescription = val;
+                      });
+                    },
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                        suffixIcon: Icon(Icons.edit),
+                        labelText: "Election Description...",
+                        border:
+                        OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+                    ),
+                  ),
+                ),
                 SizedBox(height: 25.0),
                 SizedBox(
                   width: 300,
@@ -125,34 +218,35 @@ class _CreateElectionState extends State<CreateElection> {
                         color: Colors.white
                       ),
                     ),
-                    onPressed: (){
+                    onPressed: () {
                       setState(() {
                         isPressed = true;
                       });
-                      if(startDate == null){
+                      if (startDate == null) {
                         setState(() {
                           isStartDateEmpty = true;
                         });
                       }
-                      if(endDate == null){
+                      if (endDate == null) {
                         setState(() {
                           isEndDateEmpty = true;
                         });
                       }
-                      if(startDate.difference(setDate) >= Duration(seconds: 0))
-                      if(endDate.difference(startDate) >= Duration(seconds: 0)){
-                        if(_formkey.currentState.validate()){
-                          setState(() {
-                            loading = true;
-                          });
-                          createElectionDatabase(startDate,endDate);
-                          setState(() {
-                            loading = false;
-                            success = true;
-                          });
+                      if (startDate.difference(setDate) >= Duration(seconds: 0)) {
+                        if (endDate.difference(startDate) >= Duration(seconds: 0)) {
+                          if (_formkey.currentState.validate()) {
+                            setState(() {
+                              loading = true;
+                            });
+                            createElectionDatabase(startDate, endDate);
+                            setState(() {
+                              loading = false;
+                              success = true;
+                            });
+                          }
                         }
                       }
-                    },
+                    }
                   ),
                 ),
                 isPressed?SizedBox(
@@ -170,5 +264,6 @@ class _CreateElectionState extends State<CreateElection> {
         ),
       ),
     );
+    }
   }
 }
