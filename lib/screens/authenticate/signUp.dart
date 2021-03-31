@@ -496,6 +496,9 @@ class _SignUpState extends State<SignUp> {
                           setState(() {
                             loading = true;
                           });
+                          if(userType == 'org'){
+                            orgName = name;
+                          }
                           dynamic result = await _auth.registerWithEmailAndPassword(email,password,name,dateOfBirth,mobileNo,userType,orgName,electionCount);
                           loading = false;
                           if(result == null){
