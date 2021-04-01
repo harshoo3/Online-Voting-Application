@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'dart:async';
 class AuthService{
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -35,13 +35,13 @@ class AuthService{
   Future loginWithEmailAndPassword(String email, String password,String userType) async{
     try{
       await Firestore.instance.collection('dataset').document(email).get()
-        .then((value)async {
-          if(userType == value.data['userType'].toString()){
-            dynamic result = await _auth.signInWithEmailAndPassword(email: email, password: password);
-            FirebaseUser user = result.currUser;
-            return _userFromFirebaseUser(user);
+          .then((value)async {
+        if(userType == value.data['userType'].toString()){
+          dynamic result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+          FirebaseUser user = result.currUser;
+          return _userFromFirebaseUser(user);
         }else{
-            return null;
+          return null;
         }
       });
     }catch(e){

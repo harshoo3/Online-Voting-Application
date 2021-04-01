@@ -14,7 +14,7 @@ import 'package:online_voting/models/accountDetails.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:online_voting/screens/home/addManifesto.dart';
 import 'package:online_voting/screens/home/createElection.dart';
-
+import 'package:online_voting/screens/authenticate/emailVerification.dart';
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -26,6 +26,8 @@ class _HomeState extends State<Home> {
   User user;
   FirebaseUser currUser;
   bool loading =true;
+  bool returned = false;
+  bool isEmailVerified = false;
   @override
   void initState(){
     getUserDetails();
@@ -35,6 +37,8 @@ class _HomeState extends State<Home> {
   Future<void> getUserDetails() async {
     // user = await _auth.getCurrentUser()
    this.currUser =  await FirebaseAuth.instance.currentUser();
+   this.isEmailVerified = currUser.isEmailVerified;
+   // print(currUser.isEmailVerified);
     // print(user.email);
     Firestore.instance
         .collection('dataset')
@@ -58,7 +62,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
+    // print(returned);
     // StreamProvider<List<AccountDetails>>.value(
     // value: DatabaseService().data,
     // child:
@@ -133,6 +137,22 @@ class _HomeState extends State<Home> {
                   },
                 ),
               ),
+              !isEmailVerified?SizedBox(
+                width: 300,
+                child: FlatButton(
+                  color: Colors.black,
+                  child:Text(
+                    'Verify Email',
+                    style: TextStyle(
+                        color: Colors.white
+                    ),
+                  ),
+                  onPressed: ()async{
+                    await Navigator.push(context, MaterialPageRoute(builder: (context) => EmailVerification(user:user))).
+                    then((value) => setState(() => {isEmailVerified=value}));
+                  },
+                ),
+              ):SizedBox(height: 0,),
             ],
           ),
       ),
