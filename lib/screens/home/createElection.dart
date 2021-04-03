@@ -40,7 +40,8 @@ class _CreateElectionState extends State<CreateElection> {
     // = new DateTime(now.year, now.month, now.day);
     final CollectionReference elec = Firestore.instance.collection('Elections');
     await elec.document(user.name).updateData({
-      '${user.electionCount}':{
+      '${user.electionCount}':
+      {
         'setDate': setDate,
         'startDate': startDate,
         'endDate': endDate,
@@ -219,30 +220,32 @@ class _CreateElectionState extends State<CreateElection> {
                       ),
                     ),
                     onPressed: () {
-                      setState(() {
-                        isPressed = true;
-                      });
-                      if (startDate == null) {
+                      if(!success){
                         setState(() {
-                          isStartDateEmpty = true;
+                          isPressed = true;
                         });
-                      }
-                      if (endDate == null) {
-                        setState(() {
-                          isEndDateEmpty = true;
-                        });
-                      }
-                      if (startDate.difference(setDate) >= Duration(seconds: 0)) {
-                        if (endDate.difference(startDate) >= Duration(seconds: 0)) {
-                          if (_formkey.currentState.validate()) {
-                            setState(() {
-                              loading = true;
-                            });
-                            createElectionDatabase(startDate, endDate);
-                            setState(() {
-                              loading = false;
-                              success = true;
-                            });
+                        if (startDate == null) {
+                          setState(() {
+                            isStartDateEmpty = true;
+                          });
+                        }
+                        if (endDate == null) {
+                          setState(() {
+                            isEndDateEmpty = true;
+                          });
+                        }
+                        if (startDate.difference(setDate) >= Duration(seconds: 0)) {
+                          if (endDate.difference(startDate) >= Duration(seconds: 0)) {
+                            if (_formkey.currentState.validate()) {
+                              setState(() {
+                                loading = true;
+                              });
+                              createElectionDatabase(startDate, endDate);
+                              setState(() {
+                                loading = false;
+                                success = true;
+                              });
+                            }
                           }
                         }
                       }
