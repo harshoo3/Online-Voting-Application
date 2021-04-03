@@ -94,13 +94,6 @@ class _ElectionsState extends State<Elections> {
                   height: 25,
                 ),
               ),
-              Text('Ongoing Elections:'),
-              detailsFetched?ElectionWidget(election : ongoingELectionList[0]):SizedBox(),
-              SizedBox(height: 25,),
-              Text('Upcoming Elections :'),
-              SizedBox(
-
-              ),
               user.userType == 'org'?
               SizedBox(
                 width: 300,
@@ -117,6 +110,28 @@ class _ElectionsState extends State<Elections> {
                   },
                 ),
               ):SizedBox(height: 0,),
+              SizedBox(
+                height: 25,
+              ),
+              Text('Ongoing Elections:'),
+              Column(
+                children:
+                  detailsFetched?ongoingELectionList.map((e) => ElectionWidget(election : e)).toList():SizedBox,
+              ),
+              // detailsFetched?ongoingELectionList.forEach((element) {ElectionWidget(election : element) }):SizedBox;
+              // detailsFetched?ElectionWidget(election : ongoingELectionList[0]):SizedBox(),
+              // SizedBox(height: 25,),
+              Text('Upcoming Elections :'),
+              Column(
+                children:detailsFetched?upcomingELectionList.map((e) => ElectionWidget(election : e)).toList():SizedBox,
+              ),
+              Text('Completed Elections:'),
+              Column(
+                children:detailsFetched?completedELectionList.map((e) => ElectionWidget(election : e)).toList():SizedBox ,
+              ),
+              // SizedBox(
+              //
+              // ),
               // SizedBox(
               //   height: 25,
               // ),
@@ -136,7 +151,6 @@ class _ElectionsState extends State<Elections> {
                   },
                 ),
               ):SizedBox(height: 0,),
-
             ],
           ),
         ),

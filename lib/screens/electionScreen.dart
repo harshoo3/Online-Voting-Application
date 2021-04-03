@@ -13,7 +13,10 @@ class _ElectionScreenState extends State<ElectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Text('Online Voting'),
+      ),
     );
   }
 }
