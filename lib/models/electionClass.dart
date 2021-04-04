@@ -7,6 +7,8 @@ class ElectionClass {
   String post;
   String electionDescription;
   int maxCandidates;
+  String index;
+  int numOfWaitingCandidates;
 
-  ElectionClass({this.startDate,this.endDate,this.setDate,this.isPartyModeAllowed,this.electionDescription,this.maxCandidates,this.post});
+  ElectionClass({this.index,this.startDate,this.endDate,this.setDate,this.isPartyModeAllowed,this.electionDescription,this.maxCandidates,this.post,this.numOfWaitingCandidates});
 }

@@ -42,13 +42,17 @@ class _CreateElectionState extends State<CreateElection> {
     await elec.document(user.name).updateData({
       '${user.electionCount}':
       {
-        'setDate': setDate,
-        'startDate': startDate,
-        'endDate': endDate,
-        'post': post,
-        'electionDescription': electionDescription,
-        'maxCandidates':maxCandidates,
-        'isPartyModeAllowed':isPartyModeAllowed,
+        'electionDetails':
+        {
+          'setDate': setDate,
+          'startDate': startDate,
+          'endDate': endDate,
+          'post': post,
+          'electionDescription': electionDescription,
+          'maxCandidates':maxCandidates,
+          'isPartyModeAllowed':isPartyModeAllowed,
+          'numOfWaitingCandidates':0,
+        }
       }
     });
     user.electionCount=user.electionCount+1;

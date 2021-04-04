@@ -5,6 +5,7 @@ import 'package:online_voting/screens/home/addManifesto.dart';
 import 'package:online_voting/screens/home/createElection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_voting/models/electionClass.dart';
+import 'package:online_voting/screens/loading.dart';
 class Elections extends StatefulWidget {
 
   User user;
@@ -30,24 +31,26 @@ class _ElectionsState extends State<Elections> {
         .document(user.orgName)
         .get()
         .then((value) {
-          print(value.data.keys);
+          // print(value.data.keys);
 
           value.data.keys.forEach((element) {
             indicesList.add(element) ;
           });
-          print(indicesList.length);
+          // print(indicesList.length);
           for(var i = 0;i <indicesList.length;i++){
-            print(indicesList[i]);
+            // print(indicesList[i]);
             setState(() {
               electionList.add(
                 ElectionClass(
-                  post: value.data[indicesList[i]]['post'],
-                  electionDescription: value.data[indicesList[i]]['electionDescription'],
-                  endDate: value.data[indicesList[i]]['endDate'].toDate(),
-                  setDate: value.data[indicesList[i]]['setDate'].toDate(),
-                  isPartyModeAllowed: value.data[indicesList[i]]['isPartyModeAllowed'],
-                  maxCandidates: value.data[indicesList[i]]['maxCandidates'],
-                  startDate: value.data[indicesList[i]]['startDate'].toDate(),
+                  post: value.data[indicesList[i]]['electionDetails']['post'],
+                  electionDescription: value.data[indicesList[i]]['electionDetails']['electionDescription'],
+                  endDate: value.data[indicesList[i]]['electionDetails']['endDate'].toDate(),
+                  setDate: value.data[indicesList[i]]['electionDetails']['setDate'].toDate(),
+                  isPartyModeAllowed: value.data[indicesList[i]]['electionDetails']['isPartyModeAllowed'],
+                  maxCandidates: value.data[indicesList[i]]['electionDetails']['maxCandidates'],
+                  startDate: value.data[indicesList[i]]['electionDetails']['startDate'].toDate(),
+                  numOfWaitingCandidates: value.data[indicesList[i]]['electionDetails']['numOfWaitingCandidates'],
+                  index: indicesList[i],
                 )
               );
             });
@@ -62,12 +65,10 @@ class _ElectionsState extends State<Elections> {
             if(electionList[i].startDate.difference(now)>=Duration(seconds: 0)){
               upcomingELectionList.add(electionList[i]);
             }
-
           }
           setState(() {
             detailsFetched = true;
           });
-
     });
   }
 
@@ -116,18 +117,20 @@ class _ElectionsState extends State<Elections> {
               Text('Ongoing Elections:'),
               Column(
                 children:
-                  detailsFetched?ongoingELectionList.map((e) => ElectionWidget(election : e)).toList():SizedBox,
+                  ongoingELectionList.map((e) => ElectionWidget(election : e,user:user)).toList(),
               ),
               // detailsFetched?ongoingELectionList.forEach((element) {ElectionWidget(election : element) }):SizedBox;
               // detailsFetched?ElectionWidget(election : ongoingELectionList[0]):SizedBox(),
               // SizedBox(height: 25,),
               Text('Upcoming Elections :'),
               Column(
-                children:detailsFetched?upcomingELectionList.map((e) => ElectionWidget(election : e)).toList():SizedBox,
+                children:
+                upcomingELectionList.map((e) => ElectionWidget(election : e,user:user)).toList(),
               ),
               Text('Completed Elections:'),
               Column(
-                children:detailsFetched?completedELectionList.map((e) => ElectionWidget(election : e)).toList():SizedBox ,
+                children:
+                completedELectionList.map((e) => ElectionWidget(election : e,user:user)).toList() ,
               ),
               // SizedBox(
               //
@@ -135,6 +138,7 @@ class _ElectionsState extends State<Elections> {
               // SizedBox(
               //   height: 25,
               // ),
+
               user.userType == 'can'?
               SizedBox(
                 width: 300,

@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:online_voting/models/electionClass.dart';
+import 'package:online_voting/models/user.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:online_voting/screens/electionScreen.dart';
 import 'package:intl/intl.dart';
 class ElectionWidget extends StatefulWidget {
+  User user;
   ElectionClass election;
-  ElectionWidget({this.election});
+  ElectionWidget({this.election,this.user});
   @override
-  _ElectionWidgetState createState() => _ElectionWidgetState(election:election);
+  _ElectionWidgetState createState() => _ElectionWidgetState(election:election,user:user);
 }
 
 class _ElectionWidgetState extends State<ElectionWidget> {
   ElectionClass election;
-  _ElectionWidgetState({this.election});
+  User user;
+  _ElectionWidgetState({this.election,this.user});
 
   double calculatePercent(ElectionClass election){
     if(election!=null){
@@ -38,7 +41,7 @@ class _ElectionWidgetState extends State<ElectionWidget> {
           width: 300,
           child: FlatButton(
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ElectionScreen(election:election)));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ElectionScreen(election:election,user:user)));
             },
             color: Colors.yellow,
             shape: RoundedRectangleBorder(

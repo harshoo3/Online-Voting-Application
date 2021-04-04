@@ -32,7 +32,7 @@ class AuthService{
   }
 
   // sign in w email pwd
-  Future loginWithEmailAndPassword(String email, String password,String userType) async{
+  Future loginWithEmailAndPassword(String email, String password,String userType)async{
     try{
       await Firestore.instance.collection('dataset').document(email).get()
           .then((value)async {
