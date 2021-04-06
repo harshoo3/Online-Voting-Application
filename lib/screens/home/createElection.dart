@@ -40,6 +40,7 @@ class _CreateElectionState extends State<CreateElection> {
     // = new DateTime(now.year, now.month, now.day);
     final CollectionReference elec = Firestore.instance.collection('Elections');
     await elec.document(user.name).updateData({
+      // 'indicesList': FieldValue.arrayUnion(['${user.electionCount}']),
       '${user.electionCount}':
       {
         'electionDetails':

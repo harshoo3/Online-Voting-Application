@@ -6,8 +6,9 @@ class Candidate{
   String name='';
   String email='';
   bool approved;
+  bool denied;
   String campaignTagline='';
-  List<String>questions=[];
+  List<dynamic>questions=[];
 
-  Candidate({this.partyLogoUrl,this.approved,this.campaignTagline,this.questions,this.name,this.email,this.partyName,this.requestedCandidacy,this.requestedCandidacyIndex});
+  Candidate({this.partyLogoUrl,this.denied,this.approved,this.campaignTagline,this.questions,this.name,this.email,this.partyName,this.requestedCandidacy,this.requestedCandidacyIndex});
 }

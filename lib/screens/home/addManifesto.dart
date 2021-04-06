@@ -28,6 +28,7 @@ class _AddManifestoState extends State<AddManifesto> {
   String partyName='';
   String partyLogoUrl='';
   bool imageAdded = false;
+  bool denied = false;
   bool loading = true;
   String campaignTagline='';
   List<String>questions=['',''];
@@ -40,7 +41,7 @@ class _AddManifestoState extends State<AddManifesto> {
       await elec.document(user.orgName).updateData({
         // '${election.index}.candidates.${election.numOfCandidates}.candidateName':user.name,
         // '${election.index}.candidates.${election.numOfCandidates}.approved':false,
-        // '${election.index}.electionDetails.numOfCandidates':election.numOfCandidates+1,
+        '${election.index}.electionDetails.numOfCandidates':election.numOfCandidates+1,
         '${election.index}.candidates':
         {
           'name':user.name,
@@ -50,6 +51,7 @@ class _AddManifestoState extends State<AddManifesto> {
           'approved':false,
           'partyLogoUrl':partyLogoUrl,
           'questions':questions,
+          'denied':denied,
         }
 
       });
@@ -57,7 +59,7 @@ class _AddManifestoState extends State<AddManifesto> {
       await elec.document(user.orgName).updateData({
         // '${election.index}.candidates.${election.numOfCandidates}.candidateName':user.name,
         // '${election.index}.candidates.${election.numOfCandidates}.approved':false,
-        // '${election.index}.electionDetails.numOfCandidates':election.numOfCandidates+1,
+        '${election.index}.electionDetails.numOfCandidates':election.numOfCandidates+1,
         '${election.index}.candidates':
         {
           'name': user.name,

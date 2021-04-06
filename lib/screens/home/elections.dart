@@ -25,8 +25,8 @@ class _ElectionsState extends State<Elections> {
   _ElectionsState({this.user});
 
 
-  getElectionDetails(){
-    Firestore.instance
+  Future<void> getElectionDetails()async{
+    await Firestore.instance
       .collection('Elections')
         .document(user.orgName)
         .get()
@@ -34,8 +34,9 @@ class _ElectionsState extends State<Elections> {
           // print(value.data.keys);
 
           value.data.keys.forEach((element) {
-            indicesList.add(element) ;
+            indicesList.add(element);
           });
+          // indicesList.addAll(value.data['indicesList']);
           // print(indicesList.length);
           for(var i = 0;i <indicesList.length;i++){
             // print(indicesList[i]);
