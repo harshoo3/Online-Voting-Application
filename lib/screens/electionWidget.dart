@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:online_voting/screens/electionScreen.dart';
+import 'package:online_voting/screens/electionScreenCan.dart';
 import 'package:intl/intl.dart';
 class ElectionWidget extends StatefulWidget {
   User user;
@@ -41,7 +41,7 @@ class _ElectionWidgetState extends State<ElectionWidget> {
           width: 300,
           child: FlatButton(
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ElectionScreen(election:election,user:user)));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ElectionScreenCan(election:election,user:user)));
             },
             color: Colors.yellow,
             shape: RoundedRectangleBorder(

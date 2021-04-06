@@ -51,7 +51,7 @@ class _CreateElectionState extends State<CreateElection> {
           'electionDescription': electionDescription,
           'maxCandidates':maxCandidates,
           'isPartyModeAllowed':isPartyModeAllowed,
-          'numOfWaitingCandidates':0,
+          'numOfCandidates':0,
         }
       }
     });

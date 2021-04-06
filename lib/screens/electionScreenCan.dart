@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
+import 'package:online_voting/screens/home/addManifesto.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:intl/intl.dart';
+import 'package:online_voting/models/candidate.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-class ElectionScreen extends StatefulWidget {
+class ElectionScreenCan extends StatefulWidget {
   User user;
   ElectionClass election;
-  ElectionScreen({this.election,this.user});
+  ElectionScreenCan({this.election,this.user});
   @override
-  _ElectionScreenState createState() => _ElectionScreenState(election:election,user:user);
+  _ElectionScreenCanState createState() => _ElectionScreenCanState(election:election,user:user);
 }
 
-class _ElectionScreenState extends State<ElectionScreen> {
+class _ElectionScreenCanState extends State<ElectionScreenCan> {
   User user;
   ElectionClass election;
   bool hasRequested = false;
   bool checkingDone = false;
-  List<dynamic> list=[];
-  _ElectionScreenState({this.election,this.user});
-
-
+  Candidate candidate;
+  // List<>
+  List<dynamic> requestedCandidacy=[];
+  List<dynamic> requestedCandidacyIndex=[];
+  _ElectionScreenCanState({this.election,this.user});
   Future<void> checkRequestCandidacy()async{
     await Firestore.instance
         .collection('dataset')
@@ -30,12 +33,16 @@ class _ElectionScreenState extends State<ElectionScreen> {
         .then((value) {
           if(value.data['requestedCandidacy']!=null){
             setState(() {
-              list.addAll(value.data['requestedCandidacy']);
+              requestedCandidacy.addAll(value.data['requestedCandidacy']);
+              requestedCandidacyIndex.addAll(value.data['requestedCandidacyIndex']);
             });
-            if(list.isNotEmpty){
-              for(int i=0;i<list.length;i++){
+            setState(() {
+              candidate = Candidate(requestedCandidacy: requestedCandidacy,requestedCandidacyIndex: requestedCandidacyIndex);
+            });
+            if(candidate.requestedCandidacy.isNotEmpty){
+              for(int i=0;i<candidate.requestedCandidacy.length;i++){
                 // print(list[i]);
-                if(list[i]==election.index){
+                if(candidate.requestedCandidacy[i]==election.index){
                   // print('matched');
                   setState(() {
                     hasRequested = true;
@@ -55,24 +62,7 @@ class _ElectionScreenState extends State<ElectionScreen> {
       checkingDone = true;
     });
   }
-  Future<void> requestCandidacy()async{
-    final CollectionReference elec = Firestore.instance.collection('Elections');
-    await elec.document(user.orgName).updateData({
-      '${election.index}.waitingCandidates.${election.numOfWaitingCandidates}.candidateName':user.name,
-      '${election.index}.waitingCandidates.${election.numOfWaitingCandidates}.approved':false,
-      '${election.index}.electionDetails.numOfWaitingCandidates':election.numOfWaitingCandidates+1,
-    });
-    setState(() {
-      election.numOfWaitingCandidates=election.numOfWaitingCandidates+1;
-    });
-    final CollectionReference userdata = Firestore.instance.collection('dataset');
-    await userdata.document(user.email).updateData({
-      'requestedCandidacy': FieldValue.arrayUnion([election.index]),
-    });
-    setState(() {
-      hasRequested=true;
-    });
-  }
+
 
   double calculatePercent(ElectionClass election){
     if(election!=null){
@@ -163,8 +153,7 @@ class _ElectionScreenState extends State<ElectionScreen> {
             backgroundColor: Colors.grey,
             progressColor: Colors.pink,
           ),
-          user.userType == 'can'?
-          SizedBox(
+          hasRequested?SizedBox(): SizedBox(
             width: 300,
             child: FlatButton(
               color: Colors.black,
@@ -175,12 +164,13 @@ class _ElectionScreenState extends State<ElectionScreen> {
                 ),
               ),
               onPressed: ()async{
-                if(!hasRequested){
-                  await requestCandidacy();
-                }
+                // if(!hasRequested){
+                //   await requestCandidacy();
+                // }
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AddManifesto(user:user,election: election,candidate:candidate,)));
               },
             ),
-          ):SizedBox(height: 0,),
+          ),
           hasRequested?Text('You have already requested.'):SizedBox(),
         ],
       ),

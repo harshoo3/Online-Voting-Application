@@ -49,7 +49,7 @@ class _ElectionsState extends State<Elections> {
                   isPartyModeAllowed: value.data[indicesList[i]]['electionDetails']['isPartyModeAllowed'],
                   maxCandidates: value.data[indicesList[i]]['electionDetails']['maxCandidates'],
                   startDate: value.data[indicesList[i]]['electionDetails']['startDate'].toDate(),
-                  numOfWaitingCandidates: value.data[indicesList[i]]['electionDetails']['numOfWaitingCandidates'],
+                  numOfCandidates: value.data[indicesList[i]]['electionDetails']['numOfCandidates'],
                   index: indicesList[i],
                 )
               );
@@ -119,9 +119,6 @@ class _ElectionsState extends State<Elections> {
                 children:
                   ongoingELectionList.map((e) => ElectionWidget(election : e,user:user)).toList(),
               ),
-              // detailsFetched?ongoingELectionList.forEach((element) {ElectionWidget(election : element) }):SizedBox;
-              // detailsFetched?ElectionWidget(election : ongoingELectionList[0]):SizedBox(),
-              // SizedBox(height: 25,),
               Text('Upcoming Elections :'),
               Column(
                 children:
@@ -139,22 +136,22 @@ class _ElectionsState extends State<Elections> {
               //   height: 25,
               // ),
 
-              user.userType == 'can'?
-              SizedBox(
-                width: 300,
-                child: FlatButton(
-                  color: Colors.black,
-                  child:Text(
-                    'Add Manifesto',
-                    style: TextStyle(
-                        color: Colors.white
-                    ),
-                  ),
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddManifesto()));
-                  },
-                ),
-              ):SizedBox(height: 0,),
+              // user.userType == 'can'?
+              // SizedBox(
+              //   width: 300,
+              //   child: FlatButton(
+              //     color: Colors.black,
+              //     child:Text(
+              //       'Add Manifesto',
+              //       style: TextStyle(
+              //           color: Colors.white
+              //       ),
+              //     ),
+              //     onPressed: (){
+              //       Navigator.push(context, MaterialPageRoute(builder: (context) => AddManifesto()));
+              //     },
+              //   ),
+              // ):SizedBox(height: 0,),
             ],
           ),
         ),
