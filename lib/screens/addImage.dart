@@ -88,6 +88,10 @@ class _AddImageState extends State<AddImage> {
     return uploading ? Loading():Scaffold(
       appBar: AppBar(
         title: Text('Add Party logo'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(false),
+        ),
         actions: [
           FlatButton(
             onPressed: (){

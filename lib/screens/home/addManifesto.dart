@@ -75,8 +75,8 @@ class _AddManifestoState extends State<AddManifesto> {
       'requestedCandidacy': FieldValue.arrayUnion([election.index]),
       'requestedCandidacyIndex': FieldValue.arrayUnion([election.numOfCandidates-1]),
     });
-    candidate.requestedCandidacy.add(election.index);
-    candidate.requestedCandidacyIndex.add(election.numOfCandidates);
+    // candidate.requestedCandidacy.add(election.index);
+    // candidate.requestedCandidacyIndex.add(election.numOfCandidates);
     setState(() {
       hasRequested=true;
     });
@@ -203,9 +203,7 @@ class _AddManifestoState extends State<AddManifesto> {
               !imageAdded?SizedBox():StreamBuilder(
                 stream: Firestore.instance.collection('Logos').document(user.email).snapshots(),
                 builder: (context, snapshot) {
-                  setState(() {
-                    partyLogoUrl=snapshot.data['url'];
-                  });
+                  partyLogoUrl=snapshot.data['url'];
                   return !snapshot.hasData
                       ? Center(
                     child: CircularProgressIndicator(),
@@ -259,9 +257,11 @@ class _AddManifestoState extends State<AddManifesto> {
                     ),
                   ),
                   onPressed: ()async{
-                    // if(!hasRequested){
-                    //   await requestCandidacy();
-                    // }
+                    if(!hasRequested){
+                      if(_formkey.currentState.validate()){
+                        await requestCandidacy();
+                      }
+                    }
                     print(questions);
                     print(partyName);
                     // Navigator.push(context, MaterialPageRoute(builder: (context) => AddManifesto(user:user,election: election,candidate:candidate,)));
