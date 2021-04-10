@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_voting/models/user.dart';
+import 'package:online_voting/screens/home/sidebar.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:online_voting/models/electionClass.dart';
@@ -109,6 +110,7 @@ class _AddManifestoState extends State<AddManifesto> {
             'Account Details'
         ),
       ),
+      endDrawer: SideDrawer(user: user,),
       body: SingleChildScrollView(
         child: Form(
           key: _formkey,

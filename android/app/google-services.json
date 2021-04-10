@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1014566080197",
+    "firebase_url": "https://online-voting-b6b5d-default-rtdb.firebaseio.com",
     "project_id": "online-voting-b6b5d",
     "storage_bucket": "online-voting-b6b5d.appspot.com"
   },

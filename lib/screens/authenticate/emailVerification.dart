@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:online_voting/models/user.dart';
+import 'package:online_voting/screens/home/sidebar.dart';
 class EmailVerification extends StatefulWidget {
   User user;
   bool isEmailVerified;
@@ -64,6 +65,7 @@ class _EmailVerificationState extends State<EmailVerification> {
         backgroundColor: Colors.black,
         title: Text('Create Elections'),
       ),
+      endDrawer: SideDrawer(user: user,),
       body: Center(
         child:!isEmailVerified?
         Text('An email has been sent to your email address ${user.email}.'):

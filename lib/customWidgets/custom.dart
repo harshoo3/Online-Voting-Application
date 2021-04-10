@@ -2,23 +2,25 @@ import 'package:flutter/material.dart';
 
 class BigTextField extends StatefulWidget {
   String field;
-  List<String> fieldList=[];
+  List<dynamic> fieldList=[];
   String label;
   int index;
+  bool readOnly;
   double height;
-  BigTextField({this.field,this.label,this.fieldList,this.height=100,this.index});
+  BigTextField({this.field,this.label,this.fieldList,this.height=100,this.index,this.readOnly});
 
   @override
-  _BigTextFieldState createState() => _BigTextFieldState(field: field,label: label,index:index,fieldList:fieldList,height: height);
+  _BigTextFieldState createState() => _BigTextFieldState(field: field,label: label,index:index,fieldList:fieldList,height: height,readOnly: readOnly);
 }
 
 class _BigTextFieldState extends State<BigTextField>{
   String field;
   String label;
   int index;
+  bool readOnly;
   double height;
-  List<String> fieldList=[];
-  _BigTextFieldState({this.field,this.index,this.label,this.fieldList,this.height=100});
+  List<dynamic> fieldList=[];
+  _BigTextFieldState({this.field,this.index,this.label,this.fieldList,this.height=100,this.readOnly});
 
   @override
   void initState() {
@@ -34,7 +36,7 @@ class _BigTextFieldState extends State<BigTextField>{
     return SizedBox(
       width: 300,
       height: height,
-      child: TextFormField(
+      child: !readOnly?TextFormField(
         keyboardType: TextInputType.multiline,
         expands: true,
         maxLines: null,
@@ -59,6 +61,22 @@ class _BigTextFieldState extends State<BigTextField>{
           alignLabelWithHint: true,
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+        ),
+      ):TextFormField(
+        keyboardType: TextInputType.multiline,
+        expands: true,
+        maxLines: null,
+        readOnly: true,
+        initialValue: fieldList[index],
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+            suffixIcon: Icon(Icons.edit),
+            hintText: label,
+            labelText: label,
+            hintMaxLines: 3,
+            alignLabelWithHint: true,
+            border:
+            OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
         ),
       ),
     );

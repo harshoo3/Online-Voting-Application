@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/screens/home/addManifesto.dart';
+import 'package:online_voting/screens/home/sidebar.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:intl/intl.dart';
@@ -91,6 +92,7 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
         backgroundColor: Colors.black,
         title: Text('Online Voting'),
       ),
+      endDrawer: SideDrawer(user: user,),
       body:Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [

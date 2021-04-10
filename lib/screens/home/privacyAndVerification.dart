@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/screens/authenticate/emailVerification.dart';
+import 'package:online_voting/screens/home/sidebar.dart';
 class PrivacyAndVerification extends StatefulWidget {
   User user;
   PrivacyAndVerification({this.user});
@@ -34,6 +35,7 @@ class _PrivacyAndVerificationState extends State<PrivacyAndVerification> {
         backgroundColor: Colors.black,
         title: Text('Privacy and Verification'),
       ),
+      endDrawer: SideDrawer(user: user,),
       body: Column(
         children: [
           SizedBox(

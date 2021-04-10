@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:date_field/date_field.dart';
 import 'package:intl/intl.dart';
+import 'package:online_voting/screens/home/sidebar.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:flutter/services.dart';
@@ -76,6 +77,7 @@ class _CreateElectionState extends State<CreateElection> {
         backgroundColor: Colors.black,
         title: Text('Create Elections'),
       ),
+      endDrawer: SideDrawer(user: user,),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(

@@ -94,26 +94,6 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-              // SizedBox(height: 30,),
-              // SizedBox(
-              //   width: 300,
-              //   child: FlatButton(
-              //     color: Colors.black,
-              //     child:Text(
-              //       'Account details',
-              //       style: TextStyle(
-              //           color: Colors.white
-              //       ),
-              //     ),
-              //     onPressed: (){
-              //       Navigator.push(context, MaterialPageRoute(builder: (context) => AccountDetails(user:user)));
-              //     },
-              //   ),
-              // ),
-              // userType == 'can'?SizedBox(
-              //   width: 200,
-              //   child: Voting(),
-              // ):null,
               SizedBox(
                 width: 300,
                 child: FlatButton(

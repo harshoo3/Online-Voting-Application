@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:online_voting/models/candidate.dart';
+import 'package:online_voting/models/electionClass.dart';
+import 'package:online_voting/models/user.dart';
+import 'package:online_voting/screens/candidateManifesto.dart';
 
 class CandidateWidget extends StatelessWidget {
+  final User user;
   final Candidate candidate;
-  CandidateWidget({this.candidate});
+  final ElectionClass election;
+  CandidateWidget({this.candidate,this.user,this.election});
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -14,7 +19,7 @@ class CandidateWidget extends StatelessWidget {
           width: 300,
           child: FlatButton(
             onPressed: (){
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => ElectionScreenOrg(election:election,user:user)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CandidateManifesto(candidate:candidate,user: user,election: election,)));
             },
             child: Center(
               child: Row(

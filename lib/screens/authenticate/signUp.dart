@@ -70,25 +70,24 @@ class _SignUpState extends State<SignUp> {
     try {
       await _auth1.verifyPhoneNumber(
           phoneNumber: this.mobileNo, // PHONE NUMBER TO SEND OTP
-          codeAutoRetrievalTimeout: (String verId) {
-            //Starts the phone number verification process for the given phone number.
-            //Either sends an SMS with a 6 digit code to the phone number specified, or sign's the user in and [verificationCompleted] is called.
-            this.verificationId = verId;
-          },
+          codeAutoRetrievalTimeout: null,
           codeSent:
           smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
           timeout: const Duration(seconds: 100),
           verificationCompleted: (AuthCredential phoneAuthCredential) {
+            print('1');
             print(phoneAuthCredential);
           },
-          verificationFailed: (AuthException exceptio) {
-            print('${exceptio.message}');
+          verificationFailed: (AuthException exception) {
+            print('2');
+            print('${exception.message}');
           });
     } catch (e) {
       handleError(e);
     }
   }
   handleError(PlatformException error) {
+    print('3');
     print(error);
     // switch (error.code) {
     //   case 'ERROR_INVALID_VERIFICATION_CODE':

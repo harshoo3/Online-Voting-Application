@@ -4,6 +4,7 @@ import 'package:online_voting/models/candidate.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/screens/candidateWidget.dart';
+import 'package:online_voting/screens/home/sidebar.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:intl/intl.dart';
@@ -23,6 +24,7 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
   ElectionClass election;
   List  <Candidate>candidateList=[],requestCandidateList=[],confirmedCandidateList=[];
   List<dynamic> indicesList =[];
+  bool noRequests = false;
   bool detailsFetched = false;
   _ElectionScreenOrgState({this.election,this.user});
 
@@ -48,37 +50,45 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
         .document(user.name)
         .get()
         .then((value) {
-      value.data['${election.index}']['candidates'].keys.forEach((element) {
-        indicesList.add(element);
-      });
-      for(var i = 0;i<indicesList.length;i++){
-        // print(value.data[indicesList[i]]['candidates']['questions'][]);
-        setState(() {
-          candidateList.add(
-              Candidate(
-                partyLogoUrl: value.data['${election.index}']['candidates'][indicesList[i]]['partyLogoUrl'],
-                partyName: value.data['${election.index}']['candidates'][indicesList[i]]['partyName'],
-                approved: value.data['${election.index}']['candidates'][indicesList[i]]['approved'],
-                denied: value.data['${election.index}']['candidates'][indicesList[i]]['denied'],
-                campaignTagline: value.data['${election.index}']['candidates'][indicesList[i]]['campaignTagline'],
-                name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
-                email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
-                questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
-              ),
-          );
-        });
-        if(candidateList[i].approved){
-          confirmedCandidateList.add(candidateList[i]);
-        }else if(!candidateList[i].approved && !candidateList[i].denied){
-          requestCandidateList.add(candidateList[i]);
-        }
-      }
-          // for
-          // value.data['waitingCandidates'][election.numOfWaitingCandidates-1]['candidateName'];
-    });
-    setState(() {
+          try{
+            value.data['${election.index}']['candidates'].keys.forEach((element) {
+              indicesList.add(element);
+            });
+            for(var i = 0;i<indicesList.length;i++){
+              // print(value.data[indicesList[i]]['candidates']['questions'][]);
+              setState(() {
+                candidateList.add(
+                  Candidate(
+                    partyLogoUrl: value.data['${election.index}']['candidates'][indicesList[i]]['partyLogoUrl'],
+                    partyName: value.data['${election.index}']['candidates'][indicesList[i]]['partyName'],
+                    approved: value.data['${election.index}']['candidates'][indicesList[i]]['approved'],
+                    denied: value.data['${election.index}']['candidates'][indicesList[i]]['denied'],
+                    campaignTagline: value.data['${election.index}']['candidates'][indicesList[i]]['campaignTagline'],
+                    name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
+                    email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
+                    questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
+                    index: indicesList[i],
+                  ),
+                );
+              });
+              if(candidateList[i].approved){
+                confirmedCandidateList.add(candidateList[i]);
+              }else if(!candidateList[i].approved && !candidateList[i].denied){
+                requestCandidateList.add(candidateList[i]);
+              }
+            }
+            // for
+            // value.data['waitingCandidates'][election.numOfWaitingCandidates-1]['candidateName'];
+          }catch(e){
+            print(e);
+            setState(() {
+              noRequests = true;
+            });
+          }
+          });
+      setState(() {
       detailsFetched = true;
-    });
+      });
   }
 
   @override
@@ -95,34 +105,23 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
         backgroundColor: Colors.black,
         title: Text('Elections'),
       ),
-      body: Column(
-        children: [
-          // SizedBox(
-          //   width: 300,
-          //   child: FlatButton(
-          //     color: Colors.black,
-          //     child:Text(
-          //       'Contest this election',
-          //       style: TextStyle(
-          //           color: Colors.white
-          //       ),
-          //     ),
-          //     onPressed: ()async{
-          //       // await ;
-          //     },
-          //   ),
-          // ),
-          Text('Requests'),
-          Column(
-            children:
-            requestCandidateList.map((e) => CandidateWidget(candidate: e,)).toList(),
-          ),
-          Text('Confirmed Candidates'),
-          Column(
-            children:
-            confirmedCandidateList.map((e) => CandidateWidget(candidate: e,)).toList(),
-          ),
-        ],
+      endDrawer: SideDrawer(user: user,),
+      body: Center(
+        child: Column(
+          children: [
+            Text('Requests'),
+            !noRequests?SizedBox():Text('No candidate requests yet.'),
+            Column(
+              children:
+              requestCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user,)).toList(),
+            ),
+            Text('Confirmed Candidates'),
+            Column(
+              children:
+              confirmedCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }
