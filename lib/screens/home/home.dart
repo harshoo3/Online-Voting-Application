@@ -1,5 +1,5 @@
 // import 'dart:html';
-
+import 'package:online_voting/screens/home/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/screens/home/elections.dart';
@@ -53,7 +53,7 @@ class _HomeState extends State<Home> {
             dateOfBirth:DateTime.parse(value.data['dateOfBirth'].toString()),
             mobileNo:value.data['mobileNo'].toString(),
             orgName:value.data['orgName'].toString(),
-            electionCount:value.data['electionCount']
+            electionCount:value.data['electionCount'],
         );
         loading = false;
       });
@@ -67,19 +67,11 @@ class _HomeState extends State<Home> {
     // value: DatabaseService().data,
     // child:
     return loading? Loading():Scaffold(
+      endDrawer: SideDrawer(user: user,),
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text('Online Voting'),
-        actions: <Widget>[
-          FlatButton.icon(
-            onPressed: () async{
-              await _auth.signOut();
-            },
-            label: Text('log out'),
-            icon: Icon(Icons.logout),
-            textColor: Colors.white,
-          ),
-        ],
+        title: Text('VoteHub'),
+        centerTitle: true,
       ),
       body: SafeArea(
           child: Column(
@@ -102,22 +94,22 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-              SizedBox(height: 30,),
-              SizedBox(
-                width: 300,
-                child: FlatButton(
-                  color: Colors.black,
-                  child:Text(
-                    'Account details',
-                    style: TextStyle(
-                        color: Colors.white
-                    ),
-                  ),
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AccountDetails(user:user)));
-                  },
-                ),
-              ),
+              // SizedBox(height: 30,),
+              // SizedBox(
+              //   width: 300,
+              //   child: FlatButton(
+              //     color: Colors.black,
+              //     child:Text(
+              //       'Account details',
+              //       style: TextStyle(
+              //           color: Colors.white
+              //       ),
+              //     ),
+              //     onPressed: (){
+              //       Navigator.push(context, MaterialPageRoute(builder: (context) => AccountDetails(user:user)));
+              //     },
+              //   ),
+              // ),
               // userType == 'can'?SizedBox(
               //   width: 200,
               //   child: Voting(),
@@ -137,22 +129,6 @@ class _HomeState extends State<Home> {
                   },
                 ),
               ),
-              !isEmailVerified?SizedBox(
-                width: 300,
-                child: FlatButton(
-                  color: Colors.black,
-                  child:Text(
-                    'Verify Email',
-                    style: TextStyle(
-                        color: Colors.white
-                    ),
-                  ),
-                  onPressed: ()async{
-                    await Navigator.push(context, MaterialPageRoute(builder: (context) => EmailVerification(user:user))).
-                    then((value) => setState(() => {isEmailVerified=value}));
-                  },
-                ),
-              ):SizedBox(height: 0,),
             ],
           ),
       ),

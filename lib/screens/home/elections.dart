@@ -96,6 +96,7 @@ class _ElectionsState extends State<Elections> {
                   height: 25,
                 ),
               ),
+              // FutureBuilder(builder: builder)
               user.userType == 'org'?
               SizedBox(
                 width: 300,
@@ -130,29 +131,6 @@ class _ElectionsState extends State<Elections> {
                 children:
                 completedELectionList.map((e) => ElectionWidget(election : e,user:user)).toList() ,
               ),
-              // SizedBox(
-              //
-              // ),
-              // SizedBox(
-              //   height: 25,
-              // ),
-
-              // user.userType == 'can'?
-              // SizedBox(
-              //   width: 300,
-              //   child: FlatButton(
-              //     color: Colors.black,
-              //     child:Text(
-              //       'Add Manifesto',
-              //       style: TextStyle(
-              //           color: Colors.white
-              //       ),
-              //     ),
-              //     onPressed: (){
-              //       Navigator.push(context, MaterialPageRoute(builder: (context) => AddManifesto()));
-              //     },
-              //   ),
-              // ):SizedBox(height: 0,),
             ],
           ),
         ),

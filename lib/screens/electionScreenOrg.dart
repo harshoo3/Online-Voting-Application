@@ -21,7 +21,7 @@ class ElectionScreenOrg extends StatefulWidget {
 class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
   User user;
   ElectionClass election;
-  List<Candidate>candidateList=[],requestCandidateList=[],confirmedCandidateList=[];
+  List  <Candidate>candidateList=[],requestCandidateList=[],confirmedCandidateList=[];
   List<dynamic> indicesList =[];
   bool detailsFetched = false;
   _ElectionScreenOrgState({this.election,this.user});
@@ -48,23 +48,22 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
         .document(user.name)
         .get()
         .then((value) {
-      value.data.keys.forEach((element) {
+      value.data['${election.index}']['candidates'].keys.forEach((element) {
         indicesList.add(element);
       });
       for(var i = 0;i<indicesList.length;i++){
-        print(value.data[indicesList[i]]['candidates']['questions']);
         // print(value.data[indicesList[i]]['candidates']['questions'][]);
         setState(() {
           candidateList.add(
               Candidate(
-                partyLogoUrl: value.data[indicesList[i]]['candidates']['partyLogoUrl'],
-                partyName: value.data[indicesList[i]]['candidates']['partyName'],
-                approved: value.data[indicesList[i]]['candidates']['approved'],
-                denied: value.data[indicesList[i]]['candidates']['denied'],
-                campaignTagline: value.data[indicesList[i]]['candidates']['campaignTagline'],
-                name: value.data[indicesList[i]]['candidates']['name'],
-                email: value.data[indicesList[i]]['candidates']['email'],
-                questions: value.data[indicesList[i]]['candidates']['questions'],
+                partyLogoUrl: value.data['${election.index}']['candidates'][indicesList[i]]['partyLogoUrl'],
+                partyName: value.data['${election.index}']['candidates'][indicesList[i]]['partyName'],
+                approved: value.data['${election.index}']['candidates'][indicesList[i]]['approved'],
+                denied: value.data['${election.index}']['candidates'][indicesList[i]]['denied'],
+                campaignTagline: value.data['${election.index}']['candidates'][indicesList[i]]['campaignTagline'],
+                name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
+                email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
+                questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
               ),
           );
         });

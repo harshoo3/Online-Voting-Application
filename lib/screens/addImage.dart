@@ -58,12 +58,7 @@ class _AddImageState extends State<AddImage> {
     }
   }
   Future uploadFile() async {
-    // int i = 1;
-    //
-    // for (var img in _image) {
-    //   setState(() {
-    //     val = i / _image.length;
-    //   });
+
       ref = firebase_storage.FirebaseStorage.instance
           .ref()
           .child('images/${Path.basename(image.path)}');

@@ -5,9 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:online_voting/models/user.dart';
 class EmailVerification extends StatefulWidget {
   User user;
-  EmailVerification({this.user});
+  bool isEmailVerified;
+  EmailVerification({this.user,this.isEmailVerified});
   @override
-  _EmailVerificationState createState() => _EmailVerificationState(user: user);
+  _EmailVerificationState createState() => _EmailVerificationState(user: user,isEmailVerified: isEmailVerified);
 }
 
 
@@ -16,8 +17,8 @@ class _EmailVerificationState extends State<EmailVerification> {
   User user;
   FirebaseUser currUser;
   Timer timer;
-  bool isEmailVerified = false;
-  _EmailVerificationState({this.user});
+  bool isEmailVerified;
+  _EmailVerificationState({this.user,this.isEmailVerified});
   @override
   void dispose() {
     // TODO: implement dispose

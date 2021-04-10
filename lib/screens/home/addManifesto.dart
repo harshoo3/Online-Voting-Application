@@ -42,7 +42,7 @@ class _AddManifestoState extends State<AddManifesto> {
         // '${election.index}.candidates.${election.numOfCandidates}.candidateName':user.name,
         // '${election.index}.candidates.${election.numOfCandidates}.approved':false,
         '${election.index}.electionDetails.numOfCandidates':election.numOfCandidates+1,
-        '${election.index}.candidates':
+        '${election.index}.candidates.${election.numOfCandidates}':
         {
           'name':user.name,
           'email':user.email,
@@ -53,18 +53,18 @@ class _AddManifestoState extends State<AddManifesto> {
           'questions':questions,
           'denied':denied,
         }
-
       });
     }else {
       await elec.document(user.orgName).updateData({
         // '${election.index}.candidates.${election.numOfCandidates}.candidateName':user.name,
         // '${election.index}.candidates.${election.numOfCandidates}.approved':false,
         '${election.index}.electionDetails.numOfCandidates':election.numOfCandidates+1,
-        '${election.index}.candidates':
+        '${election.index}.candidates.${election.numOfCandidates}':
         {
           'name': user.name,
           'email': user.email,
           'approved':false,
+          'denied':denied,
           'questions': questions,
         }
       });
@@ -83,25 +83,25 @@ class _AddManifestoState extends State<AddManifesto> {
       hasRequested=true;
     });
   }
-  Future<void>getDefaultLogo()async{
-    await Firestore.instance.collection('Logos').document('Default').get().then((value){
-      setState(() {
-        partyLogoUrl = value.data['url'];
-        loading = false;
-      });
-    });
-
-  }
+  // Future<void>getDefaultLogo()async{
+  //   await Firestore.instance.collection('Logos').document('Default').get().then((value){
+  //     setState(() {
+  //       partyLogoUrl = value.data['url'];
+  //       loading = false;
+  //     });
+  //   });
+  //
+  // }
   @override
   void initState() {
     // TODO: implement initState
     // questions.add(' ');
-    getDefaultLogo();
+    // getDefaultLogo();
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    return loading?Loading():Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
         centerTitle: true,
@@ -138,17 +138,48 @@ class _AddManifestoState extends State<AddManifesto> {
                   ),
                   // SmallTextField(field:partyName,iconData:Icons.account_box, label: "Name of your Party...",),
                   SizedBox(height: 25,),
-                  SizedBox(
-                    child: FloatingActionButton(
-                      child: Text('Add your party logo'),
-                      onPressed: ()async{
-                          await Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddImage(user:user,election:election,candidate:candidate))).then((value){
-                            setState(() {
-                              imageAdded = value;
-                            });
-                          });
-                       },
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        child: FloatingActionButton(
+                          child: Text('Add your party logo'),
+                          onPressed: ()async{
+                              await Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddImage(user:user,election:election,candidate:candidate))).then((value){
+                                setState(() {
+                                  imageAdded = value;
+                                });
+                              });
+                           },
+                        ),
+                      ),
+                      SizedBox(height: 25.0),
+                      !imageAdded?SizedBox():StreamBuilder(
+                          stream: Firestore.instance.collection('Logos').document(user.email).snapshots(),
+                          builder: (context, snapshot) {
+                            partyLogoUrl=snapshot.data['url'];
+                            return !snapshot.hasData
+                                ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                                : Container(
+                              constraints: BoxConstraints(maxHeight: 80, maxWidth: 100),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    partyLogoUrl,
+                                  ),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+
+                              // ),
+
+                            );
+                          }
+                      ),
+                    ],
                   ),
                   SizedBox(
                     width: 300,
@@ -201,53 +232,6 @@ class _AddManifestoState extends State<AddManifesto> {
               BigTextField(height:120,label:  "Why do you want this Role?",fieldList: questions,index: 0,),
               SizedBox(height: 25.0),
               BigTextField(height:120,label:  "What would your first 30 Days look like in this Role?",fieldList: questions,index: 1,),
-              SizedBox(height: 25.0),
-              !imageAdded?SizedBox():StreamBuilder(
-                stream: Firestore.instance.collection('Logos').document(user.email).snapshots(),
-                builder: (context, snapshot) {
-                  partyLogoUrl=snapshot.data['url'];
-                  return !snapshot.hasData
-                      ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                      : Container(
-                    padding: EdgeInsets.all(4),
-                    // child: GridView.builder(
-                    //     scrollDirection: Axis.vertical,
-                    //     shrinkWrap: true,
-                    //     itemCount: snapshot.data.documents.length,
-                    //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    //         crossAxisCount: 3),
-                    //     itemBuilder: (context, index) {
-                    //       return Container(
-                    //         margin: EdgeInsets.all(3),
-                    //         child: FadeInImage.memoryNetwork(
-                    //             fit: BoxFit.cover,
-                    //             placeholder: kTransparentImage,
-                    //             image: snapshot.data.documents[index].data['url']),
-                    //       );
-                    //     }),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16.0),
-                      child: FadeInImage.memoryNetwork(
-                          fit: BoxFit.cover,
-                          // placeholder: partyLogoUrl,
-                          placeholder: kTransparentImage,
-                          image: partyLogoUrl),
-                      // child: Container(
-                      //   margin: EdgeInsets.all(3),
-                      //   decoration: BoxDecoration(
-                      //       image: DecorationImage(
-                      //         image:snapshot.data['${election.index}'][election.numOfWaitingCandidates]
-                      //       ),
-                      //     )
-                      //   ),
-                      ),
-                    // ),
-
-                  );
-                }
-              ),
               hasRequested?SizedBox(): SizedBox(
                 width: 300,
                 child: FlatButton(
