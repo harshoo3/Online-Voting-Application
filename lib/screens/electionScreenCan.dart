@@ -3,6 +3,7 @@ import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/screens/home/addManifesto.dart';
 import 'package:online_voting/screens/home/sidebar.dart';
+import 'package:online_voting/screens/home/viewElectionDetails.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:intl/intl.dart';
@@ -96,6 +97,21 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
       body:Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+          SizedBox(
+            width: 300,
+            child: FlatButton(
+              color: Colors.black,
+              child:Text(
+                'Election Details',
+                style: TextStyle(
+                    color: Colors.white
+                ),
+              ),
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ViewElectionDetails(user:user,election: election,)));
+              },
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
