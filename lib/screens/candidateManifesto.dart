@@ -175,7 +175,7 @@ class _CandidateManifestoState extends State<CandidateManifesto> {
                             FlatButton(
                             child: Text("Yes,deny"),
                               onPressed:  () async{
-                                await acceptRequest();
+                                await denyRequest();
                                 setState(() {
                                   candidate.denied = true;
                                 });
@@ -206,7 +206,7 @@ class _CandidateManifestoState extends State<CandidateManifesto> {
               'The candidate has been approved to participate the election.'
             ):SizedBox(),
             candidate.denied == true?Text(
-                'The candidate has been approved to participate the election.'
+                'The candidate has been rejected to participate the election.'
             ):SizedBox(),
           ]
         ),

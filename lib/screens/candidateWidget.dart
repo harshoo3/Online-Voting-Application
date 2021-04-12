@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_voting/customWidgets/customMethods.dart';
 import 'package:online_voting/models/candidate.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
@@ -8,6 +9,7 @@ class CandidateWidget extends StatelessWidget {
   final User user;
   final Candidate candidate;
   final ElectionClass election;
+
   CandidateWidget({this.candidate,this.user,this.election});
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class CandidateWidget extends StatelessWidget {
                   Text(
                     candidate.name
                   ),
-                  Container(
+                  election.isPartyModeAllowed?Container(
                     constraints: BoxConstraints(maxHeight: 80, maxWidth: 100),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -39,7 +41,7 @@ class CandidateWidget extends StatelessWidget {
                         fit: BoxFit.fill,
                       ),
                     ),
-                  )
+                  ):SizedBox(),
                 ],
               ),
             ),

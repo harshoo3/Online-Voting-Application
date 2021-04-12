@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:online_voting/customWidgets/customMethods.dart';
 import 'package:online_voting/models/candidate.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
@@ -7,10 +8,8 @@ import 'package:online_voting/screens/candidateWidget.dart';
 import 'package:online_voting/screens/home/sidebar.dart';
 import 'package:online_voting/screens/home/viewElectionDetails.dart';
 import 'package:online_voting/screens/loading.dart';
-import 'package:percent_indicator/percent_indicator.dart';
-import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:online_voting/screens/electionScreenStats.dart';
 class ElectionScreenOrg extends StatefulWidget {
   User user;
   ElectionClass election;
@@ -23,27 +22,13 @@ class ElectionScreenOrg extends StatefulWidget {
 class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
   User user;
   ElectionClass election;
-  List  <Candidate>candidateList=[],requestCandidateList=[],confirmedCandidateList=[];
+  List  <Candidate>candidateList=[],requestCandidateList=[],confirmedCandidateList=[],rejectedCandidatesList=[];
   List<dynamic> indicesList =[];
   bool noRequests = false;
   bool detailsFetched = false;
+
   _ElectionScreenOrgState({this.election,this.user});
 
-
-  double calculatePercent(ElectionClass election){
-    if(election!=null){
-      num bigdiff = election.endDate.difference(election.startDate).inSeconds;
-      num smalldiff = DateTime.now().difference(election.startDate).inSeconds;
-      double ans = smalldiff/bigdiff;
-      if(ans>1){
-        return 1;
-      }else if(ans<0){
-        return 0;
-      }else{
-        return ans;
-      }
-    }
-  }
 
   Future<void>getCandidates()async{
     await Firestore.instance
@@ -56,26 +41,42 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
               indicesList.add(element);
             });
             for(var i = 0;i<indicesList.length;i++){
-              // print(value.data[indicesList[i]]['candidates']['questions'][]);
-              setState(() {
-                candidateList.add(
-                  Candidate(
-                    partyLogoUrl: value.data['${election.index}']['candidates'][indicesList[i]]['partyLogoUrl'],
-                    partyName: value.data['${election.index}']['candidates'][indicesList[i]]['partyName'],
-                    approved: value.data['${election.index}']['candidates'][indicesList[i]]['approved'],
-                    denied: value.data['${election.index}']['candidates'][indicesList[i]]['denied'],
-                    campaignTagline: value.data['${election.index}']['candidates'][indicesList[i]]['campaignTagline'],
-                    name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
-                    email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
-                    questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
-                    index: indicesList[i],
-                  ),
-                );
-              });
+              if(election.isPartyModeAllowed){
+                setState(() {
+                  candidateList.add(
+                    Candidate(
+                      partyLogoUrl: value.data['${election.index}']['candidates'][indicesList[i]]['partyLogoUrl'],
+                      partyName: value.data['${election.index}']['candidates'][indicesList[i]]['partyName'],
+                      approved: value.data['${election.index}']['candidates'][indicesList[i]]['approved'],
+                      denied: value.data['${election.index}']['candidates'][indicesList[i]]['denied'],
+                      campaignTagline: value.data['${election.index}']['candidates'][indicesList[i]]['campaignTagline'],
+                      name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
+                      email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
+                      questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
+                      index: indicesList[i],
+                    ),
+                  );
+                });
+              }else{
+                setState(() {
+                  candidateList.add(
+                    Candidate(
+                      approved: value.data['${election.index}']['candidates'][indicesList[i]]['approved'],
+                      denied: value.data['${election.index}']['candidates'][indicesList[i]]['denied'],
+                      name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
+                      email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
+                      questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
+                      index: indicesList[i],
+                    ),
+                  );
+                });
+              }
               if(candidateList[i].approved){
                 confirmedCandidateList.add(candidateList[i]);
               }else if(!candidateList[i].approved && !candidateList[i].denied){
                 requestCandidateList.add(candidateList[i]);
+              }else if(candidateList[i].denied){
+                rejectedCandidatesList.add(candidateList[i]);
               }
             }
             // for
@@ -86,7 +87,7 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
               noRequests = true;
             });
           }
-          });
+        });
       setState(() {
       detailsFetched = true;
       });
@@ -126,6 +127,8 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
               ),
             ),
             SizedBox(height: 25,),
+            ElectionScreenStats(election:election),
+            SizedBox(height: 25,),
             Text('Requests'),
             !noRequests?SizedBox():Text('No candidate requests yet.'),
             Column(
@@ -136,6 +139,11 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
             Column(
               children:
               confirmedCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
+            ),
+            Text('Rejected Candidates'),
+            Column(
+              children:
+              rejectedCandidatesList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
             ),
           ],
         ),

@@ -231,9 +231,9 @@ class _AddManifestoState extends State<AddManifesto> {
               //     ),
               //   ),
               // ),
-              BigTextField(height:120,label:  "Why do you want this Role?",fieldList: questions,index: 0,),
+              BigTextField(height:120,label:  "Why do you want this Role?",fieldList: questions,index: 0,readOnly: false,),
               SizedBox(height: 25.0),
-              BigTextField(height:120,label:  "What would your first 30 Days look like in this Role?",fieldList: questions,index: 1,),
+              BigTextField(height:120,label:  "What would your first 30 Days look like in this Role?",fieldList: questions,index: 1,readOnly: false,),
               hasRequested?SizedBox(): SizedBox(
                 width: 300,
                 child: FlatButton(

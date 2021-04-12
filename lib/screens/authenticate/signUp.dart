@@ -35,13 +35,13 @@ class _SignUpState extends State<SignUp> {
   String smsOTP = '';
   String verificationId;
   DateTime dateOfBirth ;
-  String orgName = null;
+  String orgName = 'Default';
   bool isDateEmpty = false;
   String userType = null;
   int electionCount = 0;
   bool isUserTypeEmpty = false;
   List<DocumentSnapshot> orgNamesDoc;
-  List<String> orgNames = [];
+  List<String> orgNames = ['Default'];
   // bool phoneNumber =
   String initialCountry = 'IN';
   PhoneNumber number = PhoneNumber(isoCode: 'IN');
@@ -391,7 +391,7 @@ class _SignUpState extends State<SignUp> {
                     ),
                     mode: DateTimeFieldPickerMode.date,
                     autovalidateMode: AutovalidateMode.always,
-                    validator: (val) => isDateEmpty ? 'Invalid. Enter Date of birth' : null,
+                    validator: (val) => isDateEmpty ? 'Invalid. Enter Valid Date of birth' :null,
                     onDateSelected: (DateTime val) {
                       setState(() {
                         dateOfBirth = val;

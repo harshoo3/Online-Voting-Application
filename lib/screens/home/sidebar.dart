@@ -3,9 +3,10 @@ import 'package:online_voting/models/user.dart';
 import 'package:online_voting/models/accountDetails.dart';
 import 'package:online_voting/services/auth.dart';
 import 'package:online_voting/screens/home/privacyAndVerification.dart';
+
 class SideDrawer extends StatelessWidget {
   final AuthService _auth = AuthService();
-  User user;
+  final User user;
   SideDrawer({this.user});
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class SideDrawer extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.home_outlined),
                 title: Text('Home'),
-                onTap: () => {Navigator.pushNamed(context, '/home')},
+                onTap: () => {Navigator.pushReplacementNamed(context, '/home')},
               ),
               ListTile(
                 leading: Icon(Icons.account_circle_outlined),

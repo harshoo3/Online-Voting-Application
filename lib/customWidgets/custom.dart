@@ -17,7 +17,7 @@ class _BigTextFieldState extends State<BigTextField>{
   String field;
   String label;
   int index;
-  bool readOnly;
+  bool readOnly=false;
   double height;
   List<dynamic> fieldList=[];
   _BigTextFieldState({this.field,this.index,this.label,this.fieldList,this.height=100,this.readOnly});

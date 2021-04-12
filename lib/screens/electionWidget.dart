@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_voting/customWidgets/customMethods.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/screens/electionScreenOrg.dart';
@@ -16,22 +17,10 @@ class ElectionWidget extends StatefulWidget {
 class _ElectionWidgetState extends State<ElectionWidget> {
   ElectionClass election;
   User user;
+  CustomMethods _customMethods = CustomMethods();
   _ElectionWidgetState({this.election,this.user});
 
-  double calculatePercent(ElectionClass election){
-    if(election!=null){
-      num bigdiff = election.endDate.difference(election.startDate).inSeconds;
-      num smalldiff = DateTime.now().difference(election.startDate).inSeconds;
-      double ans = smalldiff/bigdiff;
-      if(ans>1){
-        return 1;
-      }else if(ans<0){
-        return 0;
-      }else{
-        return ans;
-      }
-    }
-  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -109,7 +98,7 @@ class _ElectionWidgetState extends State<ElectionWidget> {
                   ),
                   width: 100.0,
                   lineHeight: 14.0,
-                  percent: calculatePercent(election),
+                  percent: _customMethods.calculatePercent(election),
                   animationDuration: 1000,
                   animation: true,
                   backgroundColor: Colors.grey,
