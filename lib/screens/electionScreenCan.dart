@@ -36,7 +36,6 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
   List<dynamic> requestedCandidacy=[],requestedCandidacyIndex=[];
   _ElectionScreenCanState({this.election,this.user});
   Future<void> checkRequestCandidacy()async{
-    print(election.index);
     await Firestore.instance
         .collection('dataset')
         .document(user.email)
@@ -95,6 +94,7 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
                       campaignTagline: value.data['${election.index}']['candidates'][indicesList[i]]['campaignTagline'],
                       name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
                       email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
+                      votes: value.data['${election.index}']['candidates'][indicesList[i]]['votes'],
                       questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
                       index: indicesList[i],
                     ),
@@ -108,6 +108,7 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
                       denied: value.data['${election.index}']['candidates'][indicesList[i]]['denied'],
                       name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
                       email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
+                      votes: value.data['${election.index}']['candidates'][indicesList[i]]['votes'],
                       questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
                       index: indicesList[i],
                     ),
@@ -127,6 +128,7 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
                 candidate.name= value.data['${election.index}']['candidates'][indicesList[i]]['name'];
                 candidate.email= value.data['${election.index}']['candidates'][indicesList[i]]['email'];
                 candidate.questions= value.data['${election.index}']['candidates'][indicesList[i]]['questions'];
+                candidate.votes=value.data['${election.index}']['candidates'][indicesList[i]]['votes'];
               });
             }else{
               setState(() {
@@ -136,6 +138,7 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
                 candidate.name= value.data['${election.index}']['candidates'][indicesList[i]]['name'];
                 candidate.email= value.data['${election.index}']['candidates'][indicesList[i]]['email'];
                 candidate.questions= value.data['${election.index}']['candidates'][indicesList[i]]['questions'];
+                candidate.votes=value.data['${election.index}']['candidates'][indicesList[i]]['votes'];
               });
             }
           }
@@ -185,6 +188,10 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text('Online Voting'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       endDrawer: SideDrawer(user: user,),
       body:SingleChildScrollView(
@@ -232,7 +239,7 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
             candidateFound?Text('Your Manifesto'):SizedBox(),
             candidateFound?CandidateWidget(candidate:candidate,user: user,election: election,):SizedBox(),
             Text('Confirmed Candidates'),
-            candidateList.length==0? Text('No confirmed candidates.'):SizedBox(),
+            candidateList.length==0? Text('No confirmed candidates yet.'):SizedBox(),
             Column(
               children:
               candidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),

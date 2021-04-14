@@ -9,8 +9,9 @@ class CandidateWidget extends StatelessWidget {
   final User user;
   final Candidate candidate;
   final ElectionClass election;
+  bool hasVoted;
 
-  CandidateWidget({this.candidate,this.user,this.election});
+  CandidateWidget({this.candidate,this.user,this.election,this.hasVoted});
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -21,7 +22,7 @@ class CandidateWidget extends StatelessWidget {
           width: 300,
           child: FlatButton(
             onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CandidateManifesto(candidate:candidate,user: user,election: election,)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CandidateManifesto(candidate:candidate,user: user,election: election,hasVoted: hasVoted)));
             },
             child: Center(
               child: Row(

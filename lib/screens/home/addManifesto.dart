@@ -30,7 +30,7 @@ class _AddManifestoState extends State<AddManifesto> {
   String partyLogoUrl='';
   bool imageAdded = false;
   bool denied = false;
-  bool loading = true;
+  bool loading = false;
   String campaignTagline='';
   List<String>questions=['',''];
   firebase_storage.StorageReference ref;
@@ -53,6 +53,7 @@ class _AddManifestoState extends State<AddManifesto> {
           'partyLogoUrl':partyLogoUrl,
           'questions':questions,
           'denied':denied,
+          'votes':0,
         }
       });
     }else {
@@ -67,6 +68,7 @@ class _AddManifestoState extends State<AddManifesto> {
           'approved':false,
           'denied':denied,
           'questions': questions,
+          'votes':0,
         }
       });
     }
@@ -82,6 +84,7 @@ class _AddManifestoState extends State<AddManifesto> {
     // candidate.requestedCandidacyIndex.add(election.numOfCandidates);
     setState(() {
       hasRequested=true;
+      loading=false;
     });
   }
   // Future<void>getDefaultLogo()async{
@@ -107,7 +110,11 @@ class _AddManifestoState extends State<AddManifesto> {
         backgroundColor: Colors.black,
         centerTitle: true,
         title: Text(
-            'Account Details'
+            'Add Manifesto'
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       endDrawer: SideDrawer(user: user,),
@@ -141,11 +148,16 @@ class _AddManifestoState extends State<AddManifesto> {
                   // SmallTextField(field:partyName,iconData:Icons.account_box, label: "Name of your Party...",),
                   SizedBox(height: 25,),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Text('Add your party logo'),
                       SizedBox(
                         child: FloatingActionButton(
-                          child: Text('Add your party logo'),
+                          backgroundColor: Colors.black,
+                          child: Icon(
+                            Icons.add_a_photo_outlined,
+                            color: Colors.white,
+                          ),
                           onPressed: ()async{
                               await Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddImage(user:user,election:election,candidate:candidate))).then((value){
                                 setState(() {
@@ -209,28 +221,6 @@ class _AddManifestoState extends State<AddManifesto> {
               ),
 
               SizedBox(height: 25.0),
-              // SizedBox(
-              //   width: 300,
-              //   height: 50,
-              //   child: TextFormField(
-              //     keyboardType: TextInputType.multiline,
-              //     expands: true,
-              //     maxLines: null,
-              //     validator: (val) => val.isEmpty? 'Invalid. Mandatory Field':null,
-              //     onChanged: (val){
-              //       setState(() {
-              //         questions.add(val);
-              //       });
-              //     },
-              //     decoration: InputDecoration(
-              //         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-              //         suffixIcon: Icon(Icons.edit),
-              //         labelText: "What would your first 30 Days look like in this Role?",
-              //         border:
-              //         OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
-              //     ),
-              //   ),
-              // ),
               BigTextField(height:120,label:  "Why do you want this Role?",fieldList: questions,index: 0,readOnly: false,),
               SizedBox(height: 25.0),
               BigTextField(height:120,label:  "What would your first 30 Days look like in this Role?",fieldList: questions,index: 1,readOnly: false,),
@@ -247,16 +237,17 @@ class _AddManifestoState extends State<AddManifesto> {
                   onPressed: ()async{
                     if(!hasRequested){
                       if(_formkey.currentState.validate()){
-                        await requestCandidacy();
+                        setState(() {
+                          loading = true;
+                        });
+                        await requestCandidacy().timeout(Duration(seconds: 2));
                       }
                     }
-                    print(questions);
-                    print(partyName);
-                    // Navigator.push(context, MaterialPageRoute(builder: (context) => AddManifesto(user:user,election: election,candidate:candidate,)));
                   },
                 ),
               ),
-              hasRequested?Text('You have already requested.'):SizedBox(),
+              SizedBox(height: 25,),
+              hasRequested?Text('Your request has been recorded'):SizedBox(),
               // GestureDetector(
               //   onTap: () {
               //     //do what you want here

@@ -8,8 +8,9 @@ class Candidate{
   bool approved;
   bool denied;
   dynamic index;
+  num votes;
   String campaignTagline='';
   List<dynamic>questions=[];
 
-  Candidate({this.partyLogoUrl,this.denied,this.approved,this.campaignTagline,this.questions,this.name,this.email,this.partyName,this.index,this.requestedCandidacy,this.requestedCandidacyIndex});
+  Candidate({this.partyLogoUrl,this.votes,this.denied,this.approved,this.campaignTagline,this.questions,this.name,this.email,this.partyName,this.index,this.requestedCandidacy,this.requestedCandidacyIndex});
 }

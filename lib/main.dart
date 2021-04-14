@@ -8,7 +8,6 @@ import 'package:online_voting/screens/authenticate/signUp.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:online_voting/services/auth.dart';
 import 'package:online_voting/wrapper.dart';
-import 'package:online_voting/screens/accountDetailsList.dart';
 import 'package:provider/provider.dart';
 import 'package:online_voting/models/accountDetails.dart';
 //
@@ -34,7 +33,7 @@ class MyApp extends StatelessWidget{
       child: MaterialApp(
         theme: ThemeData(fontFamily: 'NotoSerif'),
         home: Wrapper(),
-        title: 'Ninja Trips',
+        title: 'VoteHub',
         // initialRoute: '/wrapper',
         routes: {
           '/authenticate':(context) => Authenticate(),

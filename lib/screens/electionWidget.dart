@@ -3,6 +3,7 @@ import 'package:online_voting/customWidgets/customMethods.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/screens/electionScreenOrg.dart';
+import 'package:online_voting/screens/electionScreenVot.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:online_voting/screens/electionScreenCan.dart';
 import 'package:intl/intl.dart';
@@ -33,8 +34,10 @@ class _ElectionWidgetState extends State<ElectionWidget> {
             onPressed: (){
               if(user.userType == 'can'){
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ElectionScreenCan(election:election,user:user)));
-              }else{
+              }else if(user.userType == 'org'){
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ElectionScreenOrg(election:election,user:user)));
+              }else{
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ElectionScreenVot(election:election,user:user)));
               }
 
             },

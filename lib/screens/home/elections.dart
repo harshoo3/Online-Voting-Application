@@ -5,6 +5,7 @@ import 'package:online_voting/screens/home/addManifesto.dart';
 import 'package:online_voting/screens/home/createElection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_voting/models/electionClass.dart';
+import 'package:online_voting/screens/home/sidebar.dart';
 import 'package:online_voting/screens/loading.dart';
 class Elections extends StatefulWidget {
 
@@ -18,11 +19,11 @@ class Elections extends StatefulWidget {
 class _ElectionsState extends State<Elections> {
 
   User user;
+  _ElectionsState({this.user});
   List<ElectionClass> electionList=[],ongoingELectionList =[],upcomingELectionList =[],completedELectionList =[];
   bool detailsFetched = false;
   DateTime now = DateTime.now();
   List<String> indicesList =[];
-  _ElectionsState({this.user});
 
 
   Future<void> getElectionDetails()async{
@@ -51,6 +52,8 @@ class _ElectionsState extends State<Elections> {
                   maxCandidates: value.data[indicesList[i]]['electionDetails']['maxCandidates'],
                   startDate: value.data[indicesList[i]]['electionDetails']['startDate'].toDate(),
                   numOfCandidates: value.data[indicesList[i]]['electionDetails']['numOfCandidates'],
+                  numOfApprovedCandidates: value.data[indicesList[i]]['electionDetails']['numOfApprovedCandidates'],
+                  votes: value.data[indicesList[i]]['electionDetails']['votes'],
                   index: indicesList[i],
                 )
               );
@@ -77,7 +80,6 @@ class _ElectionsState extends State<Elections> {
   void initState() {
     // TODO: implement initState
     getElectionDetails();
-    print(electionList.length);
     super.initState();
   }
   @override
@@ -86,7 +88,12 @@ class _ElectionsState extends State<Elections> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text('Elections'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
+      endDrawer: SideDrawer(user: user,),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(

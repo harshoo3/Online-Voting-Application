@@ -58,6 +58,7 @@ class SideDrawer extends StatelessWidget {
             ),
             tileColor: Colors.black,
             onTap:  () async{
+
               await _auth.signOut();
             },
           ),

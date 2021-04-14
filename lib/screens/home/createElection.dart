@@ -40,7 +40,7 @@ class _CreateElectionState extends State<CreateElection> {
 
     // = new DateTime(now.year, now.month, now.day);
     final CollectionReference elec = Firestore.instance.collection('Elections');
-    await elec.document(user.name).updateData({
+    await elec.document(user.name).setData({
       // 'indicesList': FieldValue.arrayUnion(['${user.electionCount}']),
       '${user.electionCount}':
       {
@@ -54,9 +54,13 @@ class _CreateElectionState extends State<CreateElection> {
           'maxCandidates':maxCandidates,
           'isPartyModeAllowed':isPartyModeAllowed,
           'numOfCandidates':0,
+          'numOfApprovedCandidates':0,
+          'votes':0,
         }
-      }
-    });
+      },
+    },
+    merge: true,
+    );
     user.electionCount=user.electionCount+1;
     final CollectionReference userdata = Firestore.instance.collection('dataset');
     return await userdata.document(user.email).updateData({
@@ -76,6 +80,7 @@ class _CreateElectionState extends State<CreateElection> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text('Create Elections'),
+        centerTitle: true,
       ),
       endDrawer: SideDrawer(user: user,),
       body: SafeArea(
@@ -226,7 +231,7 @@ class _CreateElectionState extends State<CreateElection> {
                         color: Colors.white
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: ()async {
                       if(!success){
                         setState(() {
                           isPressed = true;
@@ -247,7 +252,7 @@ class _CreateElectionState extends State<CreateElection> {
                               setState(() {
                                 loading = true;
                               });
-                              createElectionDatabase(startDate, endDate);
+                              await createElectionDatabase(startDate, endDate);
                               setState(() {
                                 loading = false;
                                 success = true;

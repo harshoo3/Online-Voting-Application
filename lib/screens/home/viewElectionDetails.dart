@@ -16,6 +16,10 @@ class ViewElectionDetails extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text('Create Elections'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       endDrawer: SideDrawer(user: user,),
       body: Column(

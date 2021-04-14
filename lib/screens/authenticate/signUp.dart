@@ -153,7 +153,7 @@ class _SignUpState extends State<SignUp> {
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                           suffixIcon: Icon(Icons.account_circle_outlined),
-                          hintText: "Name...",
+                          labelText: "Name...",
                           border:
                           OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
                     ),
@@ -287,7 +287,7 @@ class _SignUpState extends State<SignUp> {
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                         suffixIcon: Icon(Icons.phone),
-                        hintText: "Mobile number...",
+                        labelText: "Mobile number...",
                         border:
                         OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
                     ),
@@ -331,7 +331,7 @@ class _SignUpState extends State<SignUp> {
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                         suffixIcon: Icon(Icons.message_outlined),
-                        hintText: "OTP...",
+                        labelText: "OTP...",
                         border:
                         OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
                     ),
@@ -371,7 +371,7 @@ class _SignUpState extends State<SignUp> {
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                         suffixIcon: Icon(Icons.email_outlined),
-                        hintText: "Email...",
+                        labelText: "Email...",
                         border:
                         OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
                     ),
@@ -387,7 +387,7 @@ class _SignUpState extends State<SignUp> {
                       border:
                       OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
                       suffixIcon: Icon(Icons.event_note),
-                      hintText: 'Date of birth...',
+                      labelText: 'Date of birth...',
                     ),
                     mode: DateTimeFieldPickerMode.date,
                     autovalidateMode: AutovalidateMode.always,
@@ -424,7 +424,7 @@ class _SignUpState extends State<SignUp> {
                           },
                         ),
                         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                        hintText: "Password...",
+                        labelText: "Password...",
                         border:
                         OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
                   ),
@@ -457,7 +457,7 @@ class _SignUpState extends State<SignUp> {
                             },
                           ),
                           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                          hintText: "Confirm Password...",
+                          labelText: "Confirm Password...",
                           border:
                           OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
                     ),
@@ -488,8 +488,9 @@ class _SignUpState extends State<SignUp> {
                         }
                         if(_formkey.currentState.validate()){
                           mobileNo = mobileNo.trim();
-                          email = email.trimRight();
-                          password = password.trimRight();
+                          email = email.trim();
+                          email = email.toLowerCase();
+                          password = password.trim();
                           name = name.trimRight();
                           confirmPassword = confirmPassword.trimRight();
                           setState(() {

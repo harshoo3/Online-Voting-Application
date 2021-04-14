@@ -33,7 +33,7 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
   Future<void>getCandidates()async{
     await Firestore.instance
         .collection('Elections')
-        .document(user.name)
+        .document(user.orgName)
         .get()
         .then((value) {
           try{
@@ -52,6 +52,7 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
                       campaignTagline: value.data['${election.index}']['candidates'][indicesList[i]]['campaignTagline'],
                       name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
                       email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
+                      votes: value.data['${election.index}']['candidates'][indicesList[i]]['votes'],
                       questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
                       index: indicesList[i],
                     ),
@@ -67,6 +68,7 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
                       email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
                       questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
                       index: indicesList[i],
+                      votes:value.data['${election.index}']['candidates'][indicesList[i]]['votes'],
                     ),
                   );
                 });
@@ -106,46 +108,52 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text('Elections'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       endDrawer: SideDrawer(user: user,),
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(
-              width: 300,
-              child: FlatButton(
-                color: Colors.black,
-                child:Text(
-                  'Election Details',
-                  style: TextStyle(
-                      color: Colors.white
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              SizedBox(
+                width: 300,
+                child: FlatButton(
+                  color: Colors.black,
+                  child:Text(
+                    'Election Details',
+                    style: TextStyle(
+                        color: Colors.white
+                    ),
                   ),
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ViewElectionDetails(user:user,election: election,)));
+                  },
                 ),
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewElectionDetails(user:user,election: election,)));
-                },
               ),
-            ),
-            SizedBox(height: 25,),
-            ElectionScreenStats(election:election),
-            SizedBox(height: 25,),
-            Text('Requests'),
-            !noRequests?SizedBox():Text('No candidate requests yet.'),
-            Column(
-              children:
-              requestCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user,)).toList(),
-            ),
-            Text('Confirmed Candidates'),
-            Column(
-              children:
-              confirmedCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
-            ),
-            Text('Rejected Candidates'),
-            Column(
-              children:
-              rejectedCandidatesList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
-            ),
-          ],
+              SizedBox(height: 25,),
+              ElectionScreenStats(election:election),
+              SizedBox(height: 25,),
+              Text('Requests'),
+              !noRequests?SizedBox():Text('No candidate requests yet.'),
+              Column(
+                children:
+                requestCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user,)).toList(),
+              ),
+              Text('Confirmed Candidates'),
+              Column(
+                children:
+                confirmedCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
+              ),
+              Text('Rejected Candidates'),
+              Column(
+                children:
+                rejectedCandidatesList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -20,6 +20,7 @@ class DatabaseService{
       'orgName': orgName,
       'electionCount':electionCount,
     });
+
   }
 
   // AccountDetails _accountDetailsListFromSnapshot(DocumentSnapshot snapshot){

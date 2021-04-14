@@ -9,7 +9,6 @@ import 'package:online_voting/services/auth.dart';
 import 'package:online_voting/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:online_voting/screens/accountDetailsList.dart';
 import 'package:online_voting/models/accountDetails.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:online_voting/screens/home/addManifesto.dart';
@@ -21,13 +20,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final AuthService _auth = AuthService();
-
+  // AuthService _auth = AuthService();
   User user;
   FirebaseUser currUser;
   bool loading =true;
   bool returned = false;
-  bool isEmailVerified = false;
+
   @override
   void initState(){
     getUserDetails();
@@ -35,16 +33,17 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> getUserDetails() async {
-    // user = await _auth.getCurrentUser()
+    // await _auth.signOut();
    this.currUser =  await FirebaseAuth.instance.currentUser();
-   this.isEmailVerified = currUser.isEmailVerified;
    // print(currUser.isEmailVerified);
-    // print(user.email);
+   //  print(user.email);
+    print(currUser.email);
     Firestore.instance
         .collection('dataset')
         .document(currUser.email)
         .get()
         .then((value) {
+          print(value.data['userType'].toString());
       setState(() {
         user= User(
             userType:value.data['userType'].toString(),
@@ -58,6 +57,7 @@ class _HomeState extends State<Home> {
         loading = false;
       });
     });
+   // print(user.email);
   }
 
   @override
@@ -74,42 +74,44 @@ class _HomeState extends State<Home> {
         centerTitle: true,
       ),
       body: SafeArea(
-          child: Column(
-            children: <Widget>[
-              Center(
-                child: Text(
-                  'Home page',
-                  style: TextStyle(
-                    fontSize: 30,
-                  ),
-                ),
-              ),
-              SizedBox(height: 30,),
-              SizedBox(
-                child:Text(
-                  'Welcome ${user.name}',
-                  // 'yolo',
-                  style: TextStyle(
-                      fontSize: 20
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 300,
-                child: FlatButton(
-                  color: Colors.black,
-                  child:Text(
-                    'Elections',
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Center(
+                  child: Text(
+                    'Home page',
                     style: TextStyle(
-                        color: Colors.white
+                      fontSize: 30,
                     ),
                   ),
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Elections(user:user)));
-                  },
                 ),
-              ),
-            ],
+                SizedBox(height: 30,),
+                SizedBox(
+                  child:Text(
+                    'Welcome ${user.name}',
+                    // 'yolo',
+                    style: TextStyle(
+                        fontSize: 20
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 300,
+                  child: FlatButton(
+                    color: Colors.black,
+                    child:Text(
+                      'Elections',
+                      style: TextStyle(
+                          color: Colors.white
+                      ),
+                    ),
+                    onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Elections(user:user)));
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
       ),
     );
