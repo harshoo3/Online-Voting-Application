@@ -10,6 +10,8 @@ import 'package:online_voting/screens/home/viewElectionDetails.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_voting/screens/electionScreenStats.dart';
+import 'package:online_voting/customWidgets/custom.dart';
+
 class ElectionScreenOrg extends StatefulWidget {
   User user;
   ElectionClass election;
@@ -41,19 +43,20 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
               indicesList.add(element);
             });
             for(var i = 0;i<indicesList.length;i++){
+              Map<dynamic,dynamic> map = value.data['${election.index}']['candidates'][indicesList[i]];
               if(election.isPartyModeAllowed){
                 setState(() {
                   candidateList.add(
                     Candidate(
-                      partyLogoUrl: value.data['${election.index}']['candidates'][indicesList[i]]['partyLogoUrl'],
-                      partyName: value.data['${election.index}']['candidates'][indicesList[i]]['partyName'],
-                      approved: value.data['${election.index}']['candidates'][indicesList[i]]['approved'],
-                      denied: value.data['${election.index}']['candidates'][indicesList[i]]['denied'],
-                      campaignTagline: value.data['${election.index}']['candidates'][indicesList[i]]['campaignTagline'],
-                      name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
-                      email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
-                      votes: value.data['${election.index}']['candidates'][indicesList[i]]['votes'],
-                      questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
+                      partyLogoUrl: map['partyLogoUrl'],
+                      partyName: map['partyName'],
+                      approved: map['approved'],
+                      denied: map['denied'],
+                      campaignTagline: map['campaignTagline'],
+                      name: map['name'],
+                      email: map['email'],
+                      votes: map['votes'],
+                      questions: map['questions'],
                       index: indicesList[i],
                     ),
                   );
@@ -62,13 +65,13 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
                 setState(() {
                   candidateList.add(
                     Candidate(
-                      approved: value.data['${election.index}']['candidates'][indicesList[i]]['approved'],
-                      denied: value.data['${election.index}']['candidates'][indicesList[i]]['denied'],
-                      name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
-                      email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
-                      questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
+                      approved: map['approved'],
+                      denied: map['denied'],
+                      name: map['name'],
+                      email: map['email'],
+                      questions: map['questions'],
                       index: indicesList[i],
-                      votes:value.data['${election.index}']['candidates'][indicesList[i]]['votes'],
+                      votes:map['votes'],
                     ),
                   );
                 });
@@ -81,8 +84,6 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
                 rejectedCandidatesList.add(candidateList[i]);
               }
             }
-            // for
-            // value.data['waitingCandidates'][election.numOfWaitingCandidates-1]['candidateName'];
           }catch(e){
             print(e);
             setState(() {
@@ -105,13 +106,9 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
   @override
   Widget build(BuildContext context) {
     return !detailsFetched?Loading():Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text('Elections'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+      appBar: customAppBar(
+          title:'Your election',
+          context: context
       ),
       endDrawer: SideDrawer(user: user,),
       body: SingleChildScrollView(
@@ -142,12 +139,16 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
                 children:
                 requestCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user,)).toList(),
               ),
+              SizedBox(height: 25,),
               Text('Confirmed Candidates'),
+              confirmedCandidateList.length==0?Text('No confirmed candidates yet.'):SizedBox(),
               Column(
                 children:
                 confirmedCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
               ),
+              SizedBox(height: 25,),
               Text('Rejected Candidates'),
+              rejectedCandidatesList.length==0?Text('No rejected candidates yet.'):SizedBox(),
               Column(
                 children:
                 rejectedCandidatesList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),

@@ -69,10 +69,9 @@ class _CandidateManifestoState extends State<CandidateManifesto> {
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: SideDrawer(user: user,),
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text('VoteHub'),
-        centerTitle: true,
+      appBar: customAppBar(
+          title:'Candidate Manifesto',
+          context: context
       ),
       body: SingleChildScrollView(
         child: Center(

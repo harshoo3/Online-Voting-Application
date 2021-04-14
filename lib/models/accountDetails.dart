@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:online_voting/customWidgets/custom.dart';
 import 'package:online_voting/models/changeDetailsVerification.dart';
 import 'package:online_voting/services/auth.dart';
 import 'package:date_field/date_field.dart';
@@ -41,12 +42,9 @@ class _AccountDetailsState extends State<AccountDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        centerTitle: true,
-        title: Text(
-            'Account Details'
-        ),
+      appBar: customAppBar(
+          title:'Account Details',
+          context: context
       ),
       backgroundColor: _changeDetails? Colors.white:Colors.lightBlue[100],
       body: SafeArea(
@@ -143,22 +141,6 @@ class _AccountDetailsState extends State<AccountDetails> {
                 },
               ),
             ),
-            // SizedBox(
-            //   width: 300,
-            //   child: TextFormField(
-            //     readOnly: _changeDetails,
-            //     // controller: _controller,
-            //     initialValue: DateFormat('yyyy-MM-dd').format(dateOfBirth),
-            //     // enabled: true,
-            //     obscureText: false,
-            //     decoration: InputDecoration(
-            //         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-            //         suffixIcon: Icon(Icons.email_outlined),
-            //         border:
-            //         OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
-            //     ),
-            //   ),
-            // ),
             SizedBox(
               height: 20,
             ),

@@ -129,6 +129,13 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
     return loading? Loading():Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Online Voting',
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.black,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(
@@ -535,13 +542,6 @@ class _SignUpState extends State<SignUp> {
             ),
           ),
         ),
-      ),
-      appBar: AppBar(
-        title: Text(
-          'Online Voting',
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.black,
       ),
     );
   }

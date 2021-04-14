@@ -10,7 +10,7 @@ import 'package:online_voting/screens/home/viewElectionDetails.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_voting/screens/electionScreenStats.dart';
-
+import 'package:online_voting/customWidgets/custom.dart';
 class ElectionScreenVot extends StatefulWidget {
   User user;
   ElectionClass election;
@@ -42,32 +42,34 @@ class _ElectionScreenVotState extends State<ElectionScreenVot> {
           indicesList.add(element);
         });
         for(var i = 0;i<indicesList.length;i++){
-          if(election.isPartyModeAllowed && value.data['${election.index}']['candidates'][indicesList[i]]['approved']){
+          Map<dynamic,dynamic> map = value.data['${election.index}']['candidates'][indicesList[i]];
+          if(election.isPartyModeAllowed && map['approved']){
             setState(() {
               candidateList.add(
                 Candidate(
-                  partyLogoUrl: value.data['${election.index}']['candidates'][indicesList[i]]['partyLogoUrl'],
-                  partyName: value.data['${election.index}']['candidates'][indicesList[i]]['partyName'],
-                  approved: value.data['${election.index}']['candidates'][indicesList[i]]['approved'],
-                  denied: value.data['${election.index}']['candidates'][indicesList[i]]['denied'],
-                  campaignTagline: value.data['${election.index}']['candidates'][indicesList[i]]['campaignTagline'],
-                  name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
-                  email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
-                  votes:value.data['${election.index}']['candidates'][indicesList[i]]['votes'],                  questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
+                  partyLogoUrl: map['partyLogoUrl'],
+                  partyName: map['partyName'],
+                  approved: map['approved'],
+                  denied: map['denied'],
+                  campaignTagline: map['campaignTagline'],
+                  name: map['name'],
+                  email: map['email'],
+                  votes:map['votes'],
+                  questions: map['questions'],
                   index: indicesList[i],
                 ),
               );
             });
-          }else if(value.data['${election.index}']['candidates'][indicesList[i]]['approved']){
+          }else if(map['approved']){
             setState(() {
               candidateList.add(
                 Candidate(
-                  votes:value.data['${election.index}']['candidates'][indicesList[i]]['votes'],
-                  approved: value.data['${election.index}']['candidates'][indicesList[i]]['approved'],
-                  denied: value.data['${election.index}']['candidates'][indicesList[i]]['denied'],
-                  name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
-                  email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
-                  questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
+                  votes:map['votes'],
+                  approved: map['approved'],
+                  denied: map['denied'],
+                  name: map['name'],
+                  email: map['email'],
+                  questions: map['questions'],
                   index: indicesList[i],
                 ),
               );
@@ -80,9 +82,6 @@ class _ElectionScreenVotState extends State<ElectionScreenVot> {
           noCandidates = true;
         });
       }
-    });
-    setState(() {
-      detailsFetched = true;
     });
   }
   Future<void>checkIfVoted()async{
@@ -119,7 +118,7 @@ class _ElectionScreenVotState extends State<ElectionScreenVot> {
       }
     });
   }
-  Future<void>FetchDetails()async{
+  Future<void>fetchDetails()async{
     await getCandidates();
     await checkIfVoted();
     setState(() {
@@ -129,20 +128,15 @@ class _ElectionScreenVotState extends State<ElectionScreenVot> {
   @override
   void initState() {
     // TODO: implement initState
-    getCandidates();
-    checkIfVoted();
+    fetchDetails();
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
     return !detailsFetched?Loading():Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text('Elections'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+      appBar: customAppBar(
+          title:'Your election',
+          context: context
       ),
       endDrawer: SideDrawer(user: user,),
       body: Center(

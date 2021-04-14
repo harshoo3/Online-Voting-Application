@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/screens/home/sidebar.dart';
 import 'package:online_voting/screens/loading.dart';
+import 'package:online_voting/customWidgets/custom.dart';
+// import 'dart:';
 class Elections extends StatefulWidget {
 
   User user;
@@ -23,6 +25,7 @@ class _ElectionsState extends State<Elections> {
   List<ElectionClass> electionList=[],ongoingELectionList =[],upcomingELectionList =[],completedELectionList =[];
   bool detailsFetched = false;
   DateTime now = DateTime.now();
+  ElectionClass election;
   List<String> indicesList =[];
 
 
@@ -37,37 +40,35 @@ class _ElectionsState extends State<Elections> {
           value.data.keys.forEach((element) {
             indicesList.add(element);
           });
+
           // indicesList.addAll(value.data['indicesList']);
           // print(indicesList.length);
           for(var i = 0;i <indicesList.length;i++){
+            Map<dynamic,dynamic> map=value.data[indicesList[i]]['electionDetails'];
             // print(indicesList[i]);
             setState(() {
               electionList.add(
                 ElectionClass(
-                  post: value.data[indicesList[i]]['electionDetails']['post'],
-                  electionDescription: value.data[indicesList[i]]['electionDetails']['electionDescription'],
-                  endDate: value.data[indicesList[i]]['electionDetails']['endDate'].toDate(),
-                  setDate: value.data[indicesList[i]]['electionDetails']['setDate'].toDate(),
-                  isPartyModeAllowed: value.data[indicesList[i]]['electionDetails']['isPartyModeAllowed'],
-                  maxCandidates: value.data[indicesList[i]]['electionDetails']['maxCandidates'],
-                  startDate: value.data[indicesList[i]]['electionDetails']['startDate'].toDate(),
-                  numOfCandidates: value.data[indicesList[i]]['electionDetails']['numOfCandidates'],
-                  numOfApprovedCandidates: value.data[indicesList[i]]['electionDetails']['numOfApprovedCandidates'],
-                  votes: value.data[indicesList[i]]['electionDetails']['votes'],
+                  post: map['post'],
+                  electionDescription: map['electionDescription'],
+                  endDate: map['endDate'].toDate(),
+                  setDate: map['setDate'].toDate(),
+                  isPartyModeAllowed: map['isPartyModeAllowed'],
+                  maxCandidates: map['maxCandidates'],
+                  startDate: map['startDate'].toDate(),
+                  numOfCandidates: map['numOfCandidates'],
+                  numOfApprovedCandidates: map['numOfApprovedCandidates'],
+                  votes: map['votes'],
                   index: indicesList[i],
                 )
               );
             });
-            if(now.difference(electionList[i].startDate)>=Duration(seconds: 0)){
-              if(electionList[i].endDate.difference(now)>=Duration(seconds: 0)){
-                ongoingELectionList.add(electionList[i]);
-              }
-            }
             if(now.difference(electionList[i].endDate)>=Duration(seconds: 0)){
               completedELectionList.add(electionList[i]);
-            }
-            if(electionList[i].startDate.difference(now)>=Duration(seconds: 0)){
+            }else if(electionList[i].startDate.difference(now)>=Duration(seconds: 0)){
               upcomingELectionList.add(electionList[i]);
+            }else{
+              ongoingELectionList.add(electionList[i]);
             }
           }
           setState(() {
@@ -85,13 +86,9 @@ class _ElectionsState extends State<Elections> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text('Elections'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+      appBar: customAppBar(
+        title:'Elections',
+        context: context
       ),
       endDrawer: SideDrawer(user: user,),
       body: SafeArea(
@@ -120,20 +117,23 @@ class _ElectionsState extends State<Elections> {
                   },
                 ),
               ):SizedBox(height: 0,),
-              SizedBox(
-                height: 25,
-              ),
+              SizedBox(height: 25,),
               Text('Ongoing Elections:'),
+              ongoingELectionList.length==0?Text('No Ongoing Elections to show.'):SizedBox(),
               Column(
                 children:
                   ongoingELectionList.map((e) => ElectionWidget(election : e,user:user)).toList(),
               ),
+              SizedBox(height: 25,),
               Text('Upcoming Elections :'),
+              upcomingELectionList.length==0?Text('No Upcoming Elections to show.'):SizedBox(),
               Column(
                 children:
                 upcomingELectionList.map((e) => ElectionWidget(election : e,user:user)).toList(),
               ),
+              SizedBox(height: 25,),
               Text('Completed Elections:'),
+              completedELectionList.length==0?Text('No Completed Elections yet.'):SizedBox(),
               Column(
                 children:
                 completedELectionList.map((e) => ElectionWidget(election : e,user:user)).toList() ,

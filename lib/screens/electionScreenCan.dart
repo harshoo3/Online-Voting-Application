@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_voting/customWidgets/custom.dart';
 import 'package:online_voting/customWidgets/customMethods.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
@@ -81,21 +82,22 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
           indicesList.add(element);
         });
         for(var i = 0;i<indicesList.length;i++){
+          Map<dynamic,dynamic> map =value.data['${election.index}']['candidates'][indicesList[i]];
           if(candidate.index!= indicesList[i]){
-            if(value.data['${election.index}']['candidates'][indicesList[i]]['approved']){
+            if(map['approved']){
               if(election.isPartyModeAllowed){
                 setState(() {
                   candidateList.add(
                     Candidate(
-                      partyLogoUrl: value.data['${election.index}']['candidates'][indicesList[i]]['partyLogoUrl'],
-                      partyName: value.data['${election.index}']['candidates'][indicesList[i]]['partyName'],
-                      approved: value.data['${election.index}']['candidates'][indicesList[i]]['approved'],
-                      denied: value.data['${election.index}']['candidates'][indicesList[i]]['denied'],
-                      campaignTagline: value.data['${election.index}']['candidates'][indicesList[i]]['campaignTagline'],
-                      name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
-                      email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
-                      votes: value.data['${election.index}']['candidates'][indicesList[i]]['votes'],
-                      questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
+                      partyLogoUrl: map['partyLogoUrl'],
+                      partyName: map['partyName'],
+                      approved: map['approved'],
+                      denied: map['denied'],
+                      campaignTagline: map['campaignTagline'],
+                      name: map['name'],
+                      email: map['email'],
+                      votes: map['votes'],
+                      questions: map['questions'],
                       index: indicesList[i],
                     ),
                   );
@@ -104,12 +106,12 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
                 setState(() {
                   candidateList.add(
                     Candidate(
-                      approved: value.data['${election.index}']['candidates'][indicesList[i]]['approved'],
-                      denied: value.data['${election.index}']['candidates'][indicesList[i]]['denied'],
-                      name: value.data['${election.index}']['candidates'][indicesList[i]]['name'],
-                      email: value.data['${election.index}']['candidates'][indicesList[i]]['email'],
-                      votes: value.data['${election.index}']['candidates'][indicesList[i]]['votes'],
-                      questions: value.data['${election.index}']['candidates'][indicesList[i]]['questions'],
+                      approved: map['approved'],
+                      denied: map['denied'],
+                      name: map['name'],
+                      email: map['email'],
+                      votes: map['votes'],
+                      questions: map['questions'],
                       index: indicesList[i],
                     ),
                   );
@@ -120,25 +122,25 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
             if(election.isPartyModeAllowed){
               setState(() {
                 candidateFound = true;
-                candidate.partyLogoUrl= value.data['${election.index}']['candidates'][indicesList[i]]['partyLogoUrl'];
-                candidate.partyName= value.data['${election.index}']['candidates'][indicesList[i]]['partyName'];
-                candidate.approved= value.data['${election.index}']['candidates'][indicesList[i]]['approved'];
-                candidate.denied= value.data['${election.index}']['candidates'][indicesList[i]]['denied'];
-                candidate.campaignTagline= value.data['${election.index}']['candidates'][indicesList[i]]['campaignTagline'];
-                candidate.name= value.data['${election.index}']['candidates'][indicesList[i]]['name'];
-                candidate.email= value.data['${election.index}']['candidates'][indicesList[i]]['email'];
-                candidate.questions= value.data['${election.index}']['candidates'][indicesList[i]]['questions'];
-                candidate.votes=value.data['${election.index}']['candidates'][indicesList[i]]['votes'];
+                candidate.partyLogoUrl= map['partyLogoUrl'];
+                candidate.partyName= map['partyName'];
+                candidate.approved= map['approved'];
+                candidate.denied= map['denied'];
+                candidate.campaignTagline= map['campaignTagline'];
+                candidate.name= map['name'];
+                candidate.email= map['email'];
+                candidate.questions= map['questions'];
+                candidate.votes=map['votes'];
               });
             }else{
               setState(() {
                 candidateFound = true;
-                candidate.approved= value.data['${election.index}']['candidates'][indicesList[i]]['approved'];
-                candidate.denied= value.data['${election.index}']['candidates'][indicesList[i]]['denied'];
-                candidate.name= value.data['${election.index}']['candidates'][indicesList[i]]['name'];
-                candidate.email= value.data['${election.index}']['candidates'][indicesList[i]]['email'];
-                candidate.questions= value.data['${election.index}']['candidates'][indicesList[i]]['questions'];
-                candidate.votes=value.data['${election.index}']['candidates'][indicesList[i]]['votes'];
+                candidate.approved= map['approved'];
+                candidate.denied= map['denied'];
+                candidate.name= map['name'];
+                candidate.email= map['email'];
+                candidate.questions= map['questions'];
+                candidate.votes=map['votes'];
               });
             }
           }
@@ -150,21 +152,17 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
         });
       }
     });
-    if(now.difference(election.startDate)>=Duration(seconds: 0)){
-      if(election.endDate.difference(now)>=Duration(seconds: 0)){
-        setState(() {
-          electionKind = 'ongoing';
-        });
-      }
-    }
     if(now.difference(election.endDate)>=Duration(seconds: 0)){
       setState(() {
         electionKind = 'completed';
       });
-    }
-    if(election.startDate.difference(now)>=Duration(seconds: 0)){
+    }else if(election.startDate.difference(now)>=Duration(seconds: 0)){
       setState(() {
         electionKind = 'upcoming';
+      });
+    }else{
+      setState(() {
+        electionKind = 'ongoing';
       });
     }
     setState(() {
@@ -185,13 +183,9 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
   @override
   Widget build(BuildContext context) {
     return !checkingDone || !detailsFetched?Loading(): Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text('Online Voting'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+      appBar: customAppBar(
+          title:'Your election',
+          context: context
       ),
       endDrawer: SideDrawer(user: user,),
       body:SingleChildScrollView(

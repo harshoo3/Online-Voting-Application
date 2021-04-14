@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:online_voting/customWidgets/custom.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/screens/authenticate/emailVerification.dart';
 import 'package:online_voting/screens/home/sidebar.dart';
@@ -31,9 +32,9 @@ class _PrivacyAndVerificationState extends State<PrivacyAndVerification> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text('Privacy and Verification'),
+      appBar: customAppBar(
+          title:'Privacy and Verification',
+          context: context
       ),
       endDrawer: SideDrawer(user: user,),
       body: Column(
