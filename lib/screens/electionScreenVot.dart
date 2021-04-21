@@ -138,7 +138,7 @@ class _ElectionScreenVotState extends State<ElectionScreenVot> {
           title:'Your election',
           context: context
       ),
-      endDrawer: SideDrawer(user: user,),
+      endDrawer: SideDrawer(user: user,context: context),
       body: Center(
         child: Column(
           children: [

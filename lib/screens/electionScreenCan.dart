@@ -187,7 +187,7 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
           title:'Your election',
           context: context
       ),
-      endDrawer: SideDrawer(user: user,),
+      endDrawer: SideDrawer(user: user,context: context),
       body:SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

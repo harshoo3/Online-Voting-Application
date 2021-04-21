@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/models/accountDetails.dart';
+import 'package:online_voting/screens/home/home.dart';
 import 'package:online_voting/services/auth.dart';
 import 'package:online_voting/screens/home/privacyAndVerification.dart';
-
+import 'package:online_voting/screens/loading.dart';
+import 'dart:async';
 class SideDrawer extends StatelessWidget {
   final AuthService _auth = AuthService();
   final User user;
-  SideDrawer({this.user});
+  BuildContext context;
+  bool home = false;
+  SideDrawer({this.user,this.context,this.home = false});
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return Drawer(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,7 +62,9 @@ class SideDrawer extends StatelessWidget {
             ),
             tileColor: Colors.black,
             onTap:  () async{
-
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => Loading(duration: Duration(seconds: 2),)));
               await _auth.signOut();
             },
           ),

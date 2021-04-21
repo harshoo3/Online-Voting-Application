@@ -110,7 +110,7 @@ class _AddManifestoState extends State<AddManifesto> {
           title:'Add Manifesto',
           context: context
       ),
-      endDrawer: SideDrawer(user: user,),
+      endDrawer: SideDrawer(user: user,context: context),
       body: SingleChildScrollView(
         child: Form(
           key: _formkey,

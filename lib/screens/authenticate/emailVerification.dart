@@ -65,7 +65,7 @@ class _EmailVerificationState extends State<EmailVerification> {
         backgroundColor: Colors.black,
         title: Text('Create Elections'),
       ),
-      endDrawer: SideDrawer(user: user,),
+      endDrawer: SideDrawer(user: user,context: context,),
       body: Center(
         child:!isEmailVerified?
         Text('An email has been sent to your email address ${user.email}.'):

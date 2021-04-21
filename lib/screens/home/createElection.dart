@@ -82,7 +82,7 @@ class _CreateElectionState extends State<CreateElection> {
             title:'Create Election',
             context: context
         ),
-      endDrawer: SideDrawer(user: user,),
+      endDrawer: SideDrawer(user: user,context: context),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Form(

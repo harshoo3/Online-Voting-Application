@@ -21,7 +21,7 @@ class ViewElectionDetails extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      endDrawer: SideDrawer(user: user,),
+      endDrawer: SideDrawer(user: user,context: context),
       body: Column(
         children: [
           Center(child: SizedBox(height: 25.0)),

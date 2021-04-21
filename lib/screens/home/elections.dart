@@ -90,7 +90,7 @@ class _ElectionsState extends State<Elections> {
         title:'Elections',
         context: context
       ),
-      endDrawer: SideDrawer(user: user,),
+      endDrawer: SideDrawer(user: user,context: context,),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(

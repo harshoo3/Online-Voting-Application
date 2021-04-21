@@ -36,7 +36,7 @@ class _PrivacyAndVerificationState extends State<PrivacyAndVerification> {
           title:'Privacy and Verification',
           context: context
       ),
-      endDrawer: SideDrawer(user: user,),
+      endDrawer: SideDrawer(user: user,context: context),
       body: Column(
         children: [
           SizedBox(

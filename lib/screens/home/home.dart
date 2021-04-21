@@ -67,7 +67,7 @@ class _HomeState extends State<Home> {
     // value: DatabaseService().data,
     // child:
     return loading? Loading():Scaffold(
-      endDrawer: SideDrawer(user: user,),
+      endDrawer: SideDrawer(user: user,context: context,home: true,),
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text('VoteHub'),

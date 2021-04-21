@@ -110,7 +110,7 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
           title:'Your election',
           context: context
       ),
-      endDrawer: SideDrawer(user: user,),
+      endDrawer: SideDrawer(user: user,context: context),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

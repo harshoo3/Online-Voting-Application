@@ -68,7 +68,7 @@ class _CandidateManifestoState extends State<CandidateManifesto> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: SideDrawer(user: user,),
+      endDrawer: SideDrawer(user: user,context: context),
       appBar: customAppBar(
           title:'Candidate Manifesto',
           context: context
