@@ -3,7 +3,6 @@ import 'package:online_voting/screens/home/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/screens/home/elections.dart';
-import 'package:online_voting/screens/home/voting.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:online_voting/services/auth.dart';
 import 'package:online_voting/services/database.dart';

@@ -5,7 +5,7 @@ import 'package:online_voting/screens/home/home.dart';
 import 'package:online_voting/services/auth.dart';
 import 'package:online_voting/screens/home/privacyAndVerification.dart';
 import 'package:online_voting/screens/loading.dart';
-import 'dart:async';
+
 class SideDrawer extends StatelessWidget {
   final AuthService _auth = AuthService();
   final User user;

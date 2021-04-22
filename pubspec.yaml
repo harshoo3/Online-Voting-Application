@@ -26,7 +26,7 @@ dependencies:
   intl: ^0.16.1
   intl_phone_number_input: ^0.6.0
   flutter_statusbarcolor: ^0.2.3
-  firebase_auth: ^0.14.0+5
+  firebase_auth: ^0.11.1+12
   cloud_firestore: ^0.12.9+4
   provider: ^4.3.3
   smart_select: ^4.3.2

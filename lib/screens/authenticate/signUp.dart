@@ -45,7 +45,7 @@ class _SignUpState extends State<SignUp> {
   // bool phoneNumber =
   String initialCountry = 'IN';
   PhoneNumber number = PhoneNumber(isoCode: 'IN');
-  Future<void> getMarker() async{
+  Future<void> getOrgNames() async{
     QuerySnapshot snapshot = await Firestore.instance.collection('orgNames').getDocuments();
     orgNamesDoc = snapshot.documents;
     for(var i = 0;i< orgNamesDoc.length;i++){
@@ -122,7 +122,7 @@ class _SignUpState extends State<SignUp> {
   @override
   void initState() {
     // TODO: implement initState
-    getMarker();
+    getOrgNames();
     super.initState();
   }
   @override
@@ -143,63 +143,11 @@ class _SignUpState extends State<SignUp> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SizedBox(
-                  height: 30,
-                ),
                 Center(
                   child: SizedBox(
-                    width: 300,
-                    child: TextFormField(
-                      validator: (val) => val.isEmpty ? 'Invalid. Please enter your name':null,
-                      onChanged: (val){
-                        setState(() {
-                          name = val;
-                        });
-                      },
-                      obscureText: false,
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                          suffixIcon: Icon(Icons.account_circle_outlined),
-                          labelText: "Name...",
-                          border:
-                          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-                    ),
+                    height: 30,
                   ),
                 ),
-                // SizedBox(
-                //   height: 25,
-                // ),
-                // SizedBox(
-                //   width: 300,
-                //   child: InternationalPhoneNumberInput(
-                //     onInputChanged: (PhoneNumber number) {
-                //       print(number.phoneNumber);
-                //     },
-                //     onInputValidated: (bool value) {
-                //       print(value);
-                //     },
-                //     selectorConfig: SelectorConfig(
-                //       selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                //       useEmoji: false,
-                //     ),
-                //     ignoreBlank: false,
-                //     autoValidateMode: AutovalidateMode.disabled,
-                //     selectorTextStyle: TextStyle(color: Colors.black),
-                //     initialValue: number,
-                //     formatInput: false,
-                //     inputDecoration: InputDecoration(
-                //       suffixIcon: Icon(Icons.phone_android_outlined),
-                //       hintText: 'Mobile number...',
-                //     ),
-                //     spaceBetweenSelectorAndTextField: 0,
-                //     keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
-                //     inputBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0)),
-                //     onSaved: (PhoneNumber number) {
-                //       print('On Saved: $number');
-                //     },
-                //   ),
-                // ),
-                SizedBox(height: 25,),
                 SizedBox(
                   width: 300,
                   child: SmartSelect<String>.single(
@@ -211,14 +159,14 @@ class _SignUpState extends State<SignUp> {
                     //   barrierColor: Colors.pink,
                     // ),
                     modalHeaderStyle: S2ModalHeaderStyle(
-                      backgroundColor: Colors.black,
-                      centerTitle: true,
-                      iconTheme: IconThemeData(
-                        color: Colors.white, //change your color here
-                      ),
-                      textStyle: TextStyle(
-                        color: Colors.white,
-                      )
+                        backgroundColor: Colors.black,
+                        centerTitle: true,
+                        iconTheme: IconThemeData(
+                          color: Colors.white, //change your color here
+                        ),
+                        textStyle: TextStyle(
+                          color: Colors.white,
+                        )
                     ),
                     // The text displayed when the value is null
                     placeholder :'Select one',
@@ -242,41 +190,66 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
                 SizedBox(height: 25,),
-                userType!= 'org'?SizedBox(
-                  width: 260,
-                  child: DropdownButtonFormField<String>(
-                    hint: Text('Organisation name'),
-                    isExpanded: true,
-                    value: orgName,
-                    icon: Icon(
-                      Icons.arrow_downward,
-                    ),
-                    iconSize: 24,
-                    elevation: 16,
-
-                    validator: (value) => value == null ? 'Organisation name required' : null,
-                    style: TextStyle(
-                        color: Colors.black
-                    ),
-                    // underline: Container(
-                    //   height: 2,
-                    //   color: Colors.black,
-                    // ),
-
-                    onChanged: (String newValue) {
+                SizedBox(
+                  width: 300,
+                  child: TextFormField(
+                    validator: (val) => val.isEmpty ? 'Invalid. Please enter your name':null,
+                    onChanged: (val){
                       setState(() {
-                        orgName = newValue;
+                        name = val;
                       });
                     },
-                    items: orgNames
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    })
-                        .toList(),
+                    obscureText: false,
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                        suffixIcon: Icon(Icons.account_circle_outlined),
+                        labelText: "Name...",
+                        border:
+                        OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
                   ),
+                ),
+                SizedBox(height: 25,),
+                userType!= 'org'?Column(
+                  children: [
+                    Text('Name of the organisation',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 260,
+                      child: DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        value: orgName,
+                        icon: Icon(
+                          Icons.arrow_downward,
+                        ),
+                        iconSize: 24,
+                        elevation: 16,
+
+                        validator: (value) => value == null ? 'Organisation name required' : null,
+                        style: TextStyle(
+                            color: Colors.black
+                        ),
+                        // underline: Container(
+                        //   height: 2,
+                        //   color: Colors.black,
+                        // ),
+
+                        onChanged: (String newValue) {
+                          setState(() {
+                            orgName = newValue;
+                          });
+                        },
+                        items: orgNames.map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
                 ):SizedBox(height: 0,),
                 SizedBox(
                   height: userType!= 'org'? 25 : 0,
@@ -506,9 +479,11 @@ class _SignUpState extends State<SignUp> {
                           if(userType == 'org'){
                             orgName = name;
                           }
-                          dynamic result = await _auth.registerWithEmailAndPassword(email,password,name,dateOfBirth,mobileNo,userType,orgName,electionCount);
-                          loading = false;
+                          dynamic result = await _auth.registerWithEmailAndPassword(email:email,password:password,name:name,dateOfBirth:dateOfBirth,mobileNo:mobileNo,userType:userType,orgName:orgName,electionCount:electionCount);
                           if(result == null){
+                            setState(() {
+                              loading = false;
+                            });
                             setState(() {
                               error = 'Please enter a valid Email';
                             });
@@ -516,7 +491,10 @@ class _SignUpState extends State<SignUp> {
                             if(userType=='org'){
                               addOrgName();
                             }
-                            print(getMarker());
+                            print(getOrgNames());
+                            setState(() {
+                              loading = false;
+                            });
                             Navigator.pop(context);
                           }
                           // }else{

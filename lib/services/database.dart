@@ -7,7 +7,7 @@ class DatabaseService{
   final String uid;
   DatabaseService({this.uid});
 
-  Future updateUserData({String name,String email,DateTime dateOfBirth,String mobileNo,String userType,String orgName,int electionCount})async{
+  Future setUserData({String name,String email,DateTime dateOfBirth,String mobileNo,String userType,String orgName,int electionCount})async{
 
     final CollectionReference userdata = Firestore.instance.collection('dataset');
     return await userdata.document(email).setData({
@@ -22,8 +22,14 @@ class DatabaseService{
     });
 
   }
-
-  // AccountDetails _accountDetailsListFromSnapshot(DocumentSnapshot snapshot){
+  Future updateUserData({String email,DateTime dateOfBirth,String mobileNo,String userType})async{
+    final CollectionReference userdata = Firestore.instance.collection('dataset');
+    return await userdata.document(email).setData({
+      'dateOfBirth': DateFormat('yyyy-MM-dd').format(dateOfBirth),
+      'mobileNo': mobileNo,
+    },merge: true);
+  }
+// AccountDetails _accountDetailsListFromSnapshot(DocumentSnapshot snapshot){
   //   return snapshot.data
   // }
   //
