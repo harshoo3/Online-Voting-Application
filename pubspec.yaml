@@ -24,6 +24,7 @@ dependencies:
   flutter_spinkit: "^4.1.2"
   date_field: ^1.0.4
   intl: ^0.16.1
+  flutter_countdown_timer: ^3.0.1
   intl_phone_number_input: ^0.6.0
   flutter_statusbarcolor: ^0.2.3
   firebase_auth: ^0.11.1+12

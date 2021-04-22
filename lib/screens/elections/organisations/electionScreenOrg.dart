@@ -4,13 +4,13 @@ import 'package:online_voting/customWidgets/customMethods.dart';
 import 'package:online_voting/models/candidate.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
-import 'package:online_voting/screens/candidateWidget.dart';
-import 'package:online_voting/screens/home/sidebar.dart';
-import 'package:online_voting/screens/home/viewElectionDetails.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/candidateWidget.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/viewElectionDetails.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:online_voting/screens/electionScreenStats.dart';
-import 'package:online_voting/customWidgets/custom.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/electionScreenStats.dart';
+import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
 
 class ElectionScreenOrg extends StatefulWidget {
   User user;
@@ -112,10 +112,11 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
       ),
       endDrawer: SideDrawer(user: user,context: context),
       body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: SizedBox(
                 width: 300,
                 child: FlatButton(
                   color: Colors.black,
@@ -130,31 +131,31 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
                   },
                 ),
               ),
-              SizedBox(height: 25,),
-              ElectionScreenStats(election:election),
-              SizedBox(height: 25,),
-              Text('Requests'),
-              !noRequests?SizedBox():Text('No candidate requests yet.'),
-              Column(
-                children:
-                requestCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user,)).toList(),
-              ),
-              SizedBox(height: 25,),
-              Text('Confirmed Candidates'),
-              confirmedCandidateList.length==0?Text('No confirmed candidates yet.'):SizedBox(),
-              Column(
-                children:
-                confirmedCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
-              ),
-              SizedBox(height: 25,),
-              Text('Rejected Candidates'),
-              rejectedCandidatesList.length==0?Text('No rejected candidates yet.'):SizedBox(),
-              Column(
-                children:
-                rejectedCandidatesList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 25,),
+            Center(child: ElectionScreenStats(election:election)),
+            SizedBox(height: 25,),
+            Text('Requests'),
+            noRequests || requestCandidateList.length==0?Text('No candidate requests pending.'):SizedBox(),
+            Column(
+              children:
+              requestCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user,)).toList(),
+            ),
+            SizedBox(height: 25,),
+            Text('Confirmed Candidates'),
+            confirmedCandidateList.length==0?Text('No confirmed candidates yet.'):SizedBox(),
+            Column(
+              children:
+              confirmedCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
+            ),
+            SizedBox(height: 25,),
+            Text('Rejected Candidates'),
+            rejectedCandidatesList.length==0?Text('No rejected candidates yet.'):SizedBox(),
+            Column(
+              children:
+              rejectedCandidatesList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
+            ),
+          ],
         ),
       ),
     );

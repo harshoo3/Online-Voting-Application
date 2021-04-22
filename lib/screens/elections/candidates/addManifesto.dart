@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_voting/models/user.dart';
-import 'package:online_voting/screens/home/sidebar.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'dart:io';
-import 'package:online_voting/customWidgets/custom.dart';
+import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
 import 'package:online_voting/models/candidate.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:online_voting/screens/addImage.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/addImage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 class AddManifesto extends StatefulWidget {
   ElectionClass election;

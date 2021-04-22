@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:online_voting/customWidgets/customMethods.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
-import 'package:online_voting/screens/electionScreenOrg.dart';
-import 'package:online_voting/screens/electionScreenVot.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/organisations/electionScreenOrg.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/voters/electionScreenVot.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:online_voting/screens/electionScreenCan.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/electionScreenCan.dart';
 import 'package:intl/intl.dart';
 class ElectionWidget extends StatefulWidget {
   User user;

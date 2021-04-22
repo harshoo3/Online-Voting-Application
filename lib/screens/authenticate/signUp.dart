@@ -331,8 +331,8 @@ class _SignUpState extends State<SignUp> {
                     color: Colors.black,
                     textColor: Colors.white,
                     child: Text("Done".toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 19,
+                      style: TextStyle(
+                        fontSize: 19,
                       ),
                     ),
                   ),
@@ -524,4 +524,3 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
-

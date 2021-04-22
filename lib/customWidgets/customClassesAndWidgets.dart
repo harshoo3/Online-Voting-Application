@@ -134,4 +134,23 @@ Widget customAppBar({String title,BuildContext context}){
     ),
   );
 }
+Widget TextWidget(String text){
+  return Text(
+    text,
+    style: TextStyle(
+        backgroundColor: Colors.black,
+        color: Colors.white,
+        fontSize: 30
+    ),
+  );
+}
+Widget ColonText(){
+  return Text(
+    ':',
+    style: TextStyle(
+      color: Colors.black,
+      fontSize: 30,
+    ),
+  );
+}
 

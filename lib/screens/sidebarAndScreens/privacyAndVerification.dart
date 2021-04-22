@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:online_voting/customWidgets/custom.dart';
+import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/screens/authenticate/emailVerification.dart';
-import 'package:online_voting/screens/home/sidebar.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
 class PrivacyAndVerification extends StatefulWidget {
   User user;
   PrivacyAndVerification({this.user});

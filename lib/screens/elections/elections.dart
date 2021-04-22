@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:online_voting/models/user.dart';
-import 'package:online_voting/screens/electionWidget.dart';
-import 'package:online_voting/screens/home/addManifesto.dart';
-import 'package:online_voting/screens/home/createElection.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/electionWidget.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/addManifesto.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/organisations/createElection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_voting/models/electionClass.dart';
-import 'package:online_voting/screens/home/sidebar.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
 import 'package:online_voting/screens/loading.dart';
-import 'package:online_voting/customWidgets/custom.dart';
+import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
 // import 'dart:';
 class Elections extends StatefulWidget {
 

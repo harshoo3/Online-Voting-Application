@@ -1,17 +1,17 @@
 // import 'dart:html';
-import 'package:online_voting/screens/home/sidebar.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:online_voting/models/user.dart';
-import 'package:online_voting/screens/home/elections.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/elections.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:online_voting/services/auth.dart';
 import 'package:online_voting/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:online_voting/models/accountDetails.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/accountDetails.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:online_voting/screens/home/addManifesto.dart';
-import 'package:online_voting/screens/home/createElection.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/addManifesto.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/organisations/createElection.dart';
 import 'package:online_voting/screens/authenticate/emailVerification.dart';
 class Home extends StatefulWidget {
   @override

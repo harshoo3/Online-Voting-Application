@@ -3,7 +3,7 @@ import 'package:online_voting/customWidgets/customMethods.dart';
 import 'package:online_voting/models/candidate.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
-import 'package:online_voting/screens/candidateManifesto.dart';
+import 'package:online_voting/screens/elections/candidates/candidateManifesto.dart';
 
 class CandidateWidget extends StatelessWidget {
   final User user;
@@ -18,18 +18,21 @@ class CandidateWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 25),
         child: SizedBox(
-          height: 150,
+          height: 100,
           width: 300,
           child: FlatButton(
             onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CandidateManifesto(candidate:candidate,user: user,election: election,hasVoted: hasVoted)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CandidateManifesto( candidate:candidate,user: user,election: election,hasVoted: hasVoted)));
             },
             child: Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
-                    candidate.name
+                    'Name:${candidate.name}',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                   election.isPartyModeAllowed?Container(
                     constraints: BoxConstraints(maxHeight: 80, maxWidth: 100),
@@ -46,7 +49,7 @@ class CandidateWidget extends StatelessWidget {
                 ],
               ),
             ),
-            color: Colors.yellow,
+            color: Colors.black,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18.0),
             ),

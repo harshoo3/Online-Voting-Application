@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:online_voting/customWidgets/custom.dart';
+import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
 import 'package:online_voting/customWidgets/customMethods.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
-import 'package:online_voting/screens/candidateWidget.dart';
-import 'package:online_voting/screens/home/addManifesto.dart';
-import 'package:online_voting/screens/home/sidebar.dart';
-import 'package:online_voting/screens/home/viewElectionDetails.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/candidateWidget.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/addManifesto.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/viewElectionDetails.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:online_voting/models/candidate.dart';
-import 'package:online_voting/screens/electionScreenStats.dart';
+import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/electionScreenStats.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 class ElectionScreenCan extends StatefulWidget {
   User user;
