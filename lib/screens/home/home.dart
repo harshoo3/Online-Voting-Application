@@ -37,12 +37,8 @@ class _HomeState extends State<Home> {
    // print(currUser.isEmailVerified);
    //  print(user.email);
     print(currUser.email);
-    Firestore.instance
-        .collection('dataset')
-        .document(currUser.email)
-        .get()
-        .then((value) {
-          print(value.data['userType'].toString());
+    await Firestore.instance.collection('dataset').document(currUser.email).get().then((value) {
+      print(value.data['userType'].toString());
       setState(() {
         user= User(
             userType:value.data['userType'].toString(),
@@ -55,8 +51,15 @@ class _HomeState extends State<Home> {
         );
         loading = false;
       });
+      return user.orgName;
+    }).then((value)async{
+      await Firestore.instance.collection('Elections').document(value).get().then((val)async{
+        setState(() {
+          user.totalVoters = val.data['totalVoters'];
+        });
+        print(user.totalVoters);
+      });
     });
-   // print(user.email);
   }
 
   @override

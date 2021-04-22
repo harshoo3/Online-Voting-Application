@@ -126,7 +126,7 @@ class _SmallTextFieldState extends State<SmallTextField> {
 Widget customAppBar({String title,BuildContext context}){
   return AppBar(
     backgroundColor: Colors.black,
-    title: Text('Online Voting'),
+    title: Text(title),
     centerTitle: true,
     leading: IconButton(
       icon: Icon(Icons.arrow_back, color: Colors.white),

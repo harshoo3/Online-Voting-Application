@@ -92,7 +92,7 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
           }
         });
       setState(() {
-      detailsFetched = true;
+        detailsFetched = true;
       });
   }
 
@@ -133,7 +133,7 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
               ),
             ),
             SizedBox(height: 25,),
-            Center(child: ElectionScreenStats(election:election)),
+            ElectionScreenStats(election:election,totalVoters: user.totalVoters,),
             SizedBox(height: 25,),
             Text('Requests'),
             noRequests || requestCandidateList.length==0?Text('No candidate requests pending.'):SizedBox(),

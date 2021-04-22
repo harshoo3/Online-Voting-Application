@@ -23,7 +23,7 @@ class SideDrawer extends StatelessWidget {
               DrawerHeader(
                 child: Center(
                   child: Text(
-                    'Hey there, fellow Voter!',
+                    'Hey there!',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),

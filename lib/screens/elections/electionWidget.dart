@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:online_voting/customWidgets/customMethods.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/organisations/electionScreenOrg.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/voters/electionScreenVot.dart';
+import 'package:online_voting/screens/elections/organisations/electionScreenOrg.dart';
+import 'package:online_voting/screens/elections/voters/electionScreenVot.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/electionScreenCan.dart';
+import 'package:online_voting/screens/elections/candidates/electionScreenCan.dart';
 import 'package:intl/intl.dart';
 class ElectionWidget extends StatefulWidget {
   User user;
@@ -41,7 +41,7 @@ class _ElectionWidgetState extends State<ElectionWidget> {
               }
 
             },
-            color: Colors.yellow,
+            color: Colors.black,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18.0),
             ),
@@ -52,9 +52,10 @@ class _ElectionWidgetState extends State<ElectionWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      'Post:${election.post}',
+                      'Post:   ${election.post}',
                       style: TextStyle(
-                        fontSize: 20
+                        fontSize: 20,
+                        color:Colors.white,
                       ),
                     ),
                     CircularPercentIndicator(
@@ -72,13 +73,14 @@ class _ElectionWidgetState extends State<ElectionWidget> {
                     children: [
                       Icon(
                         Icons.date_range_outlined,
-                        color: Colors.black,
+                        color: Colors.white,
                         size: 19,
                       ),
                       Text(
                         DateFormat.yMMMMd('en_US').format(election.startDate).toString(),
                         style: TextStyle(
-                          fontSize: 10
+                          fontSize: 10,
+                          color: Colors.white,
                         ),
                       ),
                     ],
@@ -88,13 +90,14 @@ class _ElectionWidgetState extends State<ElectionWidget> {
                     children: [
                       Icon(
                         Icons.date_range_outlined,
-                        color: Colors.black,
+                        color: Colors.white,
                         size: 19,
                       ),
                       Text(
                         DateFormat.yMMMMd('en_US').format(election.endDate).toString(),
                         style: TextStyle(
-                            fontSize: 10
+                            fontSize: 10,
+                          color: Colors.white,
                         ),
                       ),
                     ],

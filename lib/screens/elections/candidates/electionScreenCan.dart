@@ -210,7 +210,7 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
                 },
               ),
             ),
-            ElectionScreenStats(election:election),
+            ElectionScreenStats(election:election,totalVoters: user.totalVoters,),
             hasRequested || electionKind!= 'upcoming'?SizedBox(): SizedBox(
               width: 300,
               child: FlatButton(

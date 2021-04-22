@@ -159,7 +159,7 @@ class _ElectionScreenVotState extends State<ElectionScreenVot> {
               ),
             ),
             SizedBox(height: 25,),
-            ElectionScreenStats(election:election),
+            ElectionScreenStats(election:election,totalVoters: user.totalVoters,),
             SizedBox(height: 25,),
             Text('Candidates'),
             !noCandidates?SizedBox():Text('No candidates yet.'),

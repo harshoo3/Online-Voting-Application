@@ -479,24 +479,25 @@ class _SignUpState extends State<SignUp> {
                           if(userType == 'org'){
                             orgName = name;
                           }
-                          dynamic result = await _auth.registerWithEmailAndPassword(email:email,password:password,name:name,dateOfBirth:dateOfBirth,mobileNo:mobileNo,userType:userType,orgName:orgName,electionCount:electionCount);
-                          if(result == null){
-                            setState(() {
-                              loading = false;
-                            });
-                            setState(() {
-                              error = 'Please enter a valid Email';
-                            });
-                          }else{
-                            if(userType=='org'){
-                              addOrgName();
+                          await _auth.registerWithEmailAndPassword(email:email,password:password,name:name,dateOfBirth:dateOfBirth,mobileNo:mobileNo,userType:userType,orgName:orgName,electionCount:electionCount).then((value){
+                            if(value == null){
+                              setState(() {
+                                loading = false;
+                              });
+                              setState(() {
+                                error = 'Please enter a valid Email';
+                              });
+                            }else{
+                              if(userType=='org'){
+                                addOrgName();
+                              }
+                              print(getOrgNames());
+                              setState(() {
+                                loading = false;
+                              });
+                              Navigator.pop(context);
                             }
-                            print(getOrgNames());
-                            setState(() {
-                              loading = false;
-                            });
-                            Navigator.pop(context);
-                          }
+                          });
                           // }else{
                           //   await result.sendEmailVerification();
                           // }

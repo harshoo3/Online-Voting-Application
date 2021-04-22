@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:online_voting/models/user.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/electionWidget.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/addManifesto.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/organisations/createElection.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_voting/models/electionClass.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
+import 'package:online_voting/screens/elections/electionWidget.dart';
+import 'package:online_voting/screens/elections/organisations/createElection.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
+import 'package:online_voting/screens/sidebarAndScreens/sidebar.dart';
 // import 'dart:';
 class Elections extends StatefulWidget {
 
@@ -30,24 +29,20 @@ class _ElectionsState extends State<Elections> {
 
 
   Future<void> getElectionDetails()async{
-    await Firestore.instance
-      .collection('Elections')
-        .document(user.orgName)
-        .get()
-        .then((value) {
+    await Firestore.instance.collection('Elections').document(user.orgName).get().then((value) {
           // print(value.data.keys);
+      try{
+        value.data.keys.forEach((element) {
+          indicesList.add(element);
+        });
 
-          value.data.keys.forEach((element) {
-            indicesList.add(element);
-          });
-
-          // indicesList.addAll(value.data['indicesList']);
-          // print(indicesList.length);
-          for(var i = 0;i <indicesList.length;i++){
-            Map<dynamic,dynamic> map=value.data[indicesList[i]]['electionDetails'];
-            // print(indicesList[i]);
-            setState(() {
-              electionList.add(
+        // indicesList.addAll(value.data['indicesList']);
+        // print(indicesList.length);
+        for(var i = 0;i <indicesList.length;i++){
+          Map<dynamic,dynamic> map=value.data[indicesList[i]]['electionDetails'];
+          // print(indicesList[i]);
+          setState(() {
+            electionList.add(
                 ElectionClass(
                   post: map['post'],
                   electionDescription: map['electionDescription'],
@@ -61,19 +56,22 @@ class _ElectionsState extends State<Elections> {
                   votes: map['votes'],
                   index: indicesList[i],
                 )
-              );
-            });
-            if(now.difference(electionList[i].endDate)>=Duration(seconds: 0)){
-              completedELectionList.add(electionList[i]);
-            }else if(electionList[i].startDate.difference(now)>=Duration(seconds: 0)){
-              upcomingELectionList.add(electionList[i]);
-            }else{
-              ongoingELectionList.add(electionList[i]);
-            }
-          }
-          setState(() {
-            detailsFetched = true;
+            );
           });
+          if(now.difference(electionList[i].endDate)>=Duration(seconds: 0)){
+            completedELectionList.add(electionList[i]);
+          }else if(electionList[i].startDate.difference(now)>=Duration(seconds: 0)){
+            upcomingELectionList.add(electionList[i]);
+          }else{
+            ongoingELectionList.add(electionList[i]);
+          }
+        }
+      }catch(e){
+        print(e);
+      }
+      setState(() {
+        detailsFetched = true;
+      });
     });
   }
 

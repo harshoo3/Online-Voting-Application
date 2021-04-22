@@ -1,18 +1,18 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
-class EndDateCountdown extends StatefulWidget {
-  DateTime endDate;
-  EndDateCountdown({this.endDate});
+class StartDateCountdown extends StatefulWidget {
+  DateTime startDate;
+  StartDateCountdown({this.startDate});
   @override
-  State<StatefulWidget> createState() => _EndDateCountdownState(endDate: endDate);
+  State<StatefulWidget> createState() => _StartDateCountdownState(startDate: startDate);
 }
 
-class _EndDateCountdownState extends State<EndDateCountdown> {
+class _StartDateCountdownState extends State<StartDateCountdown> {
   Timer _timer;
   DateTime _currentTime;
-  DateTime endDate;
-  _EndDateCountdownState({this.endDate});
+  DateTime startDate;
+  _StartDateCountdownState({this.startDate});
 
   @override
   void initState() {
@@ -35,7 +35,7 @@ class _EndDateCountdownState extends State<EndDateCountdown> {
 
   @override
   Widget build(BuildContext context) {
-    final remaining = endDate.difference(_currentTime);
+    final remaining = startDate.difference(_currentTime);
 
     final days = remaining.inDays;
     final hours = remaining.inHours - remaining.inDays * 24;

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/accountDetails.dart';
 
 class DatabaseService{
 
@@ -10,7 +9,7 @@ class DatabaseService{
   Future setUserData({String name,String email,DateTime dateOfBirth,String mobileNo,String userType,String orgName,int electionCount})async{
 
     final CollectionReference userdata = Firestore.instance.collection('dataset');
-    return await userdata.document(email).setData({
+    await userdata.document(email).setData({
       'uid': uid,
       'name': name,
       'email': email,
@@ -20,7 +19,20 @@ class DatabaseService{
       'orgName': orgName,
       'electionCount':electionCount,
     });
-
+    final CollectionReference collRef = Firestore.instance.collection('Elections');
+    int totalVoters;
+    if(userType=='vot'){
+      await collRef.document(orgName).get().then((value)async{
+        totalVoters = value.data['totalVoters'];
+        await collRef.document(orgName).setData({
+          'totalVoters':totalVoters+1,
+        },merge: true);
+      });
+    }else if(userType=='org'){
+      await collRef.document(orgName).setData({
+        'totalVoters':0,
+      });
+    }
   }
   Future updateUserData({String email,DateTime dateOfBirth,String mobileNo,String userType})async{
     final CollectionReference userdata = Firestore.instance.collection('dataset');
