@@ -158,7 +158,7 @@ Widget ColonText(){
 Widget ElectionProgress({ElectionClass election,double progress,bool big}){
   return LinearPercentIndicator(
     leading: Padding(
-      padding: big? const EdgeInsets.fromLTRB(40,0,0,0):EdgeInsets.only(left: 0),
+      padding: big? const EdgeInsets.fromLTRB(40,0,0,0):EdgeInsets.only(left: 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -200,7 +200,7 @@ Widget ElectionProgress({ElectionClass election,double progress,bool big}){
     animationDuration: 1000,
     animation: true,
     backgroundColor: Colors.grey,
-    progressColor: Colors.pink,
+    progressColor: Colors.red,
   );
 }
 Widget VotePercentage({double votePercentage,bool big}){
@@ -210,7 +210,7 @@ Widget VotePercentage({double votePercentage,bool big}){
     percent: votePercentage*0.01,
     center: Center(
       child: Text(
-        big?votePercentage.toString()+ "% \n Voting done":votePercentage.toString()+ "%",
+        big?votePercentage.toString()+ "% \n Voters have voted":votePercentage.toString()+ "%",
         textAlign: TextAlign.center,
         style: TextStyle(
           color: big?Colors.black:Colors.white,

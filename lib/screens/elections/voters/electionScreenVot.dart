@@ -25,7 +25,7 @@ class _ElectionScreenVotState extends State<ElectionScreenVot> {
   ElectionClass election;
   List<dynamic> hasVotedInElection=[],hasVotedFor=[];
   _ElectionScreenVotState({this.election,this.user});
-  List  <Candidate>candidateList=[];
+  List  <Candidate>candidateList=[],losers=[];
   List<dynamic> indicesList =[];
   bool detailsFetched = false;
   Voter voter;
@@ -113,10 +113,27 @@ class _ElectionScreenVotState extends State<ElectionScreenVot> {
             }
           }
         }
+        findLosers();
       }catch(e){
         print(e);
       }
     });
+  }
+  findLosers(){
+    if(election.endDate.difference(DateTime.now()).isNegative){
+      if(candidateList!=null){
+        candidateList.sort((b,a) => a.votes.compareTo(b.votes));
+        int winnerVotes =candidateList[0].votes;
+        for(int i=1;i<candidateList.length;i++){
+          if(winnerVotes>candidateList[i].votes){
+            setState(() {
+              losers.add(candidateList[i]);
+            });
+            print('yolo'+candidateList[i].votes.toString());
+          }
+        }
+      }
+    }
   }
   Future<void>fetchDetails()async{
     await getCandidates();
@@ -167,17 +184,20 @@ class _ElectionScreenVotState extends State<ElectionScreenVot> {
                 ),
               ),
               SizedBox(height: 10,),
-              ElectionScreenStats(election:election,totalVoters: user.totalVoters,),
+              ElectionScreenStats(election:election,totalVoters: user.totalVoters,confirmedCandidateList:candidateList,),
               SizedBox(height: 25,),
-              Text('Candidates',
+              Text(election.endDate.difference(DateTime.now()).inSeconds>0?'Candidates':losers.isEmpty?'':'Other Candidates',
                 style: TextStyle(
-                    fontSize: 17
+                    fontSize: 20
                 ),
               ),
+              SizedBox(height: 10.0),
               !noCandidates?SizedBox():Text(election.startDate.difference(DateTime.now()).inSeconds>0?'No candidates yet.':'No candidates.'),
               Column(
                 children:
-                candidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user,hasVoted:hasVoted)).toList(),
+                election.endDate.difference(DateTime.now()).inSeconds>0?
+                candidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user,hasVoted:hasVoted)).toList():
+                losers.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
               ),
             ],
           ),

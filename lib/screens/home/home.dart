@@ -91,7 +91,8 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 SizedBox(
-                  width: 300,
+                  width: 250,
+                  height: 50,
                   child: FlatButton(
                     color: Colors.black,
                     child:Text(

@@ -224,9 +224,6 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
                   ),
                 ),
                 onPressed: ()async{
-                  // if(!hasRequested){
-                  //   await requestCandidacy();
-                  // }
                   Navigator.push(context, MaterialPageRoute(builder: (context) => AddManifesto(user:user,election: election,candidate:candidate,)));
                 },
               ),

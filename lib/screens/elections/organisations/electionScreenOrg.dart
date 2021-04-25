@@ -24,13 +24,12 @@ class ElectionScreenOrg extends StatefulWidget {
 class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
   User user;
   ElectionClass election;
-  List  <Candidate>candidateList=[],requestCandidateList=[],confirmedCandidateList=[],rejectedCandidatesList=[];
+  List  <Candidate>candidateList=[],losers=[],requestCandidateList=[],confirmedCandidateList=[],rejectedCandidatesList=[];
   List<dynamic> indicesList =[];
   bool noRequests = false;
   bool detailsFetched = false;
-
+  bool loserFound = false;
   _ElectionScreenOrgState({this.election,this.user});
-
 
   Future<void>getCandidates()async{
     await Firestore.instance
@@ -84,6 +83,7 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
                 rejectedCandidatesList.add(candidateList[i]);
               }
             }
+            findLosers();
           }catch(e){
             print(e);
             setState(() {
@@ -95,7 +95,25 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
         detailsFetched = true;
       });
   }
-
+  findLosers(){
+    if(election.endDate.difference(DateTime.now()).isNegative){
+      if(confirmedCandidateList!=null){
+        confirmedCandidateList.sort((b,a) => a.votes.compareTo(b.votes));
+        int winnerVotes =confirmedCandidateList[0].votes;
+        for(int i=1;i<confirmedCandidateList.length;i++){
+          if(winnerVotes>confirmedCandidateList[i].votes){
+            setState(() {
+              losers.add(confirmedCandidateList[i]);
+            });
+            print('yolo'+confirmedCandidateList[i].votes.toString());
+          }
+        }
+        setState(() {
+          loserFound = true;
+        });
+      }
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -133,7 +151,7 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
               ),
             ),
             SizedBox(height: 15,),
-            ElectionScreenStats(election:election,totalVoters: user.totalVoters,context: context,),
+            ElectionScreenStats(election:election,totalVoters: user.totalVoters,confirmedCandidateList:confirmedCandidateList,context: context,user: user,),
             SizedBox(height: 5,),
             election.startDate.difference(DateTime.now()).inSeconds>0?Column(
               children: [
@@ -150,15 +168,18 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
               ],
             ):SizedBox(),
             SizedBox(height: 25,),
-            Text(election.startDate.difference(DateTime.now()).inSeconds>0?'Confirmed Candidates':'Candidates',
+            Text(election.startDate.difference(DateTime.now()).inSeconds>0?'Confirmed Candidates':election.endDate.difference(DateTime.now()).inSeconds>0?'Candidates':'Other Candidates',
               style: TextStyle(
                   fontSize: 17
               ),
             ),
+            SizedBox(height: 7,),
             confirmedCandidateList.length==0?Text(election.startDate.difference(DateTime.now()).inSeconds>0?'No confirmed candidates yet.':'No candidates.'):SizedBox(),
             Column(
               children:
-              confirmedCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
+              election.endDate.difference(DateTime.now()).inSeconds>0?
+              confirmedCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList():
+              losers.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
             ),
             SizedBox(height: 10,),
             Text('Rejected Candidates',

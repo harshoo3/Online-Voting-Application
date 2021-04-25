@@ -77,8 +77,25 @@ class _CandidateManifestoState extends State<CandidateManifesto> {
         child: Center(
           child: Column(
             children : [
+              SizedBox(height: 25,),
+              SizedBox(
+                width: 300,
+                child: TextFormField(
+                  readOnly: true,
+                  initialValue: "${candidate.name}",
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                    suffixIcon: Icon(Icons.accessibility),
+                    labelText: 'Name of the Candidate',
+                    border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+                  ),
+                ),
+              ),
               !election.isPartyModeAllowed?SizedBox():Column(
                 children: [
+                  SizedBox(height: 25,),
                   SizedBox(
                     width: 300,
                     child: TextFormField(
@@ -95,11 +112,15 @@ class _CandidateManifestoState extends State<CandidateManifesto> {
                     ),
                   ),
                   // SmallTextField(field:partyName,iconData:Icons.account_box, label: "Name of your Party...",),
-                  SizedBox(height: 25,),
+                  SizedBox(height: 5,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text('Party Logo'),
+                      Text('Party Logo',
+                        style: TextStyle(
+                          fontSize: 17
+                        ),
+                      ),
                       StreamBuilder(
                           stream: Firestore.instance.collection('Logos').document(user.email).snapshots(),
                           builder: (context, snapshot) {
@@ -123,6 +144,7 @@ class _CandidateManifestoState extends State<CandidateManifesto> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 5,),
                   SizedBox(
                     width: 300,
                     height: 90,
@@ -141,6 +163,7 @@ class _CandidateManifestoState extends State<CandidateManifesto> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 25.0),
                 ],
               ),
               SizedBox(height: 25.0),
@@ -234,21 +257,26 @@ class _CandidateManifestoState extends State<CandidateManifesto> {
                   ),
                 ],
               ):user.userType == 'org' && candidate.approved ?Text(
-                  'The candidate has been approved to participate the election.'
+                  'The candidate has been approved to participate the election.',
+                textAlign: TextAlign.center,
               ):user.userType == 'org' && candidate.denied ?Text(
-                  'The candidate has been rejected to participate the election.'
+                  'The candidate has been rejected to participate the election.',
+                textAlign: TextAlign.center,
               ):user.userType == 'org' && election.maxCandidates<=election.numOfApprovedCandidates?Text(
                   'The max number of candidates limit has been reached.',
+                textAlign: TextAlign.center,
               ):SizedBox(),
               user.userType == 'vot'?hasVoted?Text('Your vote has been recorded'):
               SizedBox(
-                width: 300,
+                width: 250,
+                height: 50,
                 child: FlatButton(
                   color: Colors.black,
                   child:Text(
                     'Vote',
                     style: TextStyle(
-                    color: Colors.white
+                      color: Colors.white,
+                      fontSize: 17
                     ),
                   ),
                   onPressed: ()async{
@@ -279,6 +307,7 @@ class _CandidateManifestoState extends State<CandidateManifesto> {
                   },
                 ),
               ):SizedBox(),
+              SizedBox(height: 25.0),
             ]
           ),
         ),

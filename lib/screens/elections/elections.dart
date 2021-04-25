@@ -95,28 +95,32 @@ class _ElectionsState extends State<Elections> {
             children: [
               Center(
                 child: SizedBox(
-                  height: 25,
+                  height: 15,
                 ),
               ),
               // FutureBuilder(builder: builder)
               user.userType == 'org'?
-              SizedBox(
-                width: 250,
-                height: 50,
-                child: RaisedButton(
-                  color:Colors.black,
-                  child: Text(
-                    'Create Election',
-                    style: TextStyle(
-                        color: Colors.white
+              Column(
+                children: [
+                  SizedBox(
+                    width: 250,
+                    height: 50,
+                    child: RaisedButton(
+                      color:Colors.black,
+                      child: Text(
+                        'Create Election',
+                        style: TextStyle(
+                            color: Colors.white
+                        ),
+                      ),
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => CreateElection(user:user)));
+                      },
                     ),
                   ),
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CreateElection(user:user)));
-                  },
-                ),
+                  SizedBox(height: 15,)
+                ],
               ):SizedBox(height: 0,),
-              SizedBox(height: 15,),
               Text(
                 'Ongoing Elections:',
                 style: TextStyle(

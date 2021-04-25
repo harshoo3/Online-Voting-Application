@@ -1,25 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
 import 'package:online_voting/customWidgets/customMethods.dart';
+import 'package:online_voting/models/candidate.dart';
 import 'package:online_voting/models/electionClass.dart';
+import 'package:online_voting/models/user.dart';
+import 'package:online_voting/screens/elections/candidates/candidateWidget.dart';
 import 'package:online_voting/screens/elections/countdown.dart';
 
 class ElectionScreenStats extends StatefulWidget {
   ElectionClass election;
   BuildContext context;
+  User user;
   int totalVoters;
-  ElectionScreenStats({this.election,this.totalVoters,this.context});
+  List<Candidate>confirmedCandidateList=[];
+  ElectionScreenStats({this.election,this.user,this.totalVoters,this.context,this.confirmedCandidateList});
   @override
-  _ElectionScreenStatsState createState() => _ElectionScreenStatsState(totalVoters: totalVoters,context: context,election: election);
+  _ElectionScreenStatsState createState() => _ElectionScreenStatsState(user:user,totalVoters: totalVoters,confirmedCandidateList:confirmedCandidateList, context: context,election: election);
 }
 class _ElectionScreenStatsState extends State<ElectionScreenStats> {
   ElectionClass election;
   BuildContext context;
   int totalVoters;
+  User user;
+  bool winnerFound = false;
+  List<Candidate>confirmedCandidateList=[],winner=[];
   double progress,votePercentage;
-  _ElectionScreenStatsState({this.election,this.totalVoters,this.context});
+  _ElectionScreenStatsState({this.election,this.user,this.totalVoters,this.context,this.confirmedCandidateList});
   CustomMethods _customMethods = CustomMethods();
 
+  findWinner(){
+    if(election.endDate.difference(DateTime.now()).isNegative){
+      if(confirmedCandidateList!=null){
+        confirmedCandidateList.sort((b,a) => a.votes.compareTo(b.votes));
+        print(confirmedCandidateList[0].votes);
+        setState(() {
+          winner.add(confirmedCandidateList[0]);
+        });
+        for(int i=1;i<confirmedCandidateList.length;i++){
+          print(confirmedCandidateList[i].votes);
+          if(winner[0].votes>confirmedCandidateList[i].votes){
+            break;
+          }else{
+            setState(() {
+              winner.add(confirmedCandidateList[i]);
+            });
+          }
+        }
+        setState(() {
+          winnerFound = true;
+        });
+        print(winnerFound);
+      }
+    }
+  }
+  @override
+  void initState() {
+    findWinner();
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(context) {
     votePercentage =_customMethods.calculateVotePercentage(votes: election.votes,totalVoters: totalVoters);
@@ -52,6 +91,22 @@ class _ElectionScreenStatsState extends State<ElectionScreenStats> {
             color: Colors.black,
           ),
         ),
+        winnerFound && winner!=null?Column(
+          children: [
+            Text(winner.length>1?"And the Winner is..\n It's a draw":'Winner Found',
+              style: TextStyle(
+                fontSize: 35,
+                color: Colors.black,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 10,),
+            Column(
+              children:
+              winner.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
+            ),
+          ],
+        ):SizedBox(),
         SizedBox(height: 25,),
         Text('Election Progress...',
           style: TextStyle(
