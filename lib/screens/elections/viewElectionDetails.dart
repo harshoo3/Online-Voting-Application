@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
+import 'package:online_voting/screens/sidebarAndScreens/sidebar.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/cupertino.dart';
 

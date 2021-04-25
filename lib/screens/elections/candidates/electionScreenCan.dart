@@ -3,13 +3,13 @@ import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
 import 'package:online_voting/customWidgets/customMethods.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/candidateWidget.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/addManifesto.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/viewElectionDetails.dart';
+import 'package:online_voting/screens/elections/candidates/candidateWidget.dart';
+import 'package:online_voting/screens/elections/candidates/addManifesto.dart';
+import 'package:online_voting/screens/sidebarAndScreens/sidebar.dart';
+import 'package:online_voting/screens/elections/viewElectionDetails.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:online_voting/models/candidate.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/electionScreenStats.dart';
+import 'package:online_voting/screens/elections/electionScreenStats.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 class ElectionScreenCan extends StatefulWidget {
   User user;
@@ -184,7 +184,7 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
   Widget build(BuildContext context) {
     return !checkingDone || !detailsFetched?Loading(): Scaffold(
       appBar: customAppBar(
-          title:'Your election',
+          title:'Post : ${election.post}',
           context: context
       ),
       endDrawer: SideDrawer(user: user,context: context),
@@ -195,6 +195,7 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
             hasRequested && !candidate.denied && !candidate.approved?Text('You have already requested. Request pending.'):SizedBox(),
             hasRequested && candidate.denied ?Text('Your Request has been denied.'):SizedBox(),
             hasRequested && candidate.approved ?Text('Your Request has been approved.'):SizedBox(),
+            SizedBox(height: 11,),
             SizedBox(
               width: 300,
               child: FlatButton(
@@ -212,7 +213,8 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
             ),
             ElectionScreenStats(election:election,totalVoters: user.totalVoters,),
             hasRequested || electionKind!= 'upcoming'?SizedBox(): SizedBox(
-              width: 300,
+              width: 250,
+              height: 50,
               child: FlatButton(
                 color: Colors.black,
                 child:Text(
@@ -229,11 +231,11 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
                 },
               ),
             ),
-            SizedBox(height: 25,),
+            SizedBox(height: 5,),
             candidateFound?Text('Your Manifesto'):SizedBox(),
             candidateFound?CandidateWidget(candidate:candidate,user: user,election: election,):SizedBox(),
-            Text('Confirmed Candidates'),
-            candidateList.length==0? Text('No confirmed candidates yet.'):SizedBox(),
+            Text(election.startDate.difference(DateTime.now()).inSeconds>0?'Confirmed Candidates':'Candidates'),
+            candidateList.length==0? Text(election.startDate.difference(DateTime.now()).inSeconds>0?'No confirmed candidates yet.':'No candidates.'):SizedBox(),
             Column(
               children:
               candidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),

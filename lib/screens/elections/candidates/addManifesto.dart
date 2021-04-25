@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_voting/models/user.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
+import 'package:online_voting/screens/sidebarAndScreens/sidebar.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:online_voting/models/electionClass.dart';
@@ -9,7 +9,7 @@ import 'dart:io';
 import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
 import 'package:online_voting/models/candidate.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/addImage.dart';
+import 'package:online_voting/screens/elections/candidates/addImage.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 class AddManifesto extends StatefulWidget {
   ElectionClass election;
@@ -140,53 +140,56 @@ class _AddManifestoState extends State<AddManifesto> {
                   ),
                   // SmallTextField(field:partyName,iconData:Icons.account_box, label: "Name of your Party...",),
                   SizedBox(height: 25,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Add your party logo'),
-                      SizedBox(
-                        child: FloatingActionButton(
-                          backgroundColor: Colors.black,
-                          child: Icon(
-                            Icons.add_a_photo_outlined,
-                            color: Colors.white,
-                          ),
-                          onPressed: ()async{
-                              await Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddImage(user:user,election:election,candidate:candidate))).then((value){
-                                setState(() {
-                                  imageAdded = value;
+                  SizedBox(
+                    width: 300,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text('Add party logo'),
+                        SizedBox(
+                          child: FloatingActionButton(
+                            backgroundColor: Colors.black,
+                            child: Icon(
+                              Icons.add_a_photo_outlined,
+                              color: Colors.white,
+                            ),
+                            onPressed: ()async{
+                                await Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddImage(user:user,election:election,candidate:candidate))).then((value){
+                                  setState(() {
+                                    imageAdded = value;
+                                  });
                                 });
-                              });
-                           },
+                             },
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 25.0),
-                      !imageAdded?SizedBox():StreamBuilder(
-                          stream: Firestore.instance.collection('Logos').document(user.email).snapshots(),
-                          builder: (context, snapshot) {
-                            partyLogoUrl=snapshot.data['url'];
-                            return !snapshot.hasData
-                                ? Center(
-                              child: CircularProgressIndicator(),
-                            )
-                                : Container(
-                              constraints: BoxConstraints(maxHeight: 80, maxWidth: 100),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    partyLogoUrl,
+                        SizedBox(height: 25.0),
+                        !imageAdded?SizedBox():StreamBuilder(
+                            stream: Firestore.instance.collection('Logos').document(user.email).snapshots(),
+                            builder: (context, snapshot) {
+                              partyLogoUrl=snapshot.data['url'];
+                              return !snapshot.hasData
+                                  ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                                  : Container(
+                                constraints: BoxConstraints(maxHeight: 80, maxWidth: 100),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      partyLogoUrl,
+                                    ),
+                                    fit: BoxFit.fill,
                                   ),
-                                  fit: BoxFit.fill,
                                 ),
-                              ),
 
-                              // ),
+                                // ),
 
-                            );
-                          }
-                      ),
-                    ],
+                              );
+                            }
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     width: 300,

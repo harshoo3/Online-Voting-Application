@@ -1,86 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
 import 'package:online_voting/customWidgets/customMethods.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/screens/elections/countdown.dart';
-import 'package:percent_indicator/percent_indicator.dart';
-import 'package:intl/intl.dart';
 
-class ElectionScreenStats extends StatelessWidget {
-
+class ElectionScreenStats extends StatefulWidget {
   ElectionClass election;
+  BuildContext context;
   int totalVoters;
-  ElectionScreenStats({this.election,this.totalVoters});
-  CustomMethods _customMethods = CustomMethods();
-  double calculateVotePercentage(){
-    return totalVoters==0?0:(election.votes/totalVoters)*100;
-  }
+  ElectionScreenStats({this.election,this.totalVoters,this.context});
   @override
-  Widget build(BuildContext context) {
+  _ElectionScreenStatsState createState() => _ElectionScreenStatsState(totalVoters: totalVoters,context: context,election: election);
+}
+class _ElectionScreenStatsState extends State<ElectionScreenStats> {
+  ElectionClass election;
+  BuildContext context;
+  int totalVoters;
+  double progress,votePercentage;
+  _ElectionScreenStatsState({this.election,this.totalVoters,this.context});
+  CustomMethods _customMethods = CustomMethods();
+
+  @override
+  Widget build(context) {
+    votePercentage =_customMethods.calculateVotePercentage(votes: election.votes,totalVoters: totalVoters);
+    progress = _customMethods.calculateElectionProgress(election);
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Countdown till the election'),
-        election.startDate.difference(DateTime.now()).inSeconds>0?Center(child: StartDateCountdown(startDate: election.startDate,)):SizedBox(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        election.startDate.difference(DateTime.now()).inSeconds>0?Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Post:${election.post}',
+            Text('The voting is yet to begin...',
               style: TextStyle(
-                  fontSize: 20
+                fontSize: 30,
+                color: Colors.black,
               ),
             ),
-            CircularPercentIndicator(
-              radius: 70.0,
-              lineWidth: 4.0,
-              percent: 0.30,
-              center: new Text(calculateVotePercentage().toString()+"%"),
-              progressColor: Colors.orange,
-            ),
+            SizedBox(height: 5,),
+            Text('Countdown till the election'),
+            StartDateCountdown(startDate: election.startDate,),
           ],
-        ),
-        LinearPercentIndicator(
-          leading: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.date_range_outlined,
-                color: Colors.black,
-                size: 19,
-              ),
-              Text(
-                DateFormat.yMMMMd('en_US').format(election.startDate).toString(),
-                style: TextStyle(
-                    fontSize: 10
-                ),
-              ),
-            ],
+        ):election.endDate.difference(DateTime.now()).inSeconds>0?
+        Text('The voting has begun...',
+          style: TextStyle(
+            fontSize: 30,
+            color: Colors.black,
           ),
-          trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.date_range_outlined,
-                color: Colors.black,
-                size: 19,
-              ),
-              Text(
-                DateFormat.yMMMMd('en_US').format(election.endDate).toString(),
-                style: TextStyle(
-                    fontSize: 10
-                ),
-              ),
-            ],
+        ):Text('The voting has ended...',
+          style: TextStyle(
+            fontSize: 30,
+            color: Colors.black,
           ),
-          width: 100.0,
-          lineHeight: 14.0,
-          percent: _customMethods.calculatePercent(election),
-          animationDuration: 1000,
-          animation: true,
-          backgroundColor: Colors.grey,
-          progressColor: Colors.pink,
         ),
+        SizedBox(height: 25,),
+        Text('Election Progress...',
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.black,
+          ),
+        ),
+        ElectionProgress(election: election,progress: progress,big: true),
+        SizedBox(height: 25,),
+        VotePercentage(votePercentage: votePercentage,big: true),
       ],
     );
   }
 }
+

@@ -4,12 +4,12 @@ import 'package:online_voting/models/candidate.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/models/voter.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/candidateWidget.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/viewElectionDetails.dart';
+import 'package:online_voting/screens/elections/candidates/candidateWidget.dart';
+import 'package:online_voting/screens/sidebarAndScreens/sidebar.dart';
+import 'package:online_voting/screens/elections/viewElectionDetails.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/electionScreenStats.dart';
+import 'package:online_voting/screens/elections/electionScreenStats.dart';
 import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
 class ElectionScreenVot extends StatefulWidget {
   User user;
@@ -135,39 +135,52 @@ class _ElectionScreenVotState extends State<ElectionScreenVot> {
   Widget build(BuildContext context) {
     return !detailsFetched?Loading():Scaffold(
       appBar: customAppBar(
-          title:'Your election',
+          title:'Post : ${election.post}',
           context: context
       ),
       endDrawer: SideDrawer(user: user,context: context),
-      body: Center(
-        child: Column(
-          children: [
-            hasVoted?Text('Your vote has been recorded.'):SizedBox(),
-            SizedBox(
-              width: 300,
-              child: FlatButton(
-                color: Colors.black,
-                child:Text(
-                  'Election Details',
-                  style: TextStyle(
-                      color: Colors.white
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              hasVoted?Column(
+                children: [
+                  SizedBox(height: 10,),
+                  Text('Your vote has been recorded.'),
+                ],
+              ):SizedBox(),
+              SizedBox(height: 10,),
+              SizedBox(
+                width: 250,
+                height: 50,
+                child: FlatButton(
+                  color: Colors.black,
+                  child:Text(
+                    'Election Details',
+                    style: TextStyle(
+                        color: Colors.white
+                    ),
                   ),
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ViewElectionDetails(user:user,election: election,)));
+                  },
                 ),
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewElectionDetails(user:user,election: election,)));
-                },
               ),
-            ),
-            SizedBox(height: 25,),
-            ElectionScreenStats(election:election,totalVoters: user.totalVoters,),
-            SizedBox(height: 25,),
-            Text('Candidates'),
-            !noCandidates?SizedBox():Text('No candidates yet.'),
-            Column(
-              children:
-              candidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user,hasVoted:hasVoted)).toList(),
-            ),
-          ],
+              SizedBox(height: 10,),
+              ElectionScreenStats(election:election,totalVoters: user.totalVoters,),
+              SizedBox(height: 25,),
+              Text('Candidates',
+                style: TextStyle(
+                    fontSize: 17
+                ),
+              ),
+              !noCandidates?SizedBox():Text(election.startDate.difference(DateTime.now()).inSeconds>0?'No candidates yet.':'No candidates.'),
+              Column(
+                children:
+                candidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user,hasVoted:hasVoted)).toList(),
+              ),
+            ],
+          ),
         ),
       ),
     );

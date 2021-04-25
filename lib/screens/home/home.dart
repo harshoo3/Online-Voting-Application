@@ -1,18 +1,11 @@
 // import 'dart:html';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
+import 'package:online_voting/screens/sidebarAndScreens/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:online_voting/models/user.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/elections.dart';
+import 'package:online_voting/screens/elections/elections.dart';
 import 'package:online_voting/screens/loading.dart';
-import 'package:online_voting/services/auth.dart';
-import 'package:online_voting/services/database.dart';
-import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/accountDetails.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/addManifesto.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/organisations/createElection.dart';
-import 'package:online_voting/screens/authenticate/emailVerification.dart';
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();

@@ -8,7 +8,7 @@ class Candidate{
   bool approved;
   bool denied;
   dynamic index;
-  num votes;
+  int votes;
   String campaignTagline='';
   List<dynamic>questions=[];
 

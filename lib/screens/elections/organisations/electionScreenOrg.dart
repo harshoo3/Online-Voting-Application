@@ -4,12 +4,12 @@ import 'package:online_voting/customWidgets/customMethods.dart';
 import 'package:online_voting/models/candidate.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/candidates/candidateWidget.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/viewElectionDetails.dart';
+import 'package:online_voting/screens/elections/candidates/candidateWidget.dart';
+import 'package:online_voting/screens/sidebarAndScreens/sidebar.dart';
+import 'package:online_voting/screens/elections/viewElectionDetails.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/elections/electionScreenStats.dart';
+import 'package:online_voting/screens/elections/electionScreenStats.dart';
 import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
 
 class ElectionScreenOrg extends StatefulWidget {
@@ -107,7 +107,7 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
   Widget build(BuildContext context) {
     return !detailsFetched?Loading():Scaffold(
       appBar: customAppBar(
-          title:'Your election',
+          title:'Post : ${election.post}',
           context: context
       ),
       endDrawer: SideDrawer(user: user,context: context),
@@ -115,42 +115,58 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(
-              child: SizedBox(
-                width: 300,
-                child: FlatButton(
-                  color: Colors.black,
-                  child:Text(
-                    'Election Details',
-                    style: TextStyle(
-                        color: Colors.white
-                    ),
+            Center(child: SizedBox(height: 15,)),
+            SizedBox(
+              width: 250,
+              height: 50,
+              child: FlatButton(
+                color: Colors.black,
+                child:Text(
+                  'Election Details',
+                  style: TextStyle(
+                      color: Colors.white
                   ),
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ViewElectionDetails(user:user,election: election,)));
-                  },
                 ),
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewElectionDetails(user:user,election: election,)));
+                },
               ),
             ),
+            SizedBox(height: 15,),
+            ElectionScreenStats(election:election,totalVoters: user.totalVoters,context: context,),
+            SizedBox(height: 5,),
+            election.startDate.difference(DateTime.now()).inSeconds>0?Column(
+              children: [
+                Text('Requests',
+                  style: TextStyle(
+                    fontSize: 17
+                  ),
+                ),
+                noRequests || requestCandidateList.length==0?Text('No candidate requests pending.'):SizedBox(),
+                Column(
+                  children:
+                  requestCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user,)).toList(),
+                ),
+              ],
+            ):SizedBox(),
             SizedBox(height: 25,),
-            ElectionScreenStats(election:election,totalVoters: user.totalVoters,),
-            SizedBox(height: 25,),
-            Text('Requests'),
-            noRequests || requestCandidateList.length==0?Text('No candidate requests pending.'):SizedBox(),
-            Column(
-              children:
-              requestCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user,)).toList(),
+            Text(election.startDate.difference(DateTime.now()).inSeconds>0?'Confirmed Candidates':'Candidates',
+              style: TextStyle(
+                  fontSize: 17
+              ),
             ),
-            SizedBox(height: 25,),
-            Text('Confirmed Candidates'),
-            confirmedCandidateList.length==0?Text('No confirmed candidates yet.'):SizedBox(),
+            confirmedCandidateList.length==0?Text(election.startDate.difference(DateTime.now()).inSeconds>0?'No confirmed candidates yet.':'No candidates.'):SizedBox(),
             Column(
               children:
               confirmedCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
             ),
-            SizedBox(height: 25,),
-            Text('Rejected Candidates'),
-            rejectedCandidatesList.length==0?Text('No rejected candidates yet.'):SizedBox(),
+            SizedBox(height: 10,),
+            Text('Rejected Candidates',
+              style: TextStyle(
+                  fontSize: 17
+              ),
+            ),
+            rejectedCandidatesList.length==0?Text(election.startDate.difference(DateTime.now()).inSeconds>0?'No rejected candidates yet.':'No rejected candidates.'):SizedBox(),
             Column(
               children:
               rejectedCandidatesList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),

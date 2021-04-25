@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:online_voting/models/user.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
+import 'package:online_voting/screens/sidebarAndScreens/sidebar.dart';
 class EmailVerification extends StatefulWidget {
   User user;
   bool isEmailVerified;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
 import 'package:online_voting/customWidgets/customMethods.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
@@ -19,11 +20,13 @@ class _ElectionWidgetState extends State<ElectionWidget> {
   ElectionClass election;
   User user;
   CustomMethods _customMethods = CustomMethods();
+  double progress,votePercentage;
   _ElectionWidgetState({this.election,this.user});
-
 
   @override
   Widget build(BuildContext context) {
+    votePercentage =_customMethods.calculateVotePercentage(votes: election.votes,totalVoters: user.totalVoters);
+    progress = _customMethods.calculateElectionProgress(election);
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(bottom: 25),
@@ -39,7 +42,6 @@ class _ElectionWidgetState extends State<ElectionWidget> {
               }else{
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ElectionScreenVot(election:election,user:user)));
               }
-
             },
             color: Colors.black,
             shape: RoundedRectangleBorder(
@@ -58,58 +60,10 @@ class _ElectionWidgetState extends State<ElectionWidget> {
                         color:Colors.white,
                       ),
                     ),
-                    CircularPercentIndicator(
-                      radius: 70.0,
-                      lineWidth: 4.0,
-                      percent: 0.30,
-                      center: new Text("30%"),
-                      progressColor: Colors.orange,
-                    ),
+                    VotePercentage(votePercentage: votePercentage,big: false),
                   ],
                 ),
-                LinearPercentIndicator(
-                  leading: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.date_range_outlined,
-                        color: Colors.white,
-                        size: 19,
-                      ),
-                      Text(
-                        DateFormat.yMMMMd('en_US').format(election.startDate).toString(),
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.date_range_outlined,
-                        color: Colors.white,
-                        size: 19,
-                      ),
-                      Text(
-                        DateFormat.yMMMMd('en_US').format(election.endDate).toString(),
-                        style: TextStyle(
-                            fontSize: 10,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                  width: 100.0,
-                  lineHeight: 14.0,
-                  percent: _customMethods.calculatePercent(election),
-                  animationDuration: 1000,
-                  animation: true,
-                  backgroundColor: Colors.grey,
-                  progressColor: Colors.pink,
-                ),
+                ElectionProgress(election: election,progress: progress,big: false)
               ],
             ),
           ),

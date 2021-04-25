@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:online_voting/models/electionClass.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:intl/intl.dart';
 class BigTextField extends StatefulWidget {
   String field;
   List<dynamic> fieldList=[];
@@ -153,4 +155,68 @@ Widget ColonText(){
     ),
   );
 }
-
+Widget ElectionProgress({ElectionClass election,double progress,bool big}){
+  return LinearPercentIndicator(
+    leading: Padding(
+      padding: big? const EdgeInsets.fromLTRB(40,0,0,0):EdgeInsets.only(left: 0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.date_range_outlined,
+            color: big?Colors.black:Colors.white,
+            size: big?25:19,
+          ),
+          Text(
+            DateFormat.yMMMMd('en_US').format(election.startDate).toString(),
+            style: TextStyle(
+              fontSize: big?13:10,
+              color: big?Colors.black:Colors.white,
+            ),
+          ),
+        ],
+      ),
+    ),
+    trailing: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.date_range_outlined,
+          color: big?Colors.black:Colors.white,
+          size: big?25:19,
+        ),
+        Text(
+          DateFormat.yMMMMd('en_US').format(election.endDate).toString(),
+          style: TextStyle(
+            fontSize: big?13:10,
+            color: big?Colors.black:Colors.white,
+          ),
+        ),
+      ],
+    ),
+    width: big?130:100.0,
+    lineHeight: 14.0,
+    percent: progress,
+    animationDuration: 1000,
+    animation: true,
+    backgroundColor: Colors.grey,
+    progressColor: Colors.pink,
+  );
+}
+Widget VotePercentage({double votePercentage,bool big}){
+  return CircularPercentIndicator(
+    radius: big?150.0:70.0,
+    lineWidth: 4.0,
+    percent: votePercentage*0.01,
+    center: Center(
+      child: Text(
+        big?votePercentage.toString()+ "% \n Voting done":votePercentage.toString()+ "%",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: big?Colors.black:Colors.white,
+        ),
+      ),
+    ),
+    progressColor: Colors.green,
+  );
+}

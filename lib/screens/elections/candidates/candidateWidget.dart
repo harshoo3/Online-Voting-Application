@@ -14,6 +14,7 @@ class CandidateWidget extends StatelessWidget {
   CandidateWidget({this.candidate,this.user,this.election,this.hasVoted});
   @override
   Widget build(BuildContext context) {
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(bottom: 25),
@@ -26,16 +27,10 @@ class CandidateWidget extends StatelessWidget {
             },
             child: Center(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: election.startDate.difference(DateTime.now()).inSeconds<0?MainAxisAlignment.start:MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
-                    'Name:${candidate.name}',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
                   election.isPartyModeAllowed?Container(
-                    constraints: BoxConstraints(maxHeight: 80, maxWidth: 100),
+                    constraints: BoxConstraints(maxHeight: 70, maxWidth: 70),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
@@ -44,6 +39,18 @@ class CandidateWidget extends StatelessWidget {
                         ),
                         fit: BoxFit.fill,
                       ),
+                    ),
+                  ):SizedBox(),
+                  Text(
+                    '   ${candidate.name} ',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  election.startDate.difference(DateTime.now()).inSeconds<0?Text(
+                    '  Votes: ${candidate.votes}',
+                    style: TextStyle(
+                      color: Colors.white,
                     ),
                   ):SizedBox(),
                 ],

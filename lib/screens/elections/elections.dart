@@ -101,7 +101,8 @@ class _ElectionsState extends State<Elections> {
               // FutureBuilder(builder: builder)
               user.userType == 'org'?
               SizedBox(
-                width: 300,
+                width: 250,
+                height: 50,
                 child: RaisedButton(
                   color:Colors.black,
                   child: Text(
@@ -115,22 +116,40 @@ class _ElectionsState extends State<Elections> {
                   },
                 ),
               ):SizedBox(height: 0,),
-              SizedBox(height: 25,),
-              Text('Ongoing Elections:'),
+              SizedBox(height: 15,),
+              Text(
+                'Ongoing Elections:',
+                style: TextStyle(
+                    fontSize: 17
+                ),
+              ),
+              SizedBox(height: 5,),
               ongoingELectionList.length==0?Text('No Ongoing Elections to show.'):SizedBox(),
               Column(
                 children:
                   ongoingELectionList.map((e) => ElectionWidget(election : e,user:user)).toList(),
               ),
-              SizedBox(height: 25,),
-              Text('Upcoming Elections :'),
+              // SizedBox(height: 15,),
+              Text(
+                'Upcoming Elections:',
+                style: TextStyle(
+                    fontSize: 17
+                ),
+              ),
+              SizedBox(height: 5,),
               upcomingELectionList.length==0?Text('No Upcoming Elections to show.'):SizedBox(),
               Column(
                 children:
                 upcomingELectionList.map((e) => ElectionWidget(election : e,user:user)).toList(),
               ),
-              SizedBox(height: 25,),
-              Text('Completed Elections:'),
+              SizedBox(height: 15,),
+              Text(
+                'Completed Elections:',
+                style: TextStyle(
+                  fontSize: 17
+                ),
+              ),
+              SizedBox(height: 5,),
               completedELectionList.length==0?Text('No Completed Elections yet.'):SizedBox(),
               Column(
                 children:

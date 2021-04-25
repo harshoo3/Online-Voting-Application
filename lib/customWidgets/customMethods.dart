@@ -3,7 +3,7 @@ import 'package:online_voting/models/electionClass.dart';
 
 class CustomMethods{
 
-  double calculatePercent(ElectionClass election){
+  double calculateElectionProgress(ElectionClass election){
     if(election!=null){
       num bigdiff = election.endDate.difference(election.startDate).inSeconds;
       num smalldiff = DateTime.now().difference(election.startDate).inSeconds;
@@ -16,5 +16,8 @@ class CustomMethods{
         return ans;
       }
     }
+  }
+  double calculateVotePercentage({int totalVoters,int votes}){
+    return totalVoters==0?0:((votes*100)/totalVoters);
   }
 }

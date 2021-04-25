@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_voting/models/candidate.dart';
 import 'package:online_voting/models/electionClass.dart';
 import 'package:online_voting/models/user.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
+import 'package:online_voting/screens/sidebarAndScreens/sidebar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
 

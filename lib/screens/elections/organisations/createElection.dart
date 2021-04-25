@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:date_field/date_field.dart';
 import 'package:intl/intl.dart';
 import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
-import 'file:///C:/Users/harsh/AndroidStudioProjects/online_voting/lib/screens/sidebarAndScreens/sidebar.dart';
+import 'package:online_voting/screens/sidebarAndScreens/sidebar.dart';
 import 'package:online_voting/screens/loading.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:flutter/services.dart';
@@ -103,7 +103,7 @@ class _CreateElectionState extends State<CreateElection> {
                     ),
                     mode: DateTimeFieldPickerMode.dateAndTime,
                     autovalidateMode: AutovalidateMode.always,
-                    validator: (val) => isStartDateEmpty ? 'Invalid. Enter Date of birth' : null,
+                    validator: (val) => isStartDateEmpty ? 'Invalid. Enter Start date' :val!=null?val.difference(DateTime.now()).inSeconds<0? 'Invalid Start date':null:null,
                     onDateSelected: (DateTime val) {
                       setState(() {
                         startDate = val;
@@ -127,7 +127,7 @@ class _CreateElectionState extends State<CreateElection> {
                     ),
                     mode: DateTimeFieldPickerMode.dateAndTime,
                     autovalidateMode: AutovalidateMode.always,
-                    validator: (val) => isEndDateEmpty ? 'Invalid. Enter Date of birth' : null,
+                    validator: (val) => isEndDateEmpty ? 'Invalid. Enter End date' :val!=null?val.difference(DateTime.now()).inSeconds<0? 'Invalid End date':null:null,
                     onDateSelected: (DateTime val) {
                       setState(() {
                         endDate = val;
