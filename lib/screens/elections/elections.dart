@@ -124,24 +124,34 @@ class _ElectionsState extends State<Elections> {
               Text(
                 'Ongoing Elections:',
                 style: TextStyle(
-                    fontSize: 17
+                    fontSize: 20
                 ),
               ),
               SizedBox(height: 5,),
-              ongoingELectionList.length==0?Text('No Ongoing Elections to show.'):SizedBox(),
+              ongoingELectionList.length==0?Text('No Ongoing Elections to show.',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                ),
+              ):SizedBox(),
               Column(
                 children:
                   ongoingELectionList.map((e) => ElectionWidget(election : e,user:user)).toList(),
               ),
-              // SizedBox(height: 15,),
+              SizedBox(height: 15,),
               Text(
                 'Upcoming Elections:',
                 style: TextStyle(
-                    fontSize: 17
+                    fontSize: 20
                 ),
               ),
               SizedBox(height: 5,),
-              upcomingELectionList.length==0?Text('No Upcoming Elections to show.'):SizedBox(),
+              upcomingELectionList.length==0?Text('No Upcoming Elections to show.',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                ),
+              ):SizedBox(),
               Column(
                 children:
                 upcomingELectionList.map((e) => ElectionWidget(election : e,user:user)).toList(),
@@ -150,11 +160,16 @@ class _ElectionsState extends State<Elections> {
               Text(
                 'Completed Elections:',
                 style: TextStyle(
-                  fontSize: 17
+                  fontSize: 20
                 ),
               ),
               SizedBox(height: 5,),
-              completedELectionList.length==0?Text('No Completed Elections yet.'):SizedBox(),
+              completedELectionList.length==0?Text('No Completed Elections yet.',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                ),
+              ):SizedBox(),
               Column(
                 children:
                 completedELectionList.map((e) => ElectionWidget(election : e,user:user)).toList() ,

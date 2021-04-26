@@ -27,11 +27,13 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
   bool detailsFetched = false;
   bool noCandidates = false;
   bool candidateFound = false;
+  bool isCandidateWinner = false;
+  bool loserFound = false;
   DateTime now = DateTime.now();
   String electionKind;
   List<dynamic> indicesList =[];
   Candidate candidate;
-  List  <Candidate>candidateList=[];
+  List  <Candidate>candidateList=[],losers=[],totalCandidateList=[];
   CustomMethods _customMethods = CustomMethods();
   // List<>
   List<dynamic> requestedCandidacy=[],requestedCandidacyIndex=[];
@@ -165,9 +167,40 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
         electionKind = 'ongoing';
       });
     }
+    if(candidateFound){
+      setState(() {
+        totalCandidateList.addAll(candidateList);
+        totalCandidateList.add(candidate);
+      });
+    }
+    findLosers();
     setState(() {
       detailsFetched = true;
     });
+  }
+  findLosers(){
+    if(election.endDate.difference(DateTime.now()).isNegative){
+      if(totalCandidateList!=null){
+        totalCandidateList.sort((b,a) => a.votes.compareTo(b.votes));
+        int winnerVotes =totalCandidateList[0].votes;
+        for(int i=1;i<totalCandidateList.length;i++){
+          if(winnerVotes>totalCandidateList[i].votes){
+            setState(() {
+              losers.add(totalCandidateList[i]);
+            });
+            print('yolo'+totalCandidateList[i].votes.toString());
+          }
+        }
+        if(candidate.votes==winnerVotes){
+          setState(() {
+            isCandidateWinner = true;
+          });
+        }
+        setState(() {
+          loserFound = true;
+        });
+      }
+    }
   }
   Future<void>fetchDetails()async{
     await checkRequestCandidacy();
@@ -192,12 +225,10 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            hasRequested && !candidate.denied && !candidate.approved?Text('You have already requested. Request pending.'):SizedBox(),
-            hasRequested && candidate.denied ?Text('Your Request has been denied.'):SizedBox(),
-            hasRequested && candidate.approved ?Text('Your Request has been approved.'):SizedBox(),
-            SizedBox(height: 11,),
+            SizedBox(height: 20,),
             SizedBox(
-              width: 300,
+              width: 250,
+              height: 50,
               child: FlatButton(
                 color: Colors.black,
                 child:Text(
@@ -211,7 +242,9 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
                 },
               ),
             ),
-            ElectionScreenStats(election:election,totalVoters: user.totalVoters,),
+            SizedBox(height: 15,),
+            ElectionScreenStats(election:election,totalVoters: user.totalVoters,confirmedCandidateList:totalCandidateList,user: user,context: context,),
+            SizedBox(height: 25,),
             hasRequested || electionKind!= 'upcoming'?SizedBox(): SizedBox(
               width: 250,
               height: 50,
@@ -229,10 +262,41 @@ class _ElectionScreenCanState extends State<ElectionScreenCan> {
               ),
             ),
             SizedBox(height: 5,),
-            candidateFound?Text('Your Manifesto'):SizedBox(),
-            candidateFound?CandidateWidget(candidate:candidate,user: user,election: election,):SizedBox(),
-            Text(election.startDate.difference(DateTime.now()).inSeconds>0?'Confirmed Candidates':'Candidates'),
-            candidateList.length==0? Text(election.startDate.difference(DateTime.now()).inSeconds>0?'No confirmed candidates yet.':'No candidates.'):SizedBox(),
+            election.endDate.difference(DateTime.now()).inSeconds>0?Column(
+              children: [
+                hasRequested && !candidate.denied && !candidate.approved?Text('You have already requested. Request pending.',
+                  style: TextStyle(
+                      fontSize: 17
+                  ),
+                ):SizedBox(),
+                hasRequested && candidate.denied ?Text('Your Request has been denied.',
+                  style: TextStyle(
+                      fontSize: 17
+                  ),
+                ):SizedBox(),
+                hasRequested && candidate.approved ?Text('Your Request has been approved.',
+                  style: TextStyle(
+                      fontSize: 17
+                  ),
+                ):SizedBox(),
+                SizedBox(height: 11,),
+              ],
+            ):SizedBox(),
+            SizedBox(height: 8,),
+            candidateFound && !isCandidateWinner?Text('Your Manifesto',
+              style: TextStyle(
+                  fontSize: 20
+              ),
+            ):SizedBox(),
+            SizedBox(height: 8,),
+            candidateFound && !isCandidateWinner?CandidateWidget(candidate:candidate,user: user,election: election):SizedBox(),
+            Text(election.startDate.difference(DateTime.now()).inSeconds>0 ?'Confirmed Candidates':!candidate.approved?'Candidates':'Other Candidates',
+              style: TextStyle(
+                  fontSize: 20
+              ),
+            ),
+            SizedBox(height: 8,),
+            candidateList.length==0? Text(election.startDate.difference(DateTime.now()).inSeconds>0?'No confirmed candidates yet.':!candidate.approved?'No candidates.':'No other Candidates'):SizedBox(),
             Column(
               children:
               candidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),

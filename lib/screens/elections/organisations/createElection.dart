@@ -222,7 +222,8 @@ class _CreateElectionState extends State<CreateElection> {
                 ),
                 SizedBox(height: 25.0),
                 SizedBox(
-                  width: 300,
+                  width: 250,
+                  height: 50,
                   child: RaisedButton(
                     color:Colors.black,
                     child: Text(
@@ -264,14 +265,13 @@ class _CreateElectionState extends State<CreateElection> {
                     }
                   ),
                 ),
-                isPressed?SizedBox(
-                  width: 300,
-                  child: Text(
-                    errorText,
-                    style: TextStyle(
-                      color: success?Colors.green:Colors.red,
-                    ),
-                  )
+                isPressed?Text(
+                  errorText,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: success?Colors.green:Colors.red,
+                  ),
+                  textAlign: TextAlign.center,
                 ):SizedBox(width: 0,),
               ],
             ),

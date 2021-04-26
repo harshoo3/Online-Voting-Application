@@ -163,7 +163,11 @@ class _ElectionScreenVotState extends State<ElectionScreenVot> {
               hasVoted?Column(
                 children: [
                   SizedBox(height: 10,),
-                  Text('Your vote has been recorded.'),
+                  Text('Your vote has been recorded.',
+                    style: TextStyle(
+                      fontSize: 17
+                    ),
+                  ),
                 ],
               ):SizedBox(),
               SizedBox(height: 10,),
@@ -184,7 +188,7 @@ class _ElectionScreenVotState extends State<ElectionScreenVot> {
                 ),
               ),
               SizedBox(height: 10,),
-              ElectionScreenStats(election:election,totalVoters: user.totalVoters,confirmedCandidateList:candidateList,),
+              ElectionScreenStats(election:election,totalVoters: user.totalVoters,confirmedCandidateList:candidateList,context: context,user: user,),
               SizedBox(height: 25,),
               Text(election.endDate.difference(DateTime.now()).inSeconds>0?'Candidates':losers.isEmpty?'':'Other Candidates',
                 style: TextStyle(

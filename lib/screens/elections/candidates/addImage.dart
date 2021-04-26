@@ -82,6 +82,9 @@ class _AddImageState extends State<AddImage> {
   Widget build(BuildContext context) {
     return uploading ? Loading():Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black,
+        centerTitle: true,
+        foregroundColor: Colors.white,
         title: Text('Add Party logo'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -96,7 +99,7 @@ class _AddImageState extends State<AddImage> {
               });
               uploadFile().whenComplete(() => Navigator.of(context).pop(true));
             },
-            child: Text('upload'))
+            child: Text('upload',style: TextStyle(color: Colors.white),))
         ],
       ),
       body: Stack(

@@ -152,14 +152,15 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
             ),
             SizedBox(height: 15,),
             ElectionScreenStats(election:election,totalVoters: user.totalVoters,confirmedCandidateList:confirmedCandidateList,context: context,user: user,),
-            SizedBox(height: 5,),
+            SizedBox(height: 15,),
             election.startDate.difference(DateTime.now()).inSeconds>0?Column(
               children: [
-                Text('Requests',
+                Text('Requests:',
                   style: TextStyle(
-                    fontSize: 17
+                    fontSize: 20
                   ),
                 ),
+                SizedBox(height: 7,),
                 noRequests || requestCandidateList.length==0?Text('No candidate requests pending.'):SizedBox(),
                 Column(
                   children:
@@ -168,9 +169,9 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
               ],
             ):SizedBox(),
             SizedBox(height: 25,),
-            Text(election.startDate.difference(DateTime.now()).inSeconds>0?'Confirmed Candidates':election.endDate.difference(DateTime.now()).inSeconds>0?'Candidates':'Other Candidates',
+            Text(election.startDate.difference(DateTime.now()).inSeconds>0?'Confirmed Candidates:':election.endDate.difference(DateTime.now()).inSeconds>0?'Candidates:':'Other Candidates:',
               style: TextStyle(
-                  fontSize: 17
+                  fontSize: 20
               ),
             ),
             SizedBox(height: 7,),
@@ -181,12 +182,12 @@ class _ElectionScreenOrgState extends State<ElectionScreenOrg> {
               confirmedCandidateList.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList():
               losers.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
             ),
-            SizedBox(height: 10,),
-            Text('Rejected Candidates',
+            Text('Rejected Candidates:',
               style: TextStyle(
-                  fontSize: 17
+                  fontSize: 20
               ),
             ),
+            SizedBox(height: 7,),
             rejectedCandidatesList.length==0?Text(election.startDate.difference(DateTime.now()).inSeconds>0?'No rejected candidates yet.':'No rejected candidates.'):SizedBox(),
             Column(
               children:

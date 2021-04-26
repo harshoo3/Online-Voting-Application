@@ -88,7 +88,6 @@ class AuthService{
       dynamic result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result;
 
-
       await DatabaseService(uid : user.uid).setUserData(name:name, email:email,dateOfBirth:dateOfBirth,mobileNo:mobileNo,userType:userType,orgName:orgName,electionCount:electionCount);
 
       return _userFromFirebaseUser(user);

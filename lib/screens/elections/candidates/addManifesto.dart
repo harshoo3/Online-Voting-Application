@@ -72,13 +72,13 @@ class _AddManifestoState extends State<AddManifesto> {
         }
       });
     }
-    setState(() {
-      election.numOfCandidates=election.numOfCandidates+1;
-    });
     final CollectionReference userdata = Firestore.instance.collection('dataset');
     await userdata.document(user.email).updateData({
       'requestedCandidacy': FieldValue.arrayUnion([election.index]),
-      'requestedCandidacyIndex': FieldValue.arrayUnion([election.numOfCandidates-1]),
+      'requestedCandidacyIndex': FieldValue.arrayUnion([election.numOfCandidates]),
+    });
+    setState(() {
+      election.numOfCandidates=election.numOfCandidates+1;
     });
     // candidate.requestedCandidacy.add(election.index);
     // candidate.requestedCandidacyIndex.add(election.numOfCandidates);
@@ -139,7 +139,7 @@ class _AddManifestoState extends State<AddManifesto> {
                     ),
                   ),
                   // SmallTextField(field:partyName,iconData:Icons.account_box, label: "Name of your Party...",),
-                  SizedBox(height: 25,),
+                  SizedBox(height: 10,),
                   SizedBox(
                     width: 300,
                     child: Row(
@@ -191,6 +191,7 @@ class _AddManifestoState extends State<AddManifesto> {
                       ],
                     ),
                   ),
+                  SizedBox(height: 10,),
                   SizedBox(
                     width: 300,
                     height: 90,
@@ -219,8 +220,10 @@ class _AddManifestoState extends State<AddManifesto> {
               BigTextField(height:120,label:  "Why do you want this Role?",fieldList: questions,index: 0,readOnly: false,),
               SizedBox(height: 25.0),
               BigTextField(height:120,label:  "What would your first 30 Days look like in this Role?",fieldList: questions,index: 1,readOnly: false,),
-              hasRequested?SizedBox(): SizedBox(
-                width: 300,
+              SizedBox(height: 25.0),
+              hasRequested?Text('Your request has been recorded'): SizedBox(
+                width: 250,
+                height: 50,
                 child: FlatButton(
                   color: Colors.black,
                   child:Text(
@@ -235,14 +238,12 @@ class _AddManifestoState extends State<AddManifesto> {
                         setState(() {
                           loading = true;
                         });
-                        await requestCandidacy().timeout(Duration(seconds: 2));
+                        await requestCandidacy();
                       }
                     }
                   },
                 ),
               ),
-              SizedBox(height: 25,),
-              hasRequested?Text('Your request has been recorded'):SizedBox(),
               // GestureDetector(
               //   onTap: () {
               //     //do what you want here

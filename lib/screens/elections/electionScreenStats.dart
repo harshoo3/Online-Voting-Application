@@ -25,6 +25,7 @@ class _ElectionScreenStatsState extends State<ElectionScreenStats> {
   bool winnerFound = false;
   List<Candidate>confirmedCandidateList=[],winner=[];
   double progress,votePercentage;
+  bool isUserWinner = false;
   _ElectionScreenStatsState({this.election,this.user,this.totalVoters,this.context,this.confirmedCandidateList});
   CustomMethods _customMethods = CustomMethods();
 
@@ -36,11 +37,25 @@ class _ElectionScreenStatsState extends State<ElectionScreenStats> {
         setState(() {
           winner.add(confirmedCandidateList[0]);
         });
+        if(user.userType=='can' && !isUserWinner){
+          if(winner[0].email == user.email){
+            setState(() {
+              isUserWinner = true;
+            });
+          }
+        }
         for(int i=1;i<confirmedCandidateList.length;i++){
           print(confirmedCandidateList[i].votes);
           if(winner[0].votes>confirmedCandidateList[i].votes){
             break;
           }else{
+            if(user.userType=='can' && !isUserWinner){
+              if(confirmedCandidateList[i].email == user.email){
+                setState(() {
+                  isUserWinner = true;
+                });
+              }
+            }
             setState(() {
               winner.add(confirmedCandidateList[i]);
             });
@@ -93,7 +108,7 @@ class _ElectionScreenStatsState extends State<ElectionScreenStats> {
         ),
         winnerFound && winner!=null?Column(
           children: [
-            Text(winner.length>1?"And the Winner is..\n It's a draw":'Winner Found',
+            Text(winner.length>1?"And the Winner is..\n It's a draw":'And the Winner is..',
               style: TextStyle(
                 fontSize: 35,
                 color: Colors.black,
@@ -105,6 +120,13 @@ class _ElectionScreenStatsState extends State<ElectionScreenStats> {
               children:
               winner.map((e) => CandidateWidget(candidate: e,election: election,user: user)).toList(),
             ),
+            isUserWinner?Text("You've Won",
+              style: TextStyle(
+                fontSize: 35,
+                color: Colors.black,
+              ),
+              textAlign: TextAlign.center,
+            ):SizedBox(),
           ],
         ):SizedBox(),
         SizedBox(height: 25,),
