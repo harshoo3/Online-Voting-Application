@@ -23,7 +23,6 @@ class _SignUpState extends State<SignUp> {
   final _formkey = GlobalKey<FormState>();
   final AuthService _auth = AuthService();
 
-  FirebaseAuth _auth1 = FirebaseAuth.instance;
   bool loading = false;
   //text field state
   String email = '';
@@ -63,62 +62,7 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
-  Future<void> verifyPhone() async {
-    final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
-      this.verificationId = verId;
-    };
-    try {
-      await _auth1.verifyPhoneNumber(
-          phoneNumber: this.mobileNo, // PHONE NUMBER TO SEND OTP
-          codeAutoRetrievalTimeout: null,
-          codeSent:
-          smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
-          timeout: const Duration(seconds: 100),
-          verificationCompleted: (AuthCredential phoneAuthCredential) {
-            print('1');
-            print(phoneAuthCredential);
-          },
-          verificationFailed: (AuthException exception) {
-            print('2');
-            print('${exception.message}');
-          });
-    } catch (e) {
-      handleError(e);
-    }
-  }
-  handleError(PlatformException error) {
-    print('3');
-    print(error);
-    // switch (error.code) {
-    //   case 'ERROR_INVALID_VERIFICATION_CODE':
-    //     FocusScope.of(context).requestFocus(new FocusNode());
-    //     setState(() {
-    //       errorMessage = 'Invalid Code';
-    //     });
-    //     Navigator.of(context).pop();
-    //     smsOTPDialog(context).then((value) {
-    //       print('sign in');
-    //     });
-    //     break;
-    //   default:
-    //     setState(() {
-    //       errorMessage = error.message;
-    //     });
-    //
-    //     break;
-    // }
-  }
-  verifyOTP() async {
-    try {
-      final AuthCredential credential = PhoneAuthProvider.getCredential(
-        verificationId: verificationId,
-        smsCode: smsOTP,
-      );
-      print('otp verified');
-    } catch (e) {
-      handleError(e);
-    }
-  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -145,7 +89,7 @@ class _SignUpState extends State<SignUp> {
               children: <Widget>[
                 Center(
                   child: SizedBox(
-                    height: 30,
+                    height: 15,
                   ),
                 ),
                 SizedBox(
@@ -189,7 +133,7 @@ class _SignUpState extends State<SignUp> {
                     ],
                   ),
                 ),
-                SizedBox(height: 25,),
+                SizedBox(height: 20,),
                 SizedBox(
                   width: 300,
                   child: TextFormField(
@@ -270,70 +214,6 @@ class _SignUpState extends State<SignUp> {
                         labelText: "Mobile number...",
                         border:
                         OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
-                    ),
-                  ),
-                ),
-                SizedBox(height: 25,),
-                SizedBox(
-                  height: 45,
-                  width: 150,
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                    onPressed: (){
-                      // setState(() {
-                      //   mobileNo = '+91'+mobileNo;
-                      //   print(mobileNo);
-                      // });
-                      verifyPhone();
-                    },
-                    color: Colors.black,
-                    textColor: Colors.white,
-                    child: Text("Send OTP".toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 19,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 25,),
-                SizedBox(
-                  width: 300,
-                  child: TextFormField(
-                    validator: (val) => val.isEmpty? 'Invalid. Please enter your Mobile number':null,
-                    onChanged: (val){
-                      setState(() {
-                        smsOTP = val;
-                      });
-                    },
-                    obscureText: false,
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                        suffixIcon: Icon(Icons.message_outlined),
-                        labelText: "OTP...",
-                        border:
-                        OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
-                    ),
-                  ),
-                ),
-                SizedBox(height: 25,),
-                SizedBox(
-                  height: 45,
-                  width: 150,
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                    onPressed: (){
-                      verifyOTP();
-                    },
-                    color: Colors.black,
-                    textColor: Colors.white,
-                    child: Text("Done".toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 19,
-                      ),
                     ),
                   ),
                 ),

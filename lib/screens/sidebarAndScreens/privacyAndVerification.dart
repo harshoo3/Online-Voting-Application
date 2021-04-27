@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:online_voting/customWidgets/customClassesAndWidgets.dart';
 import 'package:online_voting/models/user.dart';
 import 'package:online_voting/screens/authenticate/emailVerification.dart';
+import 'package:online_voting/screens/loading.dart';
 import 'package:online_voting/screens/sidebarAndScreens/sidebar.dart';
+import 'package:online_voting/screens/authenticate/phoneVerification.dart';
 class PrivacyAndVerification extends StatefulWidget {
   User user;
   PrivacyAndVerification({this.user});
@@ -14,13 +16,18 @@ class PrivacyAndVerification extends StatefulWidget {
 class _PrivacyAndVerificationState extends State<PrivacyAndVerification> {
   User user;
   bool isEmailVerified;
+  bool isPhoneVerified = false;
   FirebaseUser currUser;
+  bool detailsFetched = false;
   _PrivacyAndVerificationState({this.user});
 
   Future<void> getVerificationDetails() async {
     // user = await _auth.getCurrentUser()
     this.currUser = await FirebaseAuth.instance.currentUser();
     this.isEmailVerified = currUser.isEmailVerified;
+    setState(() {
+      detailsFetched =true;
+    });
   }
 
   @override
@@ -31,7 +38,7 @@ class _PrivacyAndVerificationState extends State<PrivacyAndVerification> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return !detailsFetched?Loading():Scaffold(
       appBar: customAppBar(
           title:'Privacy and Verification',
           context: context
@@ -39,8 +46,10 @@ class _PrivacyAndVerificationState extends State<PrivacyAndVerification> {
       endDrawer: SideDrawer(user: user,context: context),
       body: Column(
         children: [
+          Center(child: SizedBox(height: 25,)),
           SizedBox(
-            width: 300,
+            width: 250,
+            height: 50,
             child: FlatButton(
               color: Colors.black,
               child:Text(
@@ -54,6 +63,28 @@ class _PrivacyAndVerificationState extends State<PrivacyAndVerification> {
                 then((value){
                   setState(() {
                     isEmailVerified = true;
+                  });
+                });
+              },
+            ),
+          ),
+          SizedBox(height: 25,),
+          SizedBox(
+            width: 250,
+            height: 50,
+            child: FlatButton(
+              color: Colors.black,
+              child:Text(
+                'Phone Verification',
+                style: TextStyle(
+                    color: Colors.white
+                ),
+              ),
+              onPressed: ()async{
+                await Navigator.push(context, MaterialPageRoute(builder: (context) => PhoneVerification(user:user,isPhoneVerified: isPhoneVerified,))).
+                then((value){
+                  setState(() {
+                    isPhoneVerified = true;
                   });
                 });
               },

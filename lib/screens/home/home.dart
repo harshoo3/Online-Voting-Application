@@ -72,24 +72,17 @@ class _HomeState extends State<Home> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Center(
-                  child: Text(
-                    'Home page',
-                    style: TextStyle(
-                      fontSize: 30,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 30,),
+                Center(child: SizedBox(height: 25,)),
                 SizedBox(
                   child:Text(
                     'Welcome ${user.name}',
                     // 'yolo',
                     style: TextStyle(
-                        fontSize: 20
+                        fontSize: 30
                     ),
                   ),
                 ),
+                SizedBox(height: 25,),
                 SizedBox(
                   width: 250,
                   height: 50,

@@ -63,7 +63,7 @@ class _EmailVerificationState extends State<EmailVerification> {
           onPressed: () => Navigator.of(context).pop(isEmailVerified),
         ),
         backgroundColor: Colors.black,
-        title: Text('Create Elections'),
+        title: Text('Email Verification'),
       ),
       endDrawer: SideDrawer(user: user,context: context,),
       body: Center(
