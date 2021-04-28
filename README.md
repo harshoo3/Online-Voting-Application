@@ -2,6 +2,11 @@
 
 an Online Voting Mobile Application, developed using Flutter and Firebase.
 
+## Versions Used
+
+Flutter 1.26.0-17.8.pre • channel beta <br>
+Dart 2.12.0 (build 2.12.0-259.16.beta)
+
 ## Installation
 
 All the versions of apk releases are available in the 'apk' folder. You can install the apk in your Mobile phones.
