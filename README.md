@@ -1,16 +1,15 @@
-# online_voting
+# VoteHub
 
-A new Flutter application.
+an Online Voting Mobile Application, developed using Flutter and Firebase.
 
-## Getting Started
+## Installation
 
-This project is a starting point for a Flutter application.
+All the versions of apk releases are available in the 'apk' folder. You can install the apk in your Mobile phones.
+**_It is advised to always install just the latest version._**
 
-A few resources to get you started if this is your first Flutter project:
+## Usage
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Voting app that enables organisations to conduct quick elections among it's members. The organisations can create elections, candidates would have to
+add their manifesto and request participation in the election. The candidates approved by the organisation run for the elections. Once the voting period starts,
+voters can then vote for the candidate of their choice. 
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
